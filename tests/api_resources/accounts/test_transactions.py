@@ -9,7 +9,6 @@ import pytest
 
 from jocall3 import Jocall3, AsyncJocall3
 from tests.utils import assert_matches_type
-from jocall3.types.accounts import TransactionRetrievePendingResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -23,7 +22,7 @@ class TestTransactions:
         transaction = client.accounts.transactions.retrieve_pending(
             account_id="acc_chase_checking_4567",
         )
-        assert_matches_type(TransactionRetrievePendingResponse, transaction, path=["response"])
+        assert_matches_type(object, transaction, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -33,7 +32,7 @@ class TestTransactions:
             limit=0,
             offset=0,
         )
-        assert_matches_type(TransactionRetrievePendingResponse, transaction, path=["response"])
+        assert_matches_type(object, transaction, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -45,7 +44,7 @@ class TestTransactions:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         transaction = response.parse()
-        assert_matches_type(TransactionRetrievePendingResponse, transaction, path=["response"])
+        assert_matches_type(object, transaction, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -57,7 +56,7 @@ class TestTransactions:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             transaction = response.parse()
-            assert_matches_type(TransactionRetrievePendingResponse, transaction, path=["response"])
+            assert_matches_type(object, transaction, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -81,7 +80,7 @@ class TestAsyncTransactions:
         transaction = await async_client.accounts.transactions.retrieve_pending(
             account_id="acc_chase_checking_4567",
         )
-        assert_matches_type(TransactionRetrievePendingResponse, transaction, path=["response"])
+        assert_matches_type(object, transaction, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -91,7 +90,7 @@ class TestAsyncTransactions:
             limit=0,
             offset=0,
         )
-        assert_matches_type(TransactionRetrievePendingResponse, transaction, path=["response"])
+        assert_matches_type(object, transaction, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -103,7 +102,7 @@ class TestAsyncTransactions:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         transaction = await response.parse()
-        assert_matches_type(TransactionRetrievePendingResponse, transaction, path=["response"])
+        assert_matches_type(object, transaction, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -115,7 +114,7 @@ class TestAsyncTransactions:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             transaction = await response.parse()
-            assert_matches_type(TransactionRetrievePendingResponse, transaction, path=["response"])
+            assert_matches_type(object, transaction, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 

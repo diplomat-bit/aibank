@@ -4,12 +4,7 @@ from __future__ import annotations
 
 import httpx
 
-from ...types import (
-    transaction_list_params,
-    transaction_categorize_params,
-    transaction_update_notes_params,
-    transaction_list_recurring_params,
-)
+from ...types import transaction_list_params, transaction_list_recurring_params
 from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ..._utils import maybe_transform, async_maybe_transform
 from .insights import (
@@ -29,11 +24,9 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ..._base_client import make_request_options
-from ...types.transaction_list_response import TransactionListResponse
 from ...types.transaction_retrieve_response import TransactionRetrieveResponse
 from ...types.transaction_categorize_response import TransactionCategorizeResponse
 from ...types.transaction_update_notes_response import TransactionUpdateNotesResponse
-from ...types.transaction_list_recurring_response import TransactionListRecurringResponse
 
 __all__ = ["TransactionsResource", "AsyncTransactionsResource"]
 
@@ -115,7 +108,7 @@ class TransactionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> TransactionListResponse:
+    ) -> object:
         """
         Retrieves a paginated list of the user's transactions, with extensive options
         for filtering by type, category, date range, amount, and intelligent AI-driven
@@ -170,16 +163,13 @@ class TransactionsResource(SyncAPIResource):
                     transaction_list_params.TransactionListParams,
                 ),
             ),
-            cast_to=TransactionListResponse,
+            cast_to=object,
         )
 
     def categorize(
         self,
         transaction_id: str,
         *,
-        category: str,
-        apply_to_future: bool | Omit = omit,
-        notes: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -204,14 +194,6 @@ class TransactionsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `transaction_id` but received {transaction_id!r}")
         return self._put(
             f"/transactions/{transaction_id}/categorize",
-            body=maybe_transform(
-                {
-                    "category": category,
-                    "apply_to_future": apply_to_future,
-                    "notes": notes,
-                },
-                transaction_categorize_params.TransactionCategorizeParams,
-            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -229,7 +211,7 @@ class TransactionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> TransactionListRecurringResponse:
+    ) -> object:
         """
         Retrieves a list of all detected or user-defined recurring transactions, useful
         for budget tracking and subscription management.
@@ -262,14 +244,13 @@ class TransactionsResource(SyncAPIResource):
                     transaction_list_recurring_params.TransactionListRecurringParams,
                 ),
             ),
-            cast_to=TransactionListRecurringResponse,
+            cast_to=object,
         )
 
     def update_notes(
         self,
         transaction_id: str,
         *,
-        notes: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -293,7 +274,6 @@ class TransactionsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `transaction_id` but received {transaction_id!r}")
         return self._put(
             f"/transactions/{transaction_id}/notes",
-            body=maybe_transform({"notes": notes}, transaction_update_notes_params.TransactionUpdateNotesParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -378,7 +358,7 @@ class AsyncTransactionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> TransactionListResponse:
+    ) -> object:
         """
         Retrieves a paginated list of the user's transactions, with extensive options
         for filtering by type, category, date range, amount, and intelligent AI-driven
@@ -433,16 +413,13 @@ class AsyncTransactionsResource(AsyncAPIResource):
                     transaction_list_params.TransactionListParams,
                 ),
             ),
-            cast_to=TransactionListResponse,
+            cast_to=object,
         )
 
     async def categorize(
         self,
         transaction_id: str,
         *,
-        category: str,
-        apply_to_future: bool | Omit = omit,
-        notes: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -467,14 +444,6 @@ class AsyncTransactionsResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `transaction_id` but received {transaction_id!r}")
         return await self._put(
             f"/transactions/{transaction_id}/categorize",
-            body=await async_maybe_transform(
-                {
-                    "category": category,
-                    "apply_to_future": apply_to_future,
-                    "notes": notes,
-                },
-                transaction_categorize_params.TransactionCategorizeParams,
-            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -492,7 +461,7 @@ class AsyncTransactionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> TransactionListRecurringResponse:
+    ) -> object:
         """
         Retrieves a list of all detected or user-defined recurring transactions, useful
         for budget tracking and subscription management.
@@ -525,14 +494,13 @@ class AsyncTransactionsResource(AsyncAPIResource):
                     transaction_list_recurring_params.TransactionListRecurringParams,
                 ),
             ),
-            cast_to=TransactionListRecurringResponse,
+            cast_to=object,
         )
 
     async def update_notes(
         self,
         transaction_id: str,
         *,
-        notes: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -556,9 +524,6 @@ class AsyncTransactionsResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `transaction_id` but received {transaction_id!r}")
         return await self._put(
             f"/transactions/{transaction_id}/notes",
-            body=await async_maybe_transform(
-                {"notes": notes}, transaction_update_notes_params.TransactionUpdateNotesParams
-            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),

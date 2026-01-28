@@ -9,10 +9,6 @@ import pytest
 
 from jocall3 import Jocall3, AsyncJocall3
 from tests.utils import assert_matches_type
-from jocall3.types.accounts import (
-    OverdraftSettingUpdateOverdraftSettingsResponse,
-    OverdraftSettingRetrieveOverdraftSettingsResponse,
-)
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -26,7 +22,7 @@ class TestOverdraftSettings:
         overdraft_setting = client.accounts.overdraft_settings.retrieve_overdraft_settings(
             "acc_chase_checking_4567",
         )
-        assert_matches_type(OverdraftSettingRetrieveOverdraftSettingsResponse, overdraft_setting, path=["response"])
+        assert_matches_type(object, overdraft_setting, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -38,7 +34,7 @@ class TestOverdraftSettings:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         overdraft_setting = response.parse()
-        assert_matches_type(OverdraftSettingRetrieveOverdraftSettingsResponse, overdraft_setting, path=["response"])
+        assert_matches_type(object, overdraft_setting, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -50,7 +46,7 @@ class TestOverdraftSettings:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             overdraft_setting = response.parse()
-            assert_matches_type(OverdraftSettingRetrieveOverdraftSettingsResponse, overdraft_setting, path=["response"])
+            assert_matches_type(object, overdraft_setting, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -66,44 +62,33 @@ class TestOverdraftSettings:
     @parametrize
     def test_method_update_overdraft_settings(self, client: Jocall3) -> None:
         overdraft_setting = client.accounts.overdraft_settings.update_overdraft_settings(
-            account_id="acc_chase_checking_4567",
+            "acc_chase_checking_4567",
         )
-        assert_matches_type(OverdraftSettingUpdateOverdraftSettingsResponse, overdraft_setting, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    def test_method_update_overdraft_settings_with_all_params(self, client: Jocall3) -> None:
-        overdraft_setting = client.accounts.overdraft_settings.update_overdraft_settings(
-            account_id="acc_chase_checking_4567",
-            enabled=False,
-            fee_preference="decline_if_over_limit",
-            link_to_savings=False,
-        )
-        assert_matches_type(OverdraftSettingUpdateOverdraftSettingsResponse, overdraft_setting, path=["response"])
+        assert_matches_type(object, overdraft_setting, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_update_overdraft_settings(self, client: Jocall3) -> None:
         response = client.accounts.overdraft_settings.with_raw_response.update_overdraft_settings(
-            account_id="acc_chase_checking_4567",
+            "acc_chase_checking_4567",
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         overdraft_setting = response.parse()
-        assert_matches_type(OverdraftSettingUpdateOverdraftSettingsResponse, overdraft_setting, path=["response"])
+        assert_matches_type(object, overdraft_setting, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_update_overdraft_settings(self, client: Jocall3) -> None:
         with client.accounts.overdraft_settings.with_streaming_response.update_overdraft_settings(
-            account_id="acc_chase_checking_4567",
+            "acc_chase_checking_4567",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             overdraft_setting = response.parse()
-            assert_matches_type(OverdraftSettingUpdateOverdraftSettingsResponse, overdraft_setting, path=["response"])
+            assert_matches_type(object, overdraft_setting, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -112,7 +97,7 @@ class TestOverdraftSettings:
     def test_path_params_update_overdraft_settings(self, client: Jocall3) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `account_id` but received ''"):
             client.accounts.overdraft_settings.with_raw_response.update_overdraft_settings(
-                account_id="",
+                "",
             )
 
 
@@ -127,7 +112,7 @@ class TestAsyncOverdraftSettings:
         overdraft_setting = await async_client.accounts.overdraft_settings.retrieve_overdraft_settings(
             "acc_chase_checking_4567",
         )
-        assert_matches_type(OverdraftSettingRetrieveOverdraftSettingsResponse, overdraft_setting, path=["response"])
+        assert_matches_type(object, overdraft_setting, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -139,7 +124,7 @@ class TestAsyncOverdraftSettings:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         overdraft_setting = await response.parse()
-        assert_matches_type(OverdraftSettingRetrieveOverdraftSettingsResponse, overdraft_setting, path=["response"])
+        assert_matches_type(object, overdraft_setting, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -151,7 +136,7 @@ class TestAsyncOverdraftSettings:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             overdraft_setting = await response.parse()
-            assert_matches_type(OverdraftSettingRetrieveOverdraftSettingsResponse, overdraft_setting, path=["response"])
+            assert_matches_type(object, overdraft_setting, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -167,44 +152,33 @@ class TestAsyncOverdraftSettings:
     @parametrize
     async def test_method_update_overdraft_settings(self, async_client: AsyncJocall3) -> None:
         overdraft_setting = await async_client.accounts.overdraft_settings.update_overdraft_settings(
-            account_id="acc_chase_checking_4567",
+            "acc_chase_checking_4567",
         )
-        assert_matches_type(OverdraftSettingUpdateOverdraftSettingsResponse, overdraft_setting, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    async def test_method_update_overdraft_settings_with_all_params(self, async_client: AsyncJocall3) -> None:
-        overdraft_setting = await async_client.accounts.overdraft_settings.update_overdraft_settings(
-            account_id="acc_chase_checking_4567",
-            enabled=False,
-            fee_preference="decline_if_over_limit",
-            link_to_savings=False,
-        )
-        assert_matches_type(OverdraftSettingUpdateOverdraftSettingsResponse, overdraft_setting, path=["response"])
+        assert_matches_type(object, overdraft_setting, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_update_overdraft_settings(self, async_client: AsyncJocall3) -> None:
         response = await async_client.accounts.overdraft_settings.with_raw_response.update_overdraft_settings(
-            account_id="acc_chase_checking_4567",
+            "acc_chase_checking_4567",
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         overdraft_setting = await response.parse()
-        assert_matches_type(OverdraftSettingUpdateOverdraftSettingsResponse, overdraft_setting, path=["response"])
+        assert_matches_type(object, overdraft_setting, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_update_overdraft_settings(self, async_client: AsyncJocall3) -> None:
         async with async_client.accounts.overdraft_settings.with_streaming_response.update_overdraft_settings(
-            account_id="acc_chase_checking_4567",
+            "acc_chase_checking_4567",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             overdraft_setting = await response.parse()
-            assert_matches_type(OverdraftSettingUpdateOverdraftSettingsResponse, overdraft_setting, path=["response"])
+            assert_matches_type(object, overdraft_setting, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -213,5 +187,5 @@ class TestAsyncOverdraftSettings:
     async def test_path_params_update_overdraft_settings(self, async_client: AsyncJocall3) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `account_id` but received ''"):
             await async_client.accounts.overdraft_settings.with_raw_response.update_overdraft_settings(
-                account_id="",
+                "",
             )
