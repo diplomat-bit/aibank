@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.1.0 (2026-01-28)
+
+Full Changelog: [v0.0.3...v0.1.0](https://github.com/diplomat-bit/jocall3-python/compare/v0.0.3...v0.1.0)
+
+### Features
+
+* **api:** api update ([e0f5ef8](https://github.com/diplomat-bit/jocall3-python/commit/e0f5ef8c9c0fad9c4c4dbc3c3f2a8f0cc2dd0ab5))
+* **api:** manual updates ([ed40583](https://github.com/diplomat-bit/jocall3-python/commit/ed405836f7f2a71acb2a1ce5520a8df30994744e))
+
+
+### Chores
+
+* update SDK settings ([94ca901](https://github.com/diplomat-bit/jocall3-python/commit/94ca90137b8b27ef1037c39c27f76e8c5e8de033))
+
 ## 0.0.3 (2026-01-25)
 
 Full Changelog: [v0.0.2...v0.0.3](https://github.com/diplomat-bit/jocall3-python/compare/v0.0.2...v0.0.3)
