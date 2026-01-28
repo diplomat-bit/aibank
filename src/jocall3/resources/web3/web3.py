@@ -20,6 +20,14 @@ from .wallets import (
 )
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
+from .transactions import (
+    TransactionsResource,
+    AsyncTransactionsResource,
+    TransactionsResourceWithRawResponse,
+    AsyncTransactionsResourceWithRawResponse,
+    TransactionsResourceWithStreamingResponse,
+    AsyncTransactionsResourceWithStreamingResponse,
+)
 
 __all__ = ["Web3Resource", "AsyncWeb3Resource"]
 
@@ -28,6 +36,10 @@ class Web3Resource(SyncAPIResource):
     @cached_property
     def wallets(self) -> WalletsResource:
         return WalletsResource(self._client)
+
+    @cached_property
+    def transactions(self) -> TransactionsResource:
+        return TransactionsResource(self._client)
 
     @cached_property
     def nfts(self) -> NFTsResource:
@@ -57,6 +69,10 @@ class AsyncWeb3Resource(AsyncAPIResource):
     @cached_property
     def wallets(self) -> AsyncWalletsResource:
         return AsyncWalletsResource(self._client)
+
+    @cached_property
+    def transactions(self) -> AsyncTransactionsResource:
+        return AsyncTransactionsResource(self._client)
 
     @cached_property
     def nfts(self) -> AsyncNFTsResource:
@@ -91,6 +107,10 @@ class Web3ResourceWithRawResponse:
         return WalletsResourceWithRawResponse(self._web3.wallets)
 
     @cached_property
+    def transactions(self) -> TransactionsResourceWithRawResponse:
+        return TransactionsResourceWithRawResponse(self._web3.transactions)
+
+    @cached_property
     def nfts(self) -> NFTsResourceWithRawResponse:
         return NFTsResourceWithRawResponse(self._web3.nfts)
 
@@ -102,6 +122,10 @@ class AsyncWeb3ResourceWithRawResponse:
     @cached_property
     def wallets(self) -> AsyncWalletsResourceWithRawResponse:
         return AsyncWalletsResourceWithRawResponse(self._web3.wallets)
+
+    @cached_property
+    def transactions(self) -> AsyncTransactionsResourceWithRawResponse:
+        return AsyncTransactionsResourceWithRawResponse(self._web3.transactions)
 
     @cached_property
     def nfts(self) -> AsyncNFTsResourceWithRawResponse:
@@ -117,6 +141,10 @@ class Web3ResourceWithStreamingResponse:
         return WalletsResourceWithStreamingResponse(self._web3.wallets)
 
     @cached_property
+    def transactions(self) -> TransactionsResourceWithStreamingResponse:
+        return TransactionsResourceWithStreamingResponse(self._web3.transactions)
+
+    @cached_property
     def nfts(self) -> NFTsResourceWithStreamingResponse:
         return NFTsResourceWithStreamingResponse(self._web3.nfts)
 
@@ -128,6 +156,10 @@ class AsyncWeb3ResourceWithStreamingResponse:
     @cached_property
     def wallets(self) -> AsyncWalletsResourceWithStreamingResponse:
         return AsyncWalletsResourceWithStreamingResponse(self._web3.wallets)
+
+    @cached_property
+    def transactions(self) -> AsyncTransactionsResourceWithStreamingResponse:
+        return AsyncTransactionsResourceWithStreamingResponse(self._web3.transactions)
 
     @cached_property
     def nfts(self) -> AsyncNFTsResourceWithStreamingResponse:

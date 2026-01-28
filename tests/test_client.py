@@ -23,7 +23,7 @@ from jocall3 import Jocall3, AsyncJocall3, APIResponseValidationError
 from jocall3._types import Omit
 from jocall3._utils import asyncify
 from jocall3._models import BaseModel, FinalRequestOptions
-from jocall3._exceptions import Jocall3Error, APIStatusError, APITimeoutError, APIResponseValidationError
+from jocall3._exceptions import APIStatusError, APITimeoutError, APIResponseValidationError
 from jocall3._base_client import (
     DEFAULT_TIMEOUT,
     HTTPX_DEFAULT_TIMEOUT,
@@ -39,7 +39,6 @@ from .utils import update_env
 
 T = TypeVar("T")
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
-api_key = "My API Key"
 gemini_api_key = "My Gemini API Key"
 
 
@@ -137,10 +136,6 @@ class TestJocall3:
         copied = client.copy()
         assert id(copied) != id(client)
 
-        copied = client.copy(api_key="another My API Key")
-        assert copied.api_key == "another My API Key"
-        assert client.api_key == "My API Key"
-
         copied = client.copy(gemini_api_key="another My Gemini API Key")
         assert copied.gemini_api_key == "another My Gemini API Key"
         assert client.gemini_api_key == "My Gemini API Key"
@@ -164,7 +159,6 @@ class TestJocall3:
     def test_copy_default_headers(self) -> None:
         client = Jocall3(
             base_url=base_url,
-            api_key=api_key,
             gemini_api_key=gemini_api_key,
             _strict_response_validation=True,
             default_headers={"X-Foo": "bar"},
@@ -203,7 +197,6 @@ class TestJocall3:
     def test_copy_default_query(self) -> None:
         client = Jocall3(
             base_url=base_url,
-            api_key=api_key,
             gemini_api_key=gemini_api_key,
             _strict_response_validation=True,
             default_query={"foo": "bar"},
@@ -332,11 +325,7 @@ class TestJocall3:
 
     def test_client_timeout_option(self) -> None:
         client = Jocall3(
-            base_url=base_url,
-            api_key=api_key,
-            gemini_api_key=gemini_api_key,
-            _strict_response_validation=True,
-            timeout=httpx.Timeout(0),
+            base_url=base_url, gemini_api_key=gemini_api_key, _strict_response_validation=True, timeout=httpx.Timeout(0)
         )
 
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -350,7 +339,6 @@ class TestJocall3:
         with httpx.Client(timeout=None) as http_client:
             client = Jocall3(
                 base_url=base_url,
-                api_key=api_key,
                 gemini_api_key=gemini_api_key,
                 _strict_response_validation=True,
                 http_client=http_client,
@@ -366,7 +354,6 @@ class TestJocall3:
         with httpx.Client() as http_client:
             client = Jocall3(
                 base_url=base_url,
-                api_key=api_key,
                 gemini_api_key=gemini_api_key,
                 _strict_response_validation=True,
                 http_client=http_client,
@@ -382,7 +369,6 @@ class TestJocall3:
         with httpx.Client(timeout=HTTPX_DEFAULT_TIMEOUT) as http_client:
             client = Jocall3(
                 base_url=base_url,
-                api_key=api_key,
                 gemini_api_key=gemini_api_key,
                 _strict_response_validation=True,
                 http_client=http_client,
@@ -399,7 +385,6 @@ class TestJocall3:
             async with httpx.AsyncClient() as http_client:
                 Jocall3(
                     base_url=base_url,
-                    api_key=api_key,
                     gemini_api_key=gemini_api_key,
                     _strict_response_validation=True,
                     http_client=cast(Any, http_client),
@@ -408,7 +393,6 @@ class TestJocall3:
     def test_default_headers_option(self) -> None:
         test_client = Jocall3(
             base_url=base_url,
-            api_key=api_key,
             gemini_api_key=gemini_api_key,
             _strict_response_validation=True,
             default_headers={"X-Foo": "bar"},
@@ -419,7 +403,6 @@ class TestJocall3:
 
         test_client2 = Jocall3(
             base_url=base_url,
-            api_key=api_key,
             gemini_api_key=gemini_api_key,
             _strict_response_validation=True,
             default_headers={
@@ -435,23 +418,27 @@ class TestJocall3:
         test_client2.close()
 
     def test_validate_headers(self) -> None:
-        client = Jocall3(
-            base_url=base_url, api_key=api_key, gemini_api_key=gemini_api_key, _strict_response_validation=True
-        )
+        client = Jocall3(base_url=base_url, gemini_api_key=gemini_api_key, _strict_response_validation=True)
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
-        assert request.headers.get("Authorization") == f"Bearer {api_key}"
+        assert request.headers.get("x-goog-api-key") == gemini_api_key
 
-        with pytest.raises(Jocall3Error):
-            with update_env(**{"JOCALL3_API_KEY": Omit()}):
-                client2 = Jocall3(
-                    base_url=base_url, api_key=None, gemini_api_key=gemini_api_key, _strict_response_validation=True
-                )
-            _ = client2
+        with update_env(**{"GEMINI_API_KEY": Omit()}):
+            client2 = Jocall3(base_url=base_url, gemini_api_key=None, _strict_response_validation=True)
+
+        with pytest.raises(
+            TypeError,
+            match="Could not resolve authentication method. Expected the gemini_api_key to be set. Or for the `x-goog-api-key` headers to be explicitly omitted",
+        ):
+            client2._build_request(FinalRequestOptions(method="get", url="/foo"))
+
+        request2 = client2._build_request(
+            FinalRequestOptions(method="get", url="/foo", headers={"x-goog-api-key": Omit()})
+        )
+        assert request2.headers.get("x-goog-api-key") is None
 
     def test_default_query_option(self) -> None:
         client = Jocall3(
             base_url=base_url,
-            api_key=api_key,
             gemini_api_key=gemini_api_key,
             _strict_response_validation=True,
             default_query={"query_param": "bar"},
@@ -626,7 +613,6 @@ class TestJocall3:
 
         with Jocall3(
             base_url=base_url,
-            api_key=api_key,
             gemini_api_key=gemini_api_key,
             _strict_response_validation=True,
             http_client=httpx.Client(transport=MockTransport(handler=mock_handler)),
@@ -722,10 +708,7 @@ class TestJocall3:
 
     def test_base_url_setter(self) -> None:
         client = Jocall3(
-            base_url="https://example.com/from_init",
-            api_key=api_key,
-            gemini_api_key=gemini_api_key,
-            _strict_response_validation=True,
+            base_url="https://example.com/from_init", gemini_api_key=gemini_api_key, _strict_response_validation=True
         )
         assert client.base_url == "https://example.com/from_init/"
 
@@ -737,27 +720,18 @@ class TestJocall3:
 
     def test_base_url_env(self) -> None:
         with update_env(JOCALL3_BASE_URL="http://localhost:5000/from/env"):
-            client = Jocall3(api_key=api_key, gemini_api_key=gemini_api_key, _strict_response_validation=True)
+            client = Jocall3(gemini_api_key=gemini_api_key, _strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
 
         # explicit environment arg requires explicitness
         with update_env(JOCALL3_BASE_URL="http://localhost:5000/from/env"):
             with pytest.raises(ValueError, match=r"you must pass base_url=None"):
-                Jocall3(
-                    api_key=api_key,
-                    gemini_api_key=gemini_api_key,
-                    _strict_response_validation=True,
-                    environment="production",
-                )
+                Jocall3(gemini_api_key=gemini_api_key, _strict_response_validation=True, environment="production")
 
             client = Jocall3(
-                base_url=None,
-                api_key=api_key,
-                gemini_api_key=gemini_api_key,
-                _strict_response_validation=True,
-                environment="production",
+                base_url=None, gemini_api_key=gemini_api_key, _strict_response_validation=True, environment="production"
             )
-            assert str(client.base_url).startswith("https://75975599-8fdc-4274-8701-05fc0b8089cc.mock.pstmn.io")
+            assert str(client.base_url).startswith("https://api.quantum-core.finance/v1")
 
             client.close()
 
@@ -766,13 +740,11 @@ class TestJocall3:
         [
             Jocall3(
                 base_url="http://localhost:5000/custom/path/",
-                api_key=api_key,
                 gemini_api_key=gemini_api_key,
                 _strict_response_validation=True,
             ),
             Jocall3(
                 base_url="http://localhost:5000/custom/path/",
-                api_key=api_key,
                 gemini_api_key=gemini_api_key,
                 _strict_response_validation=True,
                 http_client=httpx.Client(),
@@ -796,13 +768,11 @@ class TestJocall3:
         [
             Jocall3(
                 base_url="http://localhost:5000/custom/path/",
-                api_key=api_key,
                 gemini_api_key=gemini_api_key,
                 _strict_response_validation=True,
             ),
             Jocall3(
                 base_url="http://localhost:5000/custom/path/",
-                api_key=api_key,
                 gemini_api_key=gemini_api_key,
                 _strict_response_validation=True,
                 http_client=httpx.Client(),
@@ -826,13 +796,11 @@ class TestJocall3:
         [
             Jocall3(
                 base_url="http://localhost:5000/custom/path/",
-                api_key=api_key,
                 gemini_api_key=gemini_api_key,
                 _strict_response_validation=True,
             ),
             Jocall3(
                 base_url="http://localhost:5000/custom/path/",
-                api_key=api_key,
                 gemini_api_key=gemini_api_key,
                 _strict_response_validation=True,
                 http_client=httpx.Client(),
@@ -852,9 +820,7 @@ class TestJocall3:
         client.close()
 
     def test_copied_client_does_not_close_http(self) -> None:
-        test_client = Jocall3(
-            base_url=base_url, api_key=api_key, gemini_api_key=gemini_api_key, _strict_response_validation=True
-        )
+        test_client = Jocall3(base_url=base_url, gemini_api_key=gemini_api_key, _strict_response_validation=True)
         assert not test_client.is_closed()
 
         copied = test_client.copy()
@@ -865,9 +831,7 @@ class TestJocall3:
         assert not test_client.is_closed()
 
     def test_client_context_manager(self) -> None:
-        test_client = Jocall3(
-            base_url=base_url, api_key=api_key, gemini_api_key=gemini_api_key, _strict_response_validation=True
-        )
+        test_client = Jocall3(base_url=base_url, gemini_api_key=gemini_api_key, _strict_response_validation=True)
         with test_client as c2:
             assert c2 is test_client
             assert not c2.is_closed()
@@ -890,7 +854,6 @@ class TestJocall3:
         with pytest.raises(TypeError, match=r"max_retries cannot be None"):
             Jocall3(
                 base_url=base_url,
-                api_key=api_key,
                 gemini_api_key=gemini_api_key,
                 _strict_response_validation=True,
                 max_retries=cast(Any, None),
@@ -903,16 +866,12 @@ class TestJocall3:
 
         respx_mock.get("/foo").mock(return_value=httpx.Response(200, text="my-custom-format"))
 
-        strict_client = Jocall3(
-            base_url=base_url, api_key=api_key, gemini_api_key=gemini_api_key, _strict_response_validation=True
-        )
+        strict_client = Jocall3(base_url=base_url, gemini_api_key=gemini_api_key, _strict_response_validation=True)
 
         with pytest.raises(APIResponseValidationError):
             strict_client.get("/foo", cast_to=Model)
 
-        non_strict_client = Jocall3(
-            base_url=base_url, api_key=api_key, gemini_api_key=gemini_api_key, _strict_response_validation=False
-        )
+        non_strict_client = Jocall3(base_url=base_url, gemini_api_key=gemini_api_key, _strict_response_validation=False)
 
         response = non_strict_client.get("/foo", cast_to=Model)
         assert isinstance(response, str)  # type: ignore[unreachable]
@@ -1119,10 +1078,6 @@ class TestAsyncJocall3:
         copied = async_client.copy()
         assert id(copied) != id(async_client)
 
-        copied = async_client.copy(api_key="another My API Key")
-        assert copied.api_key == "another My API Key"
-        assert async_client.api_key == "My API Key"
-
         copied = async_client.copy(gemini_api_key="another My Gemini API Key")
         assert copied.gemini_api_key == "another My Gemini API Key"
         assert async_client.gemini_api_key == "My Gemini API Key"
@@ -1146,7 +1101,6 @@ class TestAsyncJocall3:
     async def test_copy_default_headers(self) -> None:
         client = AsyncJocall3(
             base_url=base_url,
-            api_key=api_key,
             gemini_api_key=gemini_api_key,
             _strict_response_validation=True,
             default_headers={"X-Foo": "bar"},
@@ -1185,7 +1139,6 @@ class TestAsyncJocall3:
     async def test_copy_default_query(self) -> None:
         client = AsyncJocall3(
             base_url=base_url,
-            api_key=api_key,
             gemini_api_key=gemini_api_key,
             _strict_response_validation=True,
             default_query={"foo": "bar"},
@@ -1316,11 +1269,7 @@ class TestAsyncJocall3:
 
     async def test_client_timeout_option(self) -> None:
         client = AsyncJocall3(
-            base_url=base_url,
-            api_key=api_key,
-            gemini_api_key=gemini_api_key,
-            _strict_response_validation=True,
-            timeout=httpx.Timeout(0),
+            base_url=base_url, gemini_api_key=gemini_api_key, _strict_response_validation=True, timeout=httpx.Timeout(0)
         )
 
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -1334,7 +1283,6 @@ class TestAsyncJocall3:
         async with httpx.AsyncClient(timeout=None) as http_client:
             client = AsyncJocall3(
                 base_url=base_url,
-                api_key=api_key,
                 gemini_api_key=gemini_api_key,
                 _strict_response_validation=True,
                 http_client=http_client,
@@ -1350,7 +1298,6 @@ class TestAsyncJocall3:
         async with httpx.AsyncClient() as http_client:
             client = AsyncJocall3(
                 base_url=base_url,
-                api_key=api_key,
                 gemini_api_key=gemini_api_key,
                 _strict_response_validation=True,
                 http_client=http_client,
@@ -1366,7 +1313,6 @@ class TestAsyncJocall3:
         async with httpx.AsyncClient(timeout=HTTPX_DEFAULT_TIMEOUT) as http_client:
             client = AsyncJocall3(
                 base_url=base_url,
-                api_key=api_key,
                 gemini_api_key=gemini_api_key,
                 _strict_response_validation=True,
                 http_client=http_client,
@@ -1383,7 +1329,6 @@ class TestAsyncJocall3:
             with httpx.Client() as http_client:
                 AsyncJocall3(
                     base_url=base_url,
-                    api_key=api_key,
                     gemini_api_key=gemini_api_key,
                     _strict_response_validation=True,
                     http_client=cast(Any, http_client),
@@ -1392,7 +1337,6 @@ class TestAsyncJocall3:
     async def test_default_headers_option(self) -> None:
         test_client = AsyncJocall3(
             base_url=base_url,
-            api_key=api_key,
             gemini_api_key=gemini_api_key,
             _strict_response_validation=True,
             default_headers={"X-Foo": "bar"},
@@ -1403,7 +1347,6 @@ class TestAsyncJocall3:
 
         test_client2 = AsyncJocall3(
             base_url=base_url,
-            api_key=api_key,
             gemini_api_key=gemini_api_key,
             _strict_response_validation=True,
             default_headers={
@@ -1419,23 +1362,27 @@ class TestAsyncJocall3:
         await test_client2.close()
 
     def test_validate_headers(self) -> None:
-        client = AsyncJocall3(
-            base_url=base_url, api_key=api_key, gemini_api_key=gemini_api_key, _strict_response_validation=True
-        )
+        client = AsyncJocall3(base_url=base_url, gemini_api_key=gemini_api_key, _strict_response_validation=True)
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
-        assert request.headers.get("Authorization") == f"Bearer {api_key}"
+        assert request.headers.get("x-goog-api-key") == gemini_api_key
 
-        with pytest.raises(Jocall3Error):
-            with update_env(**{"JOCALL3_API_KEY": Omit()}):
-                client2 = AsyncJocall3(
-                    base_url=base_url, api_key=None, gemini_api_key=gemini_api_key, _strict_response_validation=True
-                )
-            _ = client2
+        with update_env(**{"GEMINI_API_KEY": Omit()}):
+            client2 = AsyncJocall3(base_url=base_url, gemini_api_key=None, _strict_response_validation=True)
+
+        with pytest.raises(
+            TypeError,
+            match="Could not resolve authentication method. Expected the gemini_api_key to be set. Or for the `x-goog-api-key` headers to be explicitly omitted",
+        ):
+            client2._build_request(FinalRequestOptions(method="get", url="/foo"))
+
+        request2 = client2._build_request(
+            FinalRequestOptions(method="get", url="/foo", headers={"x-goog-api-key": Omit()})
+        )
+        assert request2.headers.get("x-goog-api-key") is None
 
     async def test_default_query_option(self) -> None:
         client = AsyncJocall3(
             base_url=base_url,
-            api_key=api_key,
             gemini_api_key=gemini_api_key,
             _strict_response_validation=True,
             default_query={"query_param": "bar"},
@@ -1610,7 +1557,6 @@ class TestAsyncJocall3:
 
         async with AsyncJocall3(
             base_url=base_url,
-            api_key=api_key,
             gemini_api_key=gemini_api_key,
             _strict_response_validation=True,
             http_client=httpx.AsyncClient(transport=MockTransport(handler=mock_handler)),
@@ -1710,10 +1656,7 @@ class TestAsyncJocall3:
 
     async def test_base_url_setter(self) -> None:
         client = AsyncJocall3(
-            base_url="https://example.com/from_init",
-            api_key=api_key,
-            gemini_api_key=gemini_api_key,
-            _strict_response_validation=True,
+            base_url="https://example.com/from_init", gemini_api_key=gemini_api_key, _strict_response_validation=True
         )
         assert client.base_url == "https://example.com/from_init/"
 
@@ -1725,27 +1668,18 @@ class TestAsyncJocall3:
 
     async def test_base_url_env(self) -> None:
         with update_env(JOCALL3_BASE_URL="http://localhost:5000/from/env"):
-            client = AsyncJocall3(api_key=api_key, gemini_api_key=gemini_api_key, _strict_response_validation=True)
+            client = AsyncJocall3(gemini_api_key=gemini_api_key, _strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
 
         # explicit environment arg requires explicitness
         with update_env(JOCALL3_BASE_URL="http://localhost:5000/from/env"):
             with pytest.raises(ValueError, match=r"you must pass base_url=None"):
-                AsyncJocall3(
-                    api_key=api_key,
-                    gemini_api_key=gemini_api_key,
-                    _strict_response_validation=True,
-                    environment="production",
-                )
+                AsyncJocall3(gemini_api_key=gemini_api_key, _strict_response_validation=True, environment="production")
 
             client = AsyncJocall3(
-                base_url=None,
-                api_key=api_key,
-                gemini_api_key=gemini_api_key,
-                _strict_response_validation=True,
-                environment="production",
+                base_url=None, gemini_api_key=gemini_api_key, _strict_response_validation=True, environment="production"
             )
-            assert str(client.base_url).startswith("https://75975599-8fdc-4274-8701-05fc0b8089cc.mock.pstmn.io")
+            assert str(client.base_url).startswith("https://api.quantum-core.finance/v1")
 
             await client.close()
 
@@ -1754,13 +1688,11 @@ class TestAsyncJocall3:
         [
             AsyncJocall3(
                 base_url="http://localhost:5000/custom/path/",
-                api_key=api_key,
                 gemini_api_key=gemini_api_key,
                 _strict_response_validation=True,
             ),
             AsyncJocall3(
                 base_url="http://localhost:5000/custom/path/",
-                api_key=api_key,
                 gemini_api_key=gemini_api_key,
                 _strict_response_validation=True,
                 http_client=httpx.AsyncClient(),
@@ -1784,13 +1716,11 @@ class TestAsyncJocall3:
         [
             AsyncJocall3(
                 base_url="http://localhost:5000/custom/path/",
-                api_key=api_key,
                 gemini_api_key=gemini_api_key,
                 _strict_response_validation=True,
             ),
             AsyncJocall3(
                 base_url="http://localhost:5000/custom/path/",
-                api_key=api_key,
                 gemini_api_key=gemini_api_key,
                 _strict_response_validation=True,
                 http_client=httpx.AsyncClient(),
@@ -1814,13 +1744,11 @@ class TestAsyncJocall3:
         [
             AsyncJocall3(
                 base_url="http://localhost:5000/custom/path/",
-                api_key=api_key,
                 gemini_api_key=gemini_api_key,
                 _strict_response_validation=True,
             ),
             AsyncJocall3(
                 base_url="http://localhost:5000/custom/path/",
-                api_key=api_key,
                 gemini_api_key=gemini_api_key,
                 _strict_response_validation=True,
                 http_client=httpx.AsyncClient(),
@@ -1840,9 +1768,7 @@ class TestAsyncJocall3:
         await client.close()
 
     async def test_copied_client_does_not_close_http(self) -> None:
-        test_client = AsyncJocall3(
-            base_url=base_url, api_key=api_key, gemini_api_key=gemini_api_key, _strict_response_validation=True
-        )
+        test_client = AsyncJocall3(base_url=base_url, gemini_api_key=gemini_api_key, _strict_response_validation=True)
         assert not test_client.is_closed()
 
         copied = test_client.copy()
@@ -1854,9 +1780,7 @@ class TestAsyncJocall3:
         assert not test_client.is_closed()
 
     async def test_client_context_manager(self) -> None:
-        test_client = AsyncJocall3(
-            base_url=base_url, api_key=api_key, gemini_api_key=gemini_api_key, _strict_response_validation=True
-        )
+        test_client = AsyncJocall3(base_url=base_url, gemini_api_key=gemini_api_key, _strict_response_validation=True)
         async with test_client as c2:
             assert c2 is test_client
             assert not c2.is_closed()
@@ -1879,7 +1803,6 @@ class TestAsyncJocall3:
         with pytest.raises(TypeError, match=r"max_retries cannot be None"):
             AsyncJocall3(
                 base_url=base_url,
-                api_key=api_key,
                 gemini_api_key=gemini_api_key,
                 _strict_response_validation=True,
                 max_retries=cast(Any, None),
@@ -1892,15 +1815,13 @@ class TestAsyncJocall3:
 
         respx_mock.get("/foo").mock(return_value=httpx.Response(200, text="my-custom-format"))
 
-        strict_client = AsyncJocall3(
-            base_url=base_url, api_key=api_key, gemini_api_key=gemini_api_key, _strict_response_validation=True
-        )
+        strict_client = AsyncJocall3(base_url=base_url, gemini_api_key=gemini_api_key, _strict_response_validation=True)
 
         with pytest.raises(APIResponseValidationError):
             await strict_client.get("/foo", cast_to=Model)
 
         non_strict_client = AsyncJocall3(
-            base_url=base_url, api_key=api_key, gemini_api_key=gemini_api_key, _strict_response_validation=False
+            base_url=base_url, gemini_api_key=gemini_api_key, _strict_response_validation=False
         )
 
         response = await non_strict_client.get("/foo", cast_to=Model)

@@ -33,6 +33,7 @@ from ..._response import (
 )
 from ..._base_client import make_request_options
 from ...types.transaction_retrieve_response import TransactionRetrieveResponse
+from ...types.transaction_add_notes_response import TransactionAddNotesResponse
 from ...types.transaction_categorize_response import TransactionCategorizeResponse
 
 __all__ = ["TransactionsResource", "AsyncTransactionsResource"]
@@ -175,6 +176,39 @@ class TransactionsResource(SyncAPIResource):
                 ),
             ),
             cast_to=object,
+        )
+
+    def add_notes(
+        self,
+        transaction_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> TransactionAddNotesResponse:
+        """
+        Allows the user to add or update personal notes for a specific transaction.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not transaction_id:
+            raise ValueError(f"Expected a non-empty value for `transaction_id` but received {transaction_id!r}")
+        return self._put(
+            f"/transactions/{transaction_id}/notes",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=TransactionAddNotesResponse,
         )
 
     def categorize(
@@ -351,6 +385,39 @@ class AsyncTransactionsResource(AsyncAPIResource):
             cast_to=object,
         )
 
+    async def add_notes(
+        self,
+        transaction_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> TransactionAddNotesResponse:
+        """
+        Allows the user to add or update personal notes for a specific transaction.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not transaction_id:
+            raise ValueError(f"Expected a non-empty value for `transaction_id` but received {transaction_id!r}")
+        return await self._put(
+            f"/transactions/{transaction_id}/notes",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=TransactionAddNotesResponse,
+        )
+
     async def categorize(
         self,
         transaction_id: str,
@@ -396,6 +463,9 @@ class TransactionsResourceWithRawResponse:
         self.list = to_raw_response_wrapper(
             transactions.list,
         )
+        self.add_notes = to_raw_response_wrapper(
+            transactions.add_notes,
+        )
         self.categorize = to_raw_response_wrapper(
             transactions.categorize,
         )
@@ -418,6 +488,9 @@ class AsyncTransactionsResourceWithRawResponse:
         )
         self.list = async_to_raw_response_wrapper(
             transactions.list,
+        )
+        self.add_notes = async_to_raw_response_wrapper(
+            transactions.add_notes,
         )
         self.categorize = async_to_raw_response_wrapper(
             transactions.categorize,
@@ -442,6 +515,9 @@ class TransactionsResourceWithStreamingResponse:
         self.list = to_streamed_response_wrapper(
             transactions.list,
         )
+        self.add_notes = to_streamed_response_wrapper(
+            transactions.add_notes,
+        )
         self.categorize = to_streamed_response_wrapper(
             transactions.categorize,
         )
@@ -464,6 +540,9 @@ class AsyncTransactionsResourceWithStreamingResponse:
         )
         self.list = async_to_streamed_response_wrapper(
             transactions.list,
+        )
+        self.add_notes = async_to_streamed_response_wrapper(
+            transactions.add_notes,
         )
         self.categorize = async_to_streamed_response_wrapper(
             transactions.categorize,

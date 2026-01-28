@@ -16,6 +16,14 @@ from .simulate import (
     SimulateResourceWithStreamingResponse,
     AsyncSimulateResourceWithStreamingResponse,
 )
+from .simulations import (
+    SimulationsResource,
+    AsyncSimulationsResource,
+    SimulationsResourceWithRawResponse,
+    AsyncSimulationsResourceWithRawResponse,
+    SimulationsResourceWithStreamingResponse,
+    AsyncSimulationsResourceWithStreamingResponse,
+)
 
 __all__ = [
     "SimulateResource",
@@ -24,6 +32,12 @@ __all__ = [
     "AsyncSimulateResourceWithRawResponse",
     "SimulateResourceWithStreamingResponse",
     "AsyncSimulateResourceWithStreamingResponse",
+    "SimulationsResource",
+    "AsyncSimulationsResource",
+    "SimulationsResourceWithRawResponse",
+    "AsyncSimulationsResourceWithRawResponse",
+    "SimulationsResourceWithStreamingResponse",
+    "AsyncSimulationsResourceWithStreamingResponse",
     "OracleResource",
     "AsyncOracleResource",
     "OracleResourceWithRawResponse",

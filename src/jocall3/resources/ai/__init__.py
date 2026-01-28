@@ -8,6 +8,14 @@ from .ai import (
     AIResourceWithStreamingResponse,
     AsyncAIResourceWithStreamingResponse,
 )
+from .ads import (
+    AdsResource,
+    AsyncAdsResource,
+    AdsResourceWithRawResponse,
+    AsyncAdsResourceWithRawResponse,
+    AdsResourceWithStreamingResponse,
+    AsyncAdsResourceWithStreamingResponse,
+)
 from .oracle import (
     OracleResource,
     AsyncOracleResource,
@@ -52,6 +60,12 @@ __all__ = [
     "AsyncIncubatorResourceWithRawResponse",
     "IncubatorResourceWithStreamingResponse",
     "AsyncIncubatorResourceWithStreamingResponse",
+    "AdsResource",
+    "AsyncAdsResource",
+    "AdsResourceWithRawResponse",
+    "AsyncAdsResourceWithRawResponse",
+    "AdsResourceWithStreamingResponse",
+    "AsyncAdsResourceWithStreamingResponse",
     "AIResource",
     "AsyncAIResource",
     "AIResourceWithRawResponse",

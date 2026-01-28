@@ -24,8 +24,22 @@ from .biometrics import (
     BiometricsResourceWithStreamingResponse,
     AsyncBiometricsResourceWithStreamingResponse,
 )
+from .preferences import (
+    PreferencesResource,
+    AsyncPreferencesResource,
+    PreferencesResourceWithRawResponse,
+    AsyncPreferencesResourceWithRawResponse,
+    PreferencesResourceWithStreamingResponse,
+    AsyncPreferencesResourceWithStreamingResponse,
+)
 
 __all__ = [
+    "PreferencesResource",
+    "AsyncPreferencesResource",
+    "PreferencesResourceWithRawResponse",
+    "AsyncPreferencesResourceWithRawResponse",
+    "PreferencesResourceWithStreamingResponse",
+    "AsyncPreferencesResourceWithStreamingResponse",
     "DevicesResource",
     "AsyncDevicesResource",
     "DevicesResourceWithRawResponse",

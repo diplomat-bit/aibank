@@ -23,6 +23,14 @@ from .biometrics import (
     BiometricsResourceWithStreamingResponse,
     AsyncBiometricsResourceWithStreamingResponse,
 )
+from .preferences import (
+    PreferencesResource,
+    AsyncPreferencesResource,
+    PreferencesResourceWithRawResponse,
+    AsyncPreferencesResourceWithRawResponse,
+    PreferencesResourceWithStreamingResponse,
+    AsyncPreferencesResourceWithStreamingResponse,
+)
 from ...._resource import SyncAPIResource, AsyncAPIResource
 from ...._response import (
     to_raw_response_wrapper,
@@ -39,6 +47,10 @@ __all__ = ["MeResource", "AsyncMeResource"]
 
 
 class MeResource(SyncAPIResource):
+    @cached_property
+    def preferences(self) -> PreferencesResource:
+        return PreferencesResource(self._client)
+
     @cached_property
     def devices(self) -> DevicesResource:
         return DevicesResource(self._client)
@@ -133,6 +145,10 @@ class MeResource(SyncAPIResource):
 
 
 class AsyncMeResource(AsyncAPIResource):
+    @cached_property
+    def preferences(self) -> AsyncPreferencesResource:
+        return AsyncPreferencesResource(self._client)
+
     @cached_property
     def devices(self) -> AsyncDevicesResource:
         return AsyncDevicesResource(self._client)
@@ -238,6 +254,10 @@ class MeResourceWithRawResponse:
         )
 
     @cached_property
+    def preferences(self) -> PreferencesResourceWithRawResponse:
+        return PreferencesResourceWithRawResponse(self._me.preferences)
+
+    @cached_property
     def devices(self) -> DevicesResourceWithRawResponse:
         return DevicesResourceWithRawResponse(self._me.devices)
 
@@ -256,6 +276,10 @@ class AsyncMeResourceWithRawResponse:
         self.update = async_to_raw_response_wrapper(
             me.update,
         )
+
+    @cached_property
+    def preferences(self) -> AsyncPreferencesResourceWithRawResponse:
+        return AsyncPreferencesResourceWithRawResponse(self._me.preferences)
 
     @cached_property
     def devices(self) -> AsyncDevicesResourceWithRawResponse:
@@ -278,6 +302,10 @@ class MeResourceWithStreamingResponse:
         )
 
     @cached_property
+    def preferences(self) -> PreferencesResourceWithStreamingResponse:
+        return PreferencesResourceWithStreamingResponse(self._me.preferences)
+
+    @cached_property
     def devices(self) -> DevicesResourceWithStreamingResponse:
         return DevicesResourceWithStreamingResponse(self._me.devices)
 
@@ -296,6 +324,10 @@ class AsyncMeResourceWithStreamingResponse:
         self.update = async_to_streamed_response_wrapper(
             me.update,
         )
+
+    @cached_property
+    def preferences(self) -> AsyncPreferencesResourceWithStreamingResponse:
+        return AsyncPreferencesResourceWithStreamingResponse(self._me.preferences)
 
     @cached_property
     def devices(self) -> AsyncDevicesResourceWithStreamingResponse:
