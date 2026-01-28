@@ -2,5 +2,4 @@
 
 from __future__ import annotations
 
-from .chat_send_message_params import ChatSendMessageParams as ChatSendMessageParams
-from .chat_retrieve_history_params import ChatRetrieveHistoryParams as ChatRetrieveHistoryParams
+from .tool_list_params import ToolListParams as ToolListParams

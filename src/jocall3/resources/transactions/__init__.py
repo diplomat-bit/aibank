@@ -8,6 +8,14 @@ from .insights import (
     InsightsResourceWithStreamingResponse,
     AsyncInsightsResourceWithStreamingResponse,
 )
+from .recurring import (
+    RecurringResource,
+    AsyncRecurringResource,
+    RecurringResourceWithRawResponse,
+    AsyncRecurringResourceWithRawResponse,
+    RecurringResourceWithStreamingResponse,
+    AsyncRecurringResourceWithStreamingResponse,
+)
 from .transactions import (
     TransactionsResource,
     AsyncTransactionsResource,
@@ -18,6 +26,12 @@ from .transactions import (
 )
 
 __all__ = [
+    "RecurringResource",
+    "AsyncRecurringResource",
+    "RecurringResourceWithRawResponse",
+    "AsyncRecurringResourceWithRawResponse",
+    "RecurringResourceWithStreamingResponse",
+    "AsyncRecurringResourceWithStreamingResponse",
     "InsightsResource",
     "AsyncInsightsResource",
     "InsightsResourceWithRawResponse",

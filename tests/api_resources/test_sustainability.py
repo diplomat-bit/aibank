@@ -18,14 +18,14 @@ class TestSustainability:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_method_retrieve_carbon_footprint(self, client: Jocall3) -> None:
-        sustainability = client.sustainability.retrieve_carbon_footprint()
+    def test_method_get_footprint(self, client: Jocall3) -> None:
+        sustainability = client.sustainability.get_footprint()
         assert_matches_type(object, sustainability, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_raw_response_retrieve_carbon_footprint(self, client: Jocall3) -> None:
-        response = client.sustainability.with_raw_response.retrieve_carbon_footprint()
+    def test_raw_response_get_footprint(self, client: Jocall3) -> None:
+        response = client.sustainability.with_raw_response.get_footprint()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -34,8 +34,8 @@ class TestSustainability:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_streaming_response_retrieve_carbon_footprint(self, client: Jocall3) -> None:
-        with client.sustainability.with_streaming_response.retrieve_carbon_footprint() as response:
+    def test_streaming_response_get_footprint(self, client: Jocall3) -> None:
+        with client.sustainability.with_streaming_response.get_footprint() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
@@ -52,14 +52,14 @@ class TestAsyncSustainability:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_method_retrieve_carbon_footprint(self, async_client: AsyncJocall3) -> None:
-        sustainability = await async_client.sustainability.retrieve_carbon_footprint()
+    async def test_method_get_footprint(self, async_client: AsyncJocall3) -> None:
+        sustainability = await async_client.sustainability.get_footprint()
         assert_matches_type(object, sustainability, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_raw_response_retrieve_carbon_footprint(self, async_client: AsyncJocall3) -> None:
-        response = await async_client.sustainability.with_raw_response.retrieve_carbon_footprint()
+    async def test_raw_response_get_footprint(self, async_client: AsyncJocall3) -> None:
+        response = await async_client.sustainability.with_raw_response.get_footprint()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -68,8 +68,8 @@ class TestAsyncSustainability:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_streaming_response_retrieve_carbon_footprint(self, async_client: AsyncJocall3) -> None:
-        async with async_client.sustainability.with_streaming_response.retrieve_carbon_footprint() as response:
+    async def test_streaming_response_get_footprint(self, async_client: AsyncJocall3) -> None:
+        async with async_client.sustainability.with_streaming_response.get_footprint() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 

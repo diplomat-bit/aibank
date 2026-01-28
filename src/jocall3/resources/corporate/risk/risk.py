@@ -2,8 +2,7 @@
 
 from __future__ import annotations
 
-from ...._compat import cached_property
-from .fraud.fraud import (
+from .fraud import (
     FraudResource,
     AsyncFraudResource,
     FraudResourceWithRawResponse,
@@ -11,6 +10,7 @@ from .fraud.fraud import (
     FraudResourceWithStreamingResponse,
     AsyncFraudResourceWithStreamingResponse,
 )
+from ...._compat import cached_property
 from ...._resource import SyncAPIResource, AsyncAPIResource
 
 __all__ = ["RiskResource", "AsyncRiskResource"]

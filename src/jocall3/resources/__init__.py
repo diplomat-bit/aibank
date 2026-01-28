@@ -24,14 +24,6 @@ from .users import (
     UsersResourceWithStreamingResponse,
     AsyncUsersResourceWithStreamingResponse,
 )
-from .budgets import (
-    BudgetsResource,
-    AsyncBudgetsResource,
-    BudgetsResourceWithRawResponse,
-    AsyncBudgetsResourceWithRawResponse,
-    BudgetsResourceWithStreamingResponse,
-    AsyncBudgetsResourceWithStreamingResponse,
-)
 from .accounts import (
     AccountsResource,
     AsyncAccountsResource,
@@ -56,13 +48,13 @@ from .corporate import (
     CorporateResourceWithStreamingResponse,
     AsyncCorporateResourceWithStreamingResponse,
 )
-from .investments import (
-    InvestmentsResource,
-    AsyncInvestmentsResource,
-    InvestmentsResourceWithRawResponse,
-    AsyncInvestmentsResourceWithRawResponse,
-    InvestmentsResourceWithStreamingResponse,
-    AsyncInvestmentsResourceWithStreamingResponse,
+from .marketplace import (
+    MarketplaceResource,
+    AsyncMarketplaceResource,
+    MarketplaceResourceWithRawResponse,
+    AsyncMarketplaceResourceWithRawResponse,
+    MarketplaceResourceWithStreamingResponse,
+    AsyncMarketplaceResourceWithStreamingResponse,
 )
 from .transactions import (
     TransactionsResource,
@@ -100,18 +92,6 @@ __all__ = [
     "AsyncTransactionsResourceWithRawResponse",
     "TransactionsResourceWithStreamingResponse",
     "AsyncTransactionsResourceWithStreamingResponse",
-    "BudgetsResource",
-    "AsyncBudgetsResource",
-    "BudgetsResourceWithRawResponse",
-    "AsyncBudgetsResourceWithRawResponse",
-    "BudgetsResourceWithStreamingResponse",
-    "AsyncBudgetsResourceWithStreamingResponse",
-    "InvestmentsResource",
-    "AsyncInvestmentsResource",
-    "InvestmentsResourceWithRawResponse",
-    "AsyncInvestmentsResourceWithRawResponse",
-    "InvestmentsResourceWithStreamingResponse",
-    "AsyncInvestmentsResourceWithStreamingResponse",
     "AIResource",
     "AsyncAIResource",
     "AIResourceWithRawResponse",
@@ -142,4 +122,10 @@ __all__ = [
     "AsyncSustainabilityResourceWithRawResponse",
     "SustainabilityResourceWithStreamingResponse",
     "AsyncSustainabilityResourceWithStreamingResponse",
+    "MarketplaceResource",
+    "AsyncMarketplaceResource",
+    "MarketplaceResourceWithRawResponse",
+    "AsyncMarketplaceResourceWithRawResponse",
+    "MarketplaceResourceWithStreamingResponse",
+    "AsyncMarketplaceResourceWithStreamingResponse",
 ]

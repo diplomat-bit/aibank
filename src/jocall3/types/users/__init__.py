@@ -5,4 +5,3 @@ from __future__ import annotations
 from .me_update_params import MeUpdateParams as MeUpdateParams
 from .me_update_response import MeUpdateResponse as MeUpdateResponse
 from .me_retrieve_response import MeRetrieveResponse as MeRetrieveResponse
-from .me_list_devices_params import MeListDevicesParams as MeListDevicesParams

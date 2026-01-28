@@ -8,6 +8,14 @@ from .me import (
     MeResourceWithStreamingResponse,
     AsyncMeResourceWithStreamingResponse,
 )
+from .devices import (
+    DevicesResource,
+    AsyncDevicesResource,
+    DevicesResourceWithRawResponse,
+    AsyncDevicesResourceWithRawResponse,
+    DevicesResourceWithStreamingResponse,
+    AsyncDevicesResourceWithStreamingResponse,
+)
 from .biometrics import (
     BiometricsResource,
     AsyncBiometricsResource,
@@ -16,22 +24,14 @@ from .biometrics import (
     BiometricsResourceWithStreamingResponse,
     AsyncBiometricsResourceWithStreamingResponse,
 )
-from .preferences import (
-    PreferencesResource,
-    AsyncPreferencesResource,
-    PreferencesResourceWithRawResponse,
-    AsyncPreferencesResourceWithRawResponse,
-    PreferencesResourceWithStreamingResponse,
-    AsyncPreferencesResourceWithStreamingResponse,
-)
 
 __all__ = [
-    "PreferencesResource",
-    "AsyncPreferencesResource",
-    "PreferencesResourceWithRawResponse",
-    "AsyncPreferencesResourceWithRawResponse",
-    "PreferencesResourceWithStreamingResponse",
-    "AsyncPreferencesResourceWithStreamingResponse",
+    "DevicesResource",
+    "AsyncDevicesResource",
+    "DevicesResourceWithRawResponse",
+    "AsyncDevicesResourceWithRawResponse",
+    "DevicesResourceWithStreamingResponse",
+    "AsyncDevicesResourceWithStreamingResponse",
     "BiometricsResource",
     "AsyncBiometricsResource",
     "BiometricsResourceWithRawResponse",

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import httpx
 
-from ...types import transaction_list_params, transaction_list_recurring_params
+from ...types import transaction_list_params
 from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ..._utils import maybe_transform, async_maybe_transform
 from .insights import (
@@ -16,6 +16,14 @@ from .insights import (
     AsyncInsightsResourceWithStreamingResponse,
 )
 from ..._compat import cached_property
+from .recurring import (
+    RecurringResource,
+    AsyncRecurringResource,
+    RecurringResourceWithRawResponse,
+    AsyncRecurringResourceWithRawResponse,
+    RecurringResourceWithStreamingResponse,
+    AsyncRecurringResourceWithStreamingResponse,
+)
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
     to_raw_response_wrapper,
@@ -26,12 +34,15 @@ from ..._response import (
 from ..._base_client import make_request_options
 from ...types.transaction_retrieve_response import TransactionRetrieveResponse
 from ...types.transaction_categorize_response import TransactionCategorizeResponse
-from ...types.transaction_update_notes_response import TransactionUpdateNotesResponse
 
 __all__ = ["TransactionsResource", "AsyncTransactionsResource"]
 
 
 class TransactionsResource(SyncAPIResource):
+    @cached_property
+    def recurring(self) -> RecurringResource:
+        return RecurringResource(self._client)
+
     @cached_property
     def insights(self) -> InsightsResource:
         return InsightsResource(self._client)
@@ -200,88 +211,12 @@ class TransactionsResource(SyncAPIResource):
             cast_to=TransactionCategorizeResponse,
         )
 
-    def list_recurring(
-        self,
-        *,
-        limit: int | Omit = omit,
-        offset: int | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
-        """
-        Retrieves a list of all detected or user-defined recurring transactions, useful
-        for budget tracking and subscription management.
-
-        Args:
-          limit: Maximum number of items to return in a single page.
-
-          offset: Number of items to skip before starting to collect the result set.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        return self._get(
-            "/transactions/recurring",
-            options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                query=maybe_transform(
-                    {
-                        "limit": limit,
-                        "offset": offset,
-                    },
-                    transaction_list_recurring_params.TransactionListRecurringParams,
-                ),
-            ),
-            cast_to=object,
-        )
-
-    def update_notes(
-        self,
-        transaction_id: str,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> TransactionUpdateNotesResponse:
-        """
-        Allows the user to add or update personal notes for a specific transaction.
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not transaction_id:
-            raise ValueError(f"Expected a non-empty value for `transaction_id` but received {transaction_id!r}")
-        return self._put(
-            f"/transactions/{transaction_id}/notes",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=TransactionUpdateNotesResponse,
-        )
-
 
 class AsyncTransactionsResource(AsyncAPIResource):
+    @cached_property
+    def recurring(self) -> AsyncRecurringResource:
+        return AsyncRecurringResource(self._client)
+
     @cached_property
     def insights(self) -> AsyncInsightsResource:
         return AsyncInsightsResource(self._client)
@@ -450,86 +385,6 @@ class AsyncTransactionsResource(AsyncAPIResource):
             cast_to=TransactionCategorizeResponse,
         )
 
-    async def list_recurring(
-        self,
-        *,
-        limit: int | Omit = omit,
-        offset: int | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
-        """
-        Retrieves a list of all detected or user-defined recurring transactions, useful
-        for budget tracking and subscription management.
-
-        Args:
-          limit: Maximum number of items to return in a single page.
-
-          offset: Number of items to skip before starting to collect the result set.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        return await self._get(
-            "/transactions/recurring",
-            options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                query=await async_maybe_transform(
-                    {
-                        "limit": limit,
-                        "offset": offset,
-                    },
-                    transaction_list_recurring_params.TransactionListRecurringParams,
-                ),
-            ),
-            cast_to=object,
-        )
-
-    async def update_notes(
-        self,
-        transaction_id: str,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> TransactionUpdateNotesResponse:
-        """
-        Allows the user to add or update personal notes for a specific transaction.
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not transaction_id:
-            raise ValueError(f"Expected a non-empty value for `transaction_id` but received {transaction_id!r}")
-        return await self._put(
-            f"/transactions/{transaction_id}/notes",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=TransactionUpdateNotesResponse,
-        )
-
 
 class TransactionsResourceWithRawResponse:
     def __init__(self, transactions: TransactionsResource) -> None:
@@ -544,12 +399,10 @@ class TransactionsResourceWithRawResponse:
         self.categorize = to_raw_response_wrapper(
             transactions.categorize,
         )
-        self.list_recurring = to_raw_response_wrapper(
-            transactions.list_recurring,
-        )
-        self.update_notes = to_raw_response_wrapper(
-            transactions.update_notes,
-        )
+
+    @cached_property
+    def recurring(self) -> RecurringResourceWithRawResponse:
+        return RecurringResourceWithRawResponse(self._transactions.recurring)
 
     @cached_property
     def insights(self) -> InsightsResourceWithRawResponse:
@@ -569,12 +422,10 @@ class AsyncTransactionsResourceWithRawResponse:
         self.categorize = async_to_raw_response_wrapper(
             transactions.categorize,
         )
-        self.list_recurring = async_to_raw_response_wrapper(
-            transactions.list_recurring,
-        )
-        self.update_notes = async_to_raw_response_wrapper(
-            transactions.update_notes,
-        )
+
+    @cached_property
+    def recurring(self) -> AsyncRecurringResourceWithRawResponse:
+        return AsyncRecurringResourceWithRawResponse(self._transactions.recurring)
 
     @cached_property
     def insights(self) -> AsyncInsightsResourceWithRawResponse:
@@ -594,12 +445,10 @@ class TransactionsResourceWithStreamingResponse:
         self.categorize = to_streamed_response_wrapper(
             transactions.categorize,
         )
-        self.list_recurring = to_streamed_response_wrapper(
-            transactions.list_recurring,
-        )
-        self.update_notes = to_streamed_response_wrapper(
-            transactions.update_notes,
-        )
+
+    @cached_property
+    def recurring(self) -> RecurringResourceWithStreamingResponse:
+        return RecurringResourceWithStreamingResponse(self._transactions.recurring)
 
     @cached_property
     def insights(self) -> InsightsResourceWithStreamingResponse:
@@ -619,12 +468,10 @@ class AsyncTransactionsResourceWithStreamingResponse:
         self.categorize = async_to_streamed_response_wrapper(
             transactions.categorize,
         )
-        self.list_recurring = async_to_streamed_response_wrapper(
-            transactions.list_recurring,
-        )
-        self.update_notes = async_to_streamed_response_wrapper(
-            transactions.update_notes,
-        )
+
+    @cached_property
+    def recurring(self) -> AsyncRecurringResourceWithStreamingResponse:
+        return AsyncRecurringResourceWithStreamingResponse(self._transactions.recurring)
 
     @cached_property
     def insights(self) -> AsyncInsightsResourceWithStreamingResponse:

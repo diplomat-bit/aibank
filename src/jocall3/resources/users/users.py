@@ -24,24 +24,12 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ..._base_client import make_request_options
-from .password_reset import (
-    PasswordResetResource,
-    AsyncPasswordResetResource,
-    PasswordResetResourceWithRawResponse,
-    AsyncPasswordResetResourceWithRawResponse,
-    PasswordResetResourceWithStreamingResponse,
-    AsyncPasswordResetResourceWithStreamingResponse,
-)
 from ...types.user_register_response import UserRegisterResponse
 
 __all__ = ["UsersResource", "AsyncUsersResource"]
 
 
 class UsersResource(SyncAPIResource):
-    @cached_property
-    def password_reset(self) -> PasswordResetResource:
-        return PasswordResetResource(self._client)
-
     @cached_property
     def me(self) -> MeResource:
         return MeResource(self._client)
@@ -124,10 +112,6 @@ class UsersResource(SyncAPIResource):
 
 
 class AsyncUsersResource(AsyncAPIResource):
-    @cached_property
-    def password_reset(self) -> AsyncPasswordResetResource:
-        return AsyncPasswordResetResource(self._client)
-
     @cached_property
     def me(self) -> AsyncMeResource:
         return AsyncMeResource(self._client)
@@ -221,10 +205,6 @@ class UsersResourceWithRawResponse:
         )
 
     @cached_property
-    def password_reset(self) -> PasswordResetResourceWithRawResponse:
-        return PasswordResetResourceWithRawResponse(self._users.password_reset)
-
-    @cached_property
     def me(self) -> MeResourceWithRawResponse:
         return MeResourceWithRawResponse(self._users.me)
 
@@ -239,10 +219,6 @@ class AsyncUsersResourceWithRawResponse:
         self.register = async_to_raw_response_wrapper(
             users.register,
         )
-
-    @cached_property
-    def password_reset(self) -> AsyncPasswordResetResourceWithRawResponse:
-        return AsyncPasswordResetResourceWithRawResponse(self._users.password_reset)
 
     @cached_property
     def me(self) -> AsyncMeResourceWithRawResponse:
@@ -261,10 +237,6 @@ class UsersResourceWithStreamingResponse:
         )
 
     @cached_property
-    def password_reset(self) -> PasswordResetResourceWithStreamingResponse:
-        return PasswordResetResourceWithStreamingResponse(self._users.password_reset)
-
-    @cached_property
     def me(self) -> MeResourceWithStreamingResponse:
         return MeResourceWithStreamingResponse(self._users.me)
 
@@ -279,10 +251,6 @@ class AsyncUsersResourceWithStreamingResponse:
         self.register = async_to_streamed_response_wrapper(
             users.register,
         )
-
-    @cached_property
-    def password_reset(self) -> AsyncPasswordResetResourceWithStreamingResponse:
-        return AsyncPasswordResetResourceWithStreamingResponse(self._users.password_reset)
 
     @cached_property
     def me(self) -> AsyncMeResourceWithStreamingResponse:
