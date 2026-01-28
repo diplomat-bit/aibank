@@ -15,7 +15,7 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ..._base_client import make_request_options
-from ...types.accounts import transaction_retrieve_pending_params
+from ...types.accounts import transaction_list_pending_params
 
 __all__ = ["TransactionsResource", "AsyncTransactionsResource"]
 
@@ -40,7 +40,7 @@ class TransactionsResource(SyncAPIResource):
         """
         return TransactionsResourceWithStreamingResponse(self)
 
-    def retrieve_pending(
+    def list_pending(
         self,
         account_id: str,
         *,
@@ -84,7 +84,7 @@ class TransactionsResource(SyncAPIResource):
                         "limit": limit,
                         "offset": offset,
                     },
-                    transaction_retrieve_pending_params.TransactionRetrievePendingParams,
+                    transaction_list_pending_params.TransactionListPendingParams,
                 ),
             ),
             cast_to=object,
@@ -111,7 +111,7 @@ class AsyncTransactionsResource(AsyncAPIResource):
         """
         return AsyncTransactionsResourceWithStreamingResponse(self)
 
-    async def retrieve_pending(
+    async def list_pending(
         self,
         account_id: str,
         *,
@@ -155,7 +155,7 @@ class AsyncTransactionsResource(AsyncAPIResource):
                         "limit": limit,
                         "offset": offset,
                     },
-                    transaction_retrieve_pending_params.TransactionRetrievePendingParams,
+                    transaction_list_pending_params.TransactionListPendingParams,
                 ),
             ),
             cast_to=object,
@@ -166,8 +166,8 @@ class TransactionsResourceWithRawResponse:
     def __init__(self, transactions: TransactionsResource) -> None:
         self._transactions = transactions
 
-        self.retrieve_pending = to_raw_response_wrapper(
-            transactions.retrieve_pending,
+        self.list_pending = to_raw_response_wrapper(
+            transactions.list_pending,
         )
 
 
@@ -175,8 +175,8 @@ class AsyncTransactionsResourceWithRawResponse:
     def __init__(self, transactions: AsyncTransactionsResource) -> None:
         self._transactions = transactions
 
-        self.retrieve_pending = async_to_raw_response_wrapper(
-            transactions.retrieve_pending,
+        self.list_pending = async_to_raw_response_wrapper(
+            transactions.list_pending,
         )
 
 
@@ -184,8 +184,8 @@ class TransactionsResourceWithStreamingResponse:
     def __init__(self, transactions: TransactionsResource) -> None:
         self._transactions = transactions
 
-        self.retrieve_pending = to_streamed_response_wrapper(
-            transactions.retrieve_pending,
+        self.list_pending = to_streamed_response_wrapper(
+            transactions.list_pending,
         )
 
 
@@ -193,6 +193,6 @@ class AsyncTransactionsResourceWithStreamingResponse:
     def __init__(self, transactions: AsyncTransactionsResource) -> None:
         self._transactions = transactions
 
-        self.retrieve_pending = async_to_streamed_response_wrapper(
-            transactions.retrieve_pending,
+        self.list_pending = async_to_streamed_response_wrapper(
+            transactions.list_pending,
         )

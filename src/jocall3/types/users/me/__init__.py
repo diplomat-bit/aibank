@@ -2,6 +2,4 @@
 
 from __future__ import annotations
 
-from .preference_update_params import PreferenceUpdateParams as PreferenceUpdateParams
-from .preference_update_response import PreferenceUpdateResponse as PreferenceUpdateResponse
-from .preference_retrieve_response import PreferenceRetrieveResponse as PreferenceRetrieveResponse
+from .device_list_params import DeviceListParams as DeviceListParams

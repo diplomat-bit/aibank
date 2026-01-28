@@ -2,14 +2,6 @@
 
 from __future__ import annotations
 
-from .ads import (
-    AdsResource,
-    AsyncAdsResource,
-    AdsResourceWithRawResponse,
-    AsyncAdsResourceWithRawResponse,
-    AdsResourceWithStreamingResponse,
-    AsyncAdsResourceWithStreamingResponse,
-)
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from .oracle.oracle import (
@@ -54,10 +46,6 @@ class AIResource(SyncAPIResource):
         return IncubatorResource(self._client)
 
     @cached_property
-    def ads(self) -> AdsResource:
-        return AdsResource(self._client)
-
-    @cached_property
     def with_raw_response(self) -> AIResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
@@ -89,10 +77,6 @@ class AsyncAIResource(AsyncAPIResource):
     @cached_property
     def incubator(self) -> AsyncIncubatorResource:
         return AsyncIncubatorResource(self._client)
-
-    @cached_property
-    def ads(self) -> AsyncAdsResource:
-        return AsyncAdsResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AsyncAIResourceWithRawResponse:
@@ -130,10 +114,6 @@ class AIResourceWithRawResponse:
     def incubator(self) -> IncubatorResourceWithRawResponse:
         return IncubatorResourceWithRawResponse(self._ai.incubator)
 
-    @cached_property
-    def ads(self) -> AdsResourceWithRawResponse:
-        return AdsResourceWithRawResponse(self._ai.ads)
-
 
 class AsyncAIResourceWithRawResponse:
     def __init__(self, ai: AsyncAIResource) -> None:
@@ -150,10 +130,6 @@ class AsyncAIResourceWithRawResponse:
     @cached_property
     def incubator(self) -> AsyncIncubatorResourceWithRawResponse:
         return AsyncIncubatorResourceWithRawResponse(self._ai.incubator)
-
-    @cached_property
-    def ads(self) -> AsyncAdsResourceWithRawResponse:
-        return AsyncAdsResourceWithRawResponse(self._ai.ads)
 
 
 class AIResourceWithStreamingResponse:
@@ -172,10 +148,6 @@ class AIResourceWithStreamingResponse:
     def incubator(self) -> IncubatorResourceWithStreamingResponse:
         return IncubatorResourceWithStreamingResponse(self._ai.incubator)
 
-    @cached_property
-    def ads(self) -> AdsResourceWithStreamingResponse:
-        return AdsResourceWithStreamingResponse(self._ai.ads)
-
 
 class AsyncAIResourceWithStreamingResponse:
     def __init__(self, ai: AsyncAIResource) -> None:
@@ -192,7 +164,3 @@ class AsyncAIResourceWithStreamingResponse:
     @cached_property
     def incubator(self) -> AsyncIncubatorResourceWithStreamingResponse:
         return AsyncIncubatorResourceWithStreamingResponse(self._ai.incubator)
-
-    @cached_property
-    def ads(self) -> AsyncAdsResourceWithStreamingResponse:
-        return AsyncAdsResourceWithStreamingResponse(self._ai.ads)

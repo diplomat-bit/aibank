@@ -16,22 +16,8 @@ from .users import (
     UsersResourceWithStreamingResponse,
     AsyncUsersResourceWithStreamingResponse,
 )
-from .password_reset import (
-    PasswordResetResource,
-    AsyncPasswordResetResource,
-    PasswordResetResourceWithRawResponse,
-    AsyncPasswordResetResourceWithRawResponse,
-    PasswordResetResourceWithStreamingResponse,
-    AsyncPasswordResetResourceWithStreamingResponse,
-)
 
 __all__ = [
-    "PasswordResetResource",
-    "AsyncPasswordResetResource",
-    "PasswordResetResourceWithRawResponse",
-    "AsyncPasswordResetResourceWithRawResponse",
-    "PasswordResetResourceWithStreamingResponse",
-    "AsyncPasswordResetResourceWithStreamingResponse",
     "MeResource",
     "AsyncMeResource",
     "MeResourceWithRawResponse",

@@ -4,18 +4,10 @@ from __future__ import annotations
 
 import httpx
 
-from .pitch import (
-    PitchResource,
-    AsyncPitchResource,
-    PitchResourceWithRawResponse,
-    AsyncPitchResourceWithRawResponse,
-    PitchResourceWithStreamingResponse,
-    AsyncPitchResourceWithStreamingResponse,
-)
-from ...._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from ...._types import Body, Query, Headers, NotGiven, not_given
 from ...._utils import maybe_transform, async_maybe_transform
 from ...._compat import cached_property
-from ....types.ai import incubator_list_pitches_params
+from ....types.ai import incubator_generate_pitch_params
 from ...._resource import SyncAPIResource, AsyncAPIResource
 from ...._response import (
     to_raw_response_wrapper,
@@ -29,10 +21,6 @@ __all__ = ["IncubatorResource", "AsyncIncubatorResource"]
 
 
 class IncubatorResource(SyncAPIResource):
-    @cached_property
-    def pitch(self) -> PitchResource:
-        return PitchResource(self._client)
-
     @cached_property
     def with_raw_response(self) -> IncubatorResourceWithRawResponse:
         """
@@ -52,12 +40,10 @@ class IncubatorResource(SyncAPIResource):
         """
         return IncubatorResourceWithStreamingResponse(self)
 
-    def list_pitches(
+    def generate_pitch(
         self,
         *,
-        limit: int | Omit = omit,
-        offset: int | Omit = omit,
-        status: str | Omit = omit,
+        financial_projections: object,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -66,15 +52,13 @@ class IncubatorResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> object:
         """
-        Retrieves a summary list of all business pitches submitted by the authenticated
-        user to Quantum Weaver.
+        Submits a detailed business plan to the Quantum Weaver AI for rigorous analysis,
+        market validation, and seed funding consideration. This initiates the AI-driven
+        incubation journey, aiming to transform innovative ideas into commercially
+        successful ventures.
 
         Args:
-          limit: Maximum number of items to return in a single page.
-
-          offset: Number of items to skip before starting to collect the result set.
-
-          status: Filter pitches by their current stage.
+          financial_projections: Key financial metrics and projections for the next 3-5 years.
 
           extra_headers: Send extra headers
 
@@ -84,31 +68,20 @@ class IncubatorResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return self._get(
-            "/ai/incubator/pitches",
+        return self._post(
+            "/ai/incubator/pitch",
+            body=maybe_transform(
+                {"financial_projections": financial_projections},
+                incubator_generate_pitch_params.IncubatorGeneratePitchParams,
+            ),
             options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                query=maybe_transform(
-                    {
-                        "limit": limit,
-                        "offset": offset,
-                        "status": status,
-                    },
-                    incubator_list_pitches_params.IncubatorListPitchesParams,
-                ),
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=object,
         )
 
 
 class AsyncIncubatorResource(AsyncAPIResource):
-    @cached_property
-    def pitch(self) -> AsyncPitchResource:
-        return AsyncPitchResource(self._client)
-
     @cached_property
     def with_raw_response(self) -> AsyncIncubatorResourceWithRawResponse:
         """
@@ -128,12 +101,10 @@ class AsyncIncubatorResource(AsyncAPIResource):
         """
         return AsyncIncubatorResourceWithStreamingResponse(self)
 
-    async def list_pitches(
+    async def generate_pitch(
         self,
         *,
-        limit: int | Omit = omit,
-        offset: int | Omit = omit,
-        status: str | Omit = omit,
+        financial_projections: object,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -142,15 +113,13 @@ class AsyncIncubatorResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> object:
         """
-        Retrieves a summary list of all business pitches submitted by the authenticated
-        user to Quantum Weaver.
+        Submits a detailed business plan to the Quantum Weaver AI for rigorous analysis,
+        market validation, and seed funding consideration. This initiates the AI-driven
+        incubation journey, aiming to transform innovative ideas into commercially
+        successful ventures.
 
         Args:
-          limit: Maximum number of items to return in a single page.
-
-          offset: Number of items to skip before starting to collect the result set.
-
-          status: Filter pitches by their current stage.
+          financial_projections: Key financial metrics and projections for the next 3-5 years.
 
           extra_headers: Send extra headers
 
@@ -160,21 +129,14 @@ class AsyncIncubatorResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return await self._get(
-            "/ai/incubator/pitches",
+        return await self._post(
+            "/ai/incubator/pitch",
+            body=await async_maybe_transform(
+                {"financial_projections": financial_projections},
+                incubator_generate_pitch_params.IncubatorGeneratePitchParams,
+            ),
             options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                query=await async_maybe_transform(
-                    {
-                        "limit": limit,
-                        "offset": offset,
-                        "status": status,
-                    },
-                    incubator_list_pitches_params.IncubatorListPitchesParams,
-                ),
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=object,
         )
@@ -184,49 +146,33 @@ class IncubatorResourceWithRawResponse:
     def __init__(self, incubator: IncubatorResource) -> None:
         self._incubator = incubator
 
-        self.list_pitches = to_raw_response_wrapper(
-            incubator.list_pitches,
+        self.generate_pitch = to_raw_response_wrapper(
+            incubator.generate_pitch,
         )
-
-    @cached_property
-    def pitch(self) -> PitchResourceWithRawResponse:
-        return PitchResourceWithRawResponse(self._incubator.pitch)
 
 
 class AsyncIncubatorResourceWithRawResponse:
     def __init__(self, incubator: AsyncIncubatorResource) -> None:
         self._incubator = incubator
 
-        self.list_pitches = async_to_raw_response_wrapper(
-            incubator.list_pitches,
+        self.generate_pitch = async_to_raw_response_wrapper(
+            incubator.generate_pitch,
         )
-
-    @cached_property
-    def pitch(self) -> AsyncPitchResourceWithRawResponse:
-        return AsyncPitchResourceWithRawResponse(self._incubator.pitch)
 
 
 class IncubatorResourceWithStreamingResponse:
     def __init__(self, incubator: IncubatorResource) -> None:
         self._incubator = incubator
 
-        self.list_pitches = to_streamed_response_wrapper(
-            incubator.list_pitches,
+        self.generate_pitch = to_streamed_response_wrapper(
+            incubator.generate_pitch,
         )
-
-    @cached_property
-    def pitch(self) -> PitchResourceWithStreamingResponse:
-        return PitchResourceWithStreamingResponse(self._incubator.pitch)
 
 
 class AsyncIncubatorResourceWithStreamingResponse:
     def __init__(self, incubator: AsyncIncubatorResource) -> None:
         self._incubator = incubator
 
-        self.list_pitches = async_to_streamed_response_wrapper(
-            incubator.list_pitches,
+        self.generate_pitch = async_to_streamed_response_wrapper(
+            incubator.generate_pitch,
         )
-
-    @cached_property
-    def pitch(self) -> AsyncPitchResourceWithStreamingResponse:
-        return AsyncPitchResourceWithStreamingResponse(self._incubator.pitch)

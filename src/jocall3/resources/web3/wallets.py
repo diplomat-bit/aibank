@@ -14,7 +14,7 @@ from ..._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ...types.web3 import wallet_list_params, wallet_retrieve_balances_params
+from ...types.web3 import wallet_list_params, wallet_get_balance_params
 from ..._base_client import make_request_options
 
 __all__ = ["WalletsResource", "AsyncWalletsResource"]
@@ -111,7 +111,7 @@ class WalletsResource(SyncAPIResource):
             cast_to=object,
         )
 
-    def retrieve_balances(
+    def get_balance(
         self,
         wallet_id: str,
         *,
@@ -155,7 +155,7 @@ class WalletsResource(SyncAPIResource):
                         "limit": limit,
                         "offset": offset,
                     },
-                    wallet_retrieve_balances_params.WalletRetrieveBalancesParams,
+                    wallet_get_balance_params.WalletGetBalanceParams,
                 ),
             ),
             cast_to=object,
@@ -253,7 +253,7 @@ class AsyncWalletsResource(AsyncAPIResource):
             cast_to=object,
         )
 
-    async def retrieve_balances(
+    async def get_balance(
         self,
         wallet_id: str,
         *,
@@ -297,7 +297,7 @@ class AsyncWalletsResource(AsyncAPIResource):
                         "limit": limit,
                         "offset": offset,
                     },
-                    wallet_retrieve_balances_params.WalletRetrieveBalancesParams,
+                    wallet_get_balance_params.WalletGetBalanceParams,
                 ),
             ),
             cast_to=object,
@@ -314,8 +314,8 @@ class WalletsResourceWithRawResponse:
         self.list = to_raw_response_wrapper(
             wallets.list,
         )
-        self.retrieve_balances = to_raw_response_wrapper(
-            wallets.retrieve_balances,
+        self.get_balance = to_raw_response_wrapper(
+            wallets.get_balance,
         )
 
 
@@ -329,8 +329,8 @@ class AsyncWalletsResourceWithRawResponse:
         self.list = async_to_raw_response_wrapper(
             wallets.list,
         )
-        self.retrieve_balances = async_to_raw_response_wrapper(
-            wallets.retrieve_balances,
+        self.get_balance = async_to_raw_response_wrapper(
+            wallets.get_balance,
         )
 
 
@@ -344,8 +344,8 @@ class WalletsResourceWithStreamingResponse:
         self.list = to_streamed_response_wrapper(
             wallets.list,
         )
-        self.retrieve_balances = to_streamed_response_wrapper(
-            wallets.retrieve_balances,
+        self.get_balance = to_streamed_response_wrapper(
+            wallets.get_balance,
         )
 
 
@@ -359,6 +359,6 @@ class AsyncWalletsResourceWithStreamingResponse:
         self.list = async_to_streamed_response_wrapper(
             wallets.list,
         )
-        self.retrieve_balances = async_to_streamed_response_wrapper(
-            wallets.retrieve_balances,
+        self.get_balance = async_to_streamed_response_wrapper(
+            wallets.get_balance,
         )

@@ -18,16 +18,16 @@ class TestTransactions:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_method_retrieve_pending(self, client: Jocall3) -> None:
-        transaction = client.accounts.transactions.retrieve_pending(
+    def test_method_list_pending(self, client: Jocall3) -> None:
+        transaction = client.accounts.transactions.list_pending(
             account_id="acc_chase_checking_4567",
         )
         assert_matches_type(object, transaction, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_method_retrieve_pending_with_all_params(self, client: Jocall3) -> None:
-        transaction = client.accounts.transactions.retrieve_pending(
+    def test_method_list_pending_with_all_params(self, client: Jocall3) -> None:
+        transaction = client.accounts.transactions.list_pending(
             account_id="acc_chase_checking_4567",
             limit=0,
             offset=0,
@@ -36,8 +36,8 @@ class TestTransactions:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_raw_response_retrieve_pending(self, client: Jocall3) -> None:
-        response = client.accounts.transactions.with_raw_response.retrieve_pending(
+    def test_raw_response_list_pending(self, client: Jocall3) -> None:
+        response = client.accounts.transactions.with_raw_response.list_pending(
             account_id="acc_chase_checking_4567",
         )
 
@@ -48,8 +48,8 @@ class TestTransactions:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_streaming_response_retrieve_pending(self, client: Jocall3) -> None:
-        with client.accounts.transactions.with_streaming_response.retrieve_pending(
+    def test_streaming_response_list_pending(self, client: Jocall3) -> None:
+        with client.accounts.transactions.with_streaming_response.list_pending(
             account_id="acc_chase_checking_4567",
         ) as response:
             assert not response.is_closed
@@ -62,9 +62,9 @@ class TestTransactions:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_path_params_retrieve_pending(self, client: Jocall3) -> None:
+    def test_path_params_list_pending(self, client: Jocall3) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `account_id` but received ''"):
-            client.accounts.transactions.with_raw_response.retrieve_pending(
+            client.accounts.transactions.with_raw_response.list_pending(
                 account_id="",
             )
 
@@ -76,16 +76,16 @@ class TestAsyncTransactions:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_method_retrieve_pending(self, async_client: AsyncJocall3) -> None:
-        transaction = await async_client.accounts.transactions.retrieve_pending(
+    async def test_method_list_pending(self, async_client: AsyncJocall3) -> None:
+        transaction = await async_client.accounts.transactions.list_pending(
             account_id="acc_chase_checking_4567",
         )
         assert_matches_type(object, transaction, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_method_retrieve_pending_with_all_params(self, async_client: AsyncJocall3) -> None:
-        transaction = await async_client.accounts.transactions.retrieve_pending(
+    async def test_method_list_pending_with_all_params(self, async_client: AsyncJocall3) -> None:
+        transaction = await async_client.accounts.transactions.list_pending(
             account_id="acc_chase_checking_4567",
             limit=0,
             offset=0,
@@ -94,8 +94,8 @@ class TestAsyncTransactions:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_raw_response_retrieve_pending(self, async_client: AsyncJocall3) -> None:
-        response = await async_client.accounts.transactions.with_raw_response.retrieve_pending(
+    async def test_raw_response_list_pending(self, async_client: AsyncJocall3) -> None:
+        response = await async_client.accounts.transactions.with_raw_response.list_pending(
             account_id="acc_chase_checking_4567",
         )
 
@@ -106,8 +106,8 @@ class TestAsyncTransactions:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_streaming_response_retrieve_pending(self, async_client: AsyncJocall3) -> None:
-        async with async_client.accounts.transactions.with_streaming_response.retrieve_pending(
+    async def test_streaming_response_list_pending(self, async_client: AsyncJocall3) -> None:
+        async with async_client.accounts.transactions.with_streaming_response.list_pending(
             account_id="acc_chase_checking_4567",
         ) as response:
             assert not response.is_closed
@@ -120,8 +120,8 @@ class TestAsyncTransactions:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_path_params_retrieve_pending(self, async_client: AsyncJocall3) -> None:
+    async def test_path_params_list_pending(self, async_client: AsyncJocall3) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `account_id` but received ''"):
-            await async_client.accounts.transactions.with_raw_response.retrieve_pending(
+            await async_client.accounts.transactions.with_raw_response.list_pending(
                 account_id="",
             )

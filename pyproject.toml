@@ -5,7 +5,7 @@ description = "The official Python library for the jocall3 API"
 dynamic = ["readme"]
 license = "Apache-2.0"
 authors = [
-{ name = "Jocall3", email = "" },
+{ name = "Jocall3", email = "diplomat@citibankdemobusiness.dev" },
 ]
 
 dependencies = [
