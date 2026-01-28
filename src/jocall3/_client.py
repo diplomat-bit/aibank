@@ -31,14 +31,13 @@ from ._base_client import (
 )
 
 if TYPE_CHECKING:
-    from .resources import ai, web3, users, accounts, payments, corporate, marketplace, transactions, sustainability
+    from .resources import ai, web3, users, accounts, payments, corporate, transactions, sustainability
     from .resources.ai.ai import AIResource, AsyncAIResource
     from .resources.web3.web3 import Web3Resource, AsyncWeb3Resource
     from .resources.users.users import UsersResource, AsyncUsersResource
     from .resources.accounts.accounts import AccountsResource, AsyncAccountsResource
     from .resources.payments.payments import PaymentsResource, AsyncPaymentsResource
     from .resources.corporate.corporate import CorporateResource, AsyncCorporateResource
-    from .resources.marketplace.marketplace import MarketplaceResource, AsyncMarketplaceResource
     from .resources.transactions.transactions import TransactionsResource, AsyncTransactionsResource
     from .resources.sustainability.sustainability import SustainabilityResource, AsyncSustainabilityResource
 
@@ -199,12 +198,6 @@ class Jocall3(SyncAPIClient):
         from .resources.sustainability import SustainabilityResource
 
         return SustainabilityResource(self)
-
-    @cached_property
-    def marketplace(self) -> MarketplaceResource:
-        from .resources.marketplace import MarketplaceResource
-
-        return MarketplaceResource(self)
 
     @cached_property
     def with_raw_response(self) -> Jocall3WithRawResponse:
@@ -472,12 +465,6 @@ class AsyncJocall3(AsyncAPIClient):
         return AsyncSustainabilityResource(self)
 
     @cached_property
-    def marketplace(self) -> AsyncMarketplaceResource:
-        from .resources.marketplace import AsyncMarketplaceResource
-
-        return AsyncMarketplaceResource(self)
-
-    @cached_property
     def with_raw_response(self) -> AsyncJocall3WithRawResponse:
         return AsyncJocall3WithRawResponse(self)
 
@@ -657,12 +644,6 @@ class Jocall3WithRawResponse:
 
         return SustainabilityResourceWithRawResponse(self._client.sustainability)
 
-    @cached_property
-    def marketplace(self) -> marketplace.MarketplaceResourceWithRawResponse:
-        from .resources.marketplace import MarketplaceResourceWithRawResponse
-
-        return MarketplaceResourceWithRawResponse(self._client.marketplace)
-
 
 class AsyncJocall3WithRawResponse:
     _client: AsyncJocall3
@@ -717,12 +698,6 @@ class AsyncJocall3WithRawResponse:
         from .resources.sustainability import AsyncSustainabilityResourceWithRawResponse
 
         return AsyncSustainabilityResourceWithRawResponse(self._client.sustainability)
-
-    @cached_property
-    def marketplace(self) -> marketplace.AsyncMarketplaceResourceWithRawResponse:
-        from .resources.marketplace import AsyncMarketplaceResourceWithRawResponse
-
-        return AsyncMarketplaceResourceWithRawResponse(self._client.marketplace)
 
 
 class Jocall3WithStreamedResponse:
@@ -779,12 +754,6 @@ class Jocall3WithStreamedResponse:
 
         return SustainabilityResourceWithStreamingResponse(self._client.sustainability)
 
-    @cached_property
-    def marketplace(self) -> marketplace.MarketplaceResourceWithStreamingResponse:
-        from .resources.marketplace import MarketplaceResourceWithStreamingResponse
-
-        return MarketplaceResourceWithStreamingResponse(self._client.marketplace)
-
 
 class AsyncJocall3WithStreamedResponse:
     _client: AsyncJocall3
@@ -839,12 +808,6 @@ class AsyncJocall3WithStreamedResponse:
         from .resources.sustainability import AsyncSustainabilityResourceWithStreamingResponse
 
         return AsyncSustainabilityResourceWithStreamingResponse(self._client.sustainability)
-
-    @cached_property
-    def marketplace(self) -> marketplace.AsyncMarketplaceResourceWithStreamingResponse:
-        from .resources.marketplace import AsyncMarketplaceResourceWithStreamingResponse
-
-        return AsyncMarketplaceResourceWithStreamingResponse(self._client.marketplace)
 
 
 Client = Jocall3
