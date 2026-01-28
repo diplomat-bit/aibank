@@ -1,7 +1,7 @@
 # Jocall3 Python API library
 
 <!-- prettier-ignore -->
-[![PyPI version](https://img.shields.io/pypi/v/jocall3-python.svg?label=pypi%20(stable))](https://pypi.org/project/jocall3-python/)
+[![PyPI version](https://img.shields.io/pypi/v/ai_banking.svg?label=pypi%20(stable))](https://pypi.org/project/ai_banking/)
 
 The Jocall3 Python library provides convenient access to the Jocall3 REST API from any Python 3.9+
 application. The library includes type definitions for all request params and response fields,
@@ -17,7 +17,7 @@ The full API of this library can be found in [api.md](api.md).
 
 ```sh
 # install from PyPI
-pip install jocall3-python
+pip install ai_banking
 ```
 
 ## Usage
@@ -81,7 +81,7 @@ You can enable this by installing `aiohttp`:
 
 ```sh
 # install from PyPI
-pip install jocall3-python[aiohttp]
+pip install ai_banking[aiohttp]
 ```
 
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
