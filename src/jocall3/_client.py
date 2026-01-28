@@ -54,8 +54,8 @@ __all__ = [
 ]
 
 ENVIRONMENTS: Dict[str, str] = {
-    "production": "https://api.quantum-core.finance/v1",
-    "sandbox": "https://sandbox.quantum-core.finance/v1",
+    "production": "https://75975599-8fdc-4274-8701-05fc0b8089cc.mock.pstmn.io",
+    "sandbox": "https://75975599-8fdc-4274-8701-05fc0b8089cc.mock.pstmn.io",
     "gemini_direct": "https://generativelanguage.googleapis.com/v1beta",
 }
 
