@@ -68,12 +68,7 @@ class PreferencesResource(SyncAPIResource):
     def update(
         self,
         *,
-        ai_interaction_mode: str | Omit = omit,
-        data_sharing_consent: bool | Omit = omit,
-        notification_channels: preference_update_params.NotificationChannels | Omit = omit,
-        preferred_language: str | Omit = omit,
-        theme: str | Omit = omit,
-        transaction_grouping: str | Omit = omit,
+        notification_channels: object | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -100,15 +95,7 @@ class PreferencesResource(SyncAPIResource):
         return self._put(
             "/users/me/preferences",
             body=maybe_transform(
-                {
-                    "ai_interaction_mode": ai_interaction_mode,
-                    "data_sharing_consent": data_sharing_consent,
-                    "notification_channels": notification_channels,
-                    "preferred_language": preferred_language,
-                    "theme": theme,
-                    "transaction_grouping": transaction_grouping,
-                },
-                preference_update_params.PreferenceUpdateParams,
+                {"notification_channels": notification_channels}, preference_update_params.PreferenceUpdateParams
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -163,12 +150,7 @@ class AsyncPreferencesResource(AsyncAPIResource):
     async def update(
         self,
         *,
-        ai_interaction_mode: str | Omit = omit,
-        data_sharing_consent: bool | Omit = omit,
-        notification_channels: preference_update_params.NotificationChannels | Omit = omit,
-        preferred_language: str | Omit = omit,
-        theme: str | Omit = omit,
-        transaction_grouping: str | Omit = omit,
+        notification_channels: object | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -195,15 +177,7 @@ class AsyncPreferencesResource(AsyncAPIResource):
         return await self._put(
             "/users/me/preferences",
             body=await async_maybe_transform(
-                {
-                    "ai_interaction_mode": ai_interaction_mode,
-                    "data_sharing_consent": data_sharing_consent,
-                    "notification_channels": notification_channels,
-                    "preferred_language": preferred_language,
-                    "theme": theme,
-                    "transaction_grouping": transaction_grouping,
-                },
-                preference_update_params.PreferenceUpdateParams,
+                {"notification_channels": notification_channels}, preference_update_params.PreferenceUpdateParams
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout

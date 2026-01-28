@@ -14,7 +14,6 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ..._base_client import make_request_options
-from ...types.transactions.insight_get_spending_trends_response import InsightGetSpendingTrendsResponse
 
 __all__ = ["InsightsResource", "AsyncInsightsResource"]
 
@@ -48,7 +47,7 @@ class InsightsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> InsightGetSpendingTrendsResponse:
+    ) -> object:
         """
         Retrieves AI-generated insights into user spending trends over time, identifying
         patterns and anomalies.
@@ -58,7 +57,7 @@ class InsightsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=InsightGetSpendingTrendsResponse,
+            cast_to=object,
         )
 
 
@@ -91,7 +90,7 @@ class AsyncInsightsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> InsightGetSpendingTrendsResponse:
+    ) -> object:
         """
         Retrieves AI-generated insights into user spending trends over time, identifying
         patterns and anomalies.
@@ -101,7 +100,7 @@ class AsyncInsightsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=InsightGetSpendingTrendsResponse,
+            cast_to=object,
         )
 
 
