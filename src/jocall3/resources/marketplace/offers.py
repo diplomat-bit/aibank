@@ -15,31 +15,32 @@ from ..._response import (
 )
 from ..._base_client import make_request_options
 
-__all__ = ["InsightsResource", "AsyncInsightsResource"]
+__all__ = ["OffersResource", "AsyncOffersResource"]
 
 
-class InsightsResource(SyncAPIResource):
+class OffersResource(SyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> InsightsResourceWithRawResponse:
+    def with_raw_response(self) -> OffersResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/diplomat-bit/aibank#accessing-raw-response-data-eg-headers
         """
-        return InsightsResourceWithRawResponse(self)
+        return OffersResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> InsightsResourceWithStreamingResponse:
+    def with_streaming_response(self) -> OffersResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/diplomat-bit/aibank#with_streaming_response
         """
-        return InsightsResourceWithStreamingResponse(self)
+        return OffersResourceWithStreamingResponse(self)
 
-    def get_trends(
+    def redeem(
         self,
+        offer_id: str,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -49,11 +50,22 @@ class InsightsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> object:
         """
-        Retrieves AI-generated insights into user spending trends over time, identifying
-        patterns and anomalies.
+        Redeems a personalized, exclusive offer from the Plato AI marketplace, often
+        resulting in a discount, special rate, or credit to the user's account.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
         """
-        return self._get(
-            "/transactions/insights/spending-trends",
+        if not offer_id:
+            raise ValueError(f"Expected a non-empty value for `offer_id` but received {offer_id!r}")
+        return self._post(
+            f"/marketplace/offers/{offer_id}/redeem",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -61,28 +73,29 @@ class InsightsResource(SyncAPIResource):
         )
 
 
-class AsyncInsightsResource(AsyncAPIResource):
+class AsyncOffersResource(AsyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> AsyncInsightsResourceWithRawResponse:
+    def with_raw_response(self) -> AsyncOffersResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/diplomat-bit/aibank#accessing-raw-response-data-eg-headers
         """
-        return AsyncInsightsResourceWithRawResponse(self)
+        return AsyncOffersResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> AsyncInsightsResourceWithStreamingResponse:
+    def with_streaming_response(self) -> AsyncOffersResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/diplomat-bit/aibank#with_streaming_response
         """
-        return AsyncInsightsResourceWithStreamingResponse(self)
+        return AsyncOffersResourceWithStreamingResponse(self)
 
-    async def get_trends(
+    async def redeem(
         self,
+        offer_id: str,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -92,11 +105,22 @@ class AsyncInsightsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> object:
         """
-        Retrieves AI-generated insights into user spending trends over time, identifying
-        patterns and anomalies.
+        Redeems a personalized, exclusive offer from the Plato AI marketplace, often
+        resulting in a discount, special rate, or credit to the user's account.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
         """
-        return await self._get(
-            "/transactions/insights/spending-trends",
+        if not offer_id:
+            raise ValueError(f"Expected a non-empty value for `offer_id` but received {offer_id!r}")
+        return await self._post(
+            f"/marketplace/offers/{offer_id}/redeem",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -104,37 +128,37 @@ class AsyncInsightsResource(AsyncAPIResource):
         )
 
 
-class InsightsResourceWithRawResponse:
-    def __init__(self, insights: InsightsResource) -> None:
-        self._insights = insights
+class OffersResourceWithRawResponse:
+    def __init__(self, offers: OffersResource) -> None:
+        self._offers = offers
 
-        self.get_trends = to_raw_response_wrapper(
-            insights.get_trends,
+        self.redeem = to_raw_response_wrapper(
+            offers.redeem,
         )
 
 
-class AsyncInsightsResourceWithRawResponse:
-    def __init__(self, insights: AsyncInsightsResource) -> None:
-        self._insights = insights
+class AsyncOffersResourceWithRawResponse:
+    def __init__(self, offers: AsyncOffersResource) -> None:
+        self._offers = offers
 
-        self.get_trends = async_to_raw_response_wrapper(
-            insights.get_trends,
+        self.redeem = async_to_raw_response_wrapper(
+            offers.redeem,
         )
 
 
-class InsightsResourceWithStreamingResponse:
-    def __init__(self, insights: InsightsResource) -> None:
-        self._insights = insights
+class OffersResourceWithStreamingResponse:
+    def __init__(self, offers: OffersResource) -> None:
+        self._offers = offers
 
-        self.get_trends = to_streamed_response_wrapper(
-            insights.get_trends,
+        self.redeem = to_streamed_response_wrapper(
+            offers.redeem,
         )
 
 
-class AsyncInsightsResourceWithStreamingResponse:
-    def __init__(self, insights: AsyncInsightsResource) -> None:
-        self._insights = insights
+class AsyncOffersResourceWithStreamingResponse:
+    def __init__(self, offers: AsyncOffersResource) -> None:
+        self._offers = offers
 
-        self.get_trends = async_to_streamed_response_wrapper(
-            insights.get_trends,
+        self.redeem = async_to_streamed_response_wrapper(
+            offers.redeem,
         )

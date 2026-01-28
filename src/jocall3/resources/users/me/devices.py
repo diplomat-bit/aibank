@@ -16,7 +16,6 @@ from ...._response import (
 )
 from ...._base_client import make_request_options
 from ....types.users.me import device_list_params
-from ....types.users.me.device_list_response import DeviceListResponse
 
 __all__ = ["DevicesResource", "AsyncDevicesResource"]
 
@@ -52,7 +51,7 @@ class DevicesResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> DeviceListResponse:
+    ) -> object:
         """
         Retrieves a list of all devices linked to the user's account, including mobile
         phones, tablets, and desktops, indicating their last active status and security
@@ -86,7 +85,7 @@ class DevicesResource(SyncAPIResource):
                     device_list_params.DeviceListParams,
                 ),
             ),
-            cast_to=DeviceListResponse,
+            cast_to=object,
         )
 
 
@@ -121,7 +120,7 @@ class AsyncDevicesResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> DeviceListResponse:
+    ) -> object:
         """
         Retrieves a list of all devices linked to the user's account, including mobile
         phones, tablets, and desktops, indicating their last active status and security
@@ -155,7 +154,7 @@ class AsyncDevicesResource(AsyncAPIResource):
                     device_list_params.DeviceListParams,
                 ),
             ),
-            cast_to=DeviceListResponse,
+            cast_to=object,
         )
 
 
