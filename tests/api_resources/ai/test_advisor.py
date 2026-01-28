@@ -52,6 +52,44 @@ class TestAdvisor:
 
         assert cast(Any, response.is_closed) is True
 
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_method_history(self, client: Jocall3) -> None:
+        advisor = client.ai.advisor.history()
+        assert_matches_type(object, advisor, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_method_history_with_all_params(self, client: Jocall3) -> None:
+        advisor = client.ai.advisor.history(
+            limit=0,
+            offset=0,
+            session_id="sessionId",
+        )
+        assert_matches_type(object, advisor, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_raw_response_history(self, client: Jocall3) -> None:
+        response = client.ai.advisor.with_raw_response.history()
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        advisor = response.parse()
+        assert_matches_type(object, advisor, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_streaming_response_history(self, client: Jocall3) -> None:
+        with client.ai.advisor.with_streaming_response.history() as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            advisor = response.parse()
+            assert_matches_type(object, advisor, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
 
 class TestAsyncAdvisor:
     parametrize = pytest.mark.parametrize(
@@ -86,6 +124,44 @@ class TestAsyncAdvisor:
     @parametrize
     async def test_streaming_response_chat(self, async_client: AsyncJocall3) -> None:
         async with async_client.ai.advisor.with_streaming_response.chat() as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            advisor = await response.parse()
+            assert_matches_type(object, advisor, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_method_history(self, async_client: AsyncJocall3) -> None:
+        advisor = await async_client.ai.advisor.history()
+        assert_matches_type(object, advisor, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_method_history_with_all_params(self, async_client: AsyncJocall3) -> None:
+        advisor = await async_client.ai.advisor.history(
+            limit=0,
+            offset=0,
+            session_id="sessionId",
+        )
+        assert_matches_type(object, advisor, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_raw_response_history(self, async_client: AsyncJocall3) -> None:
+        response = await async_client.ai.advisor.with_raw_response.history()
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        advisor = await response.parse()
+        assert_matches_type(object, advisor, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_streaming_response_history(self, async_client: AsyncJocall3) -> None:
+        async with async_client.ai.advisor.with_streaming_response.history() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 

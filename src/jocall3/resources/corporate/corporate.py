@@ -2,7 +2,23 @@
 
 from __future__ import annotations
 
+from .treasury import (
+    TreasuryResource,
+    AsyncTreasuryResource,
+    TreasuryResourceWithRawResponse,
+    AsyncTreasuryResourceWithRawResponse,
+    TreasuryResourceWithStreamingResponse,
+    AsyncTreasuryResourceWithStreamingResponse,
+)
 from ..._compat import cached_property
+from .anomalies import (
+    AnomaliesResource,
+    AsyncAnomaliesResource,
+    AnomaliesResourceWithRawResponse,
+    AsyncAnomaliesResourceWithRawResponse,
+    AnomaliesResourceWithStreamingResponse,
+    AsyncAnomaliesResourceWithStreamingResponse,
+)
 from .risk.risk import (
     RiskResource,
     AsyncRiskResource,
@@ -20,13 +36,13 @@ from .cards.cards import (
     CardsResourceWithStreamingResponse,
     AsyncCardsResourceWithStreamingResponse,
 )
-from .treasury.treasury import (
-    TreasuryResource,
-    AsyncTreasuryResource,
-    TreasuryResourceWithRawResponse,
-    AsyncTreasuryResourceWithRawResponse,
-    TreasuryResourceWithStreamingResponse,
-    AsyncTreasuryResourceWithStreamingResponse,
+from .sanction_screening import (
+    SanctionScreeningResource,
+    AsyncSanctionScreeningResource,
+    SanctionScreeningResourceWithRawResponse,
+    AsyncSanctionScreeningResourceWithRawResponse,
+    SanctionScreeningResourceWithStreamingResponse,
+    AsyncSanctionScreeningResourceWithStreamingResponse,
 )
 from .compliance.compliance import (
     ComplianceResource,
@@ -42,6 +58,10 @@ __all__ = ["CorporateResource", "AsyncCorporateResource"]
 
 class CorporateResource(SyncAPIResource):
     @cached_property
+    def sanction_screening(self) -> SanctionScreeningResource:
+        return SanctionScreeningResource(self._client)
+
+    @cached_property
     def compliance(self) -> ComplianceResource:
         return ComplianceResource(self._client)
 
@@ -56,6 +76,10 @@ class CorporateResource(SyncAPIResource):
     @cached_property
     def risk(self) -> RiskResource:
         return RiskResource(self._client)
+
+    @cached_property
+    def anomalies(self) -> AnomaliesResource:
+        return AnomaliesResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> CorporateResourceWithRawResponse:
@@ -79,6 +103,10 @@ class CorporateResource(SyncAPIResource):
 
 class AsyncCorporateResource(AsyncAPIResource):
     @cached_property
+    def sanction_screening(self) -> AsyncSanctionScreeningResource:
+        return AsyncSanctionScreeningResource(self._client)
+
+    @cached_property
     def compliance(self) -> AsyncComplianceResource:
         return AsyncComplianceResource(self._client)
 
@@ -93,6 +121,10 @@ class AsyncCorporateResource(AsyncAPIResource):
     @cached_property
     def risk(self) -> AsyncRiskResource:
         return AsyncRiskResource(self._client)
+
+    @cached_property
+    def anomalies(self) -> AsyncAnomaliesResource:
+        return AsyncAnomaliesResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AsyncCorporateResourceWithRawResponse:
@@ -119,6 +151,10 @@ class CorporateResourceWithRawResponse:
         self._corporate = corporate
 
     @cached_property
+    def sanction_screening(self) -> SanctionScreeningResourceWithRawResponse:
+        return SanctionScreeningResourceWithRawResponse(self._corporate.sanction_screening)
+
+    @cached_property
     def compliance(self) -> ComplianceResourceWithRawResponse:
         return ComplianceResourceWithRawResponse(self._corporate.compliance)
 
@@ -134,10 +170,18 @@ class CorporateResourceWithRawResponse:
     def risk(self) -> RiskResourceWithRawResponse:
         return RiskResourceWithRawResponse(self._corporate.risk)
 
+    @cached_property
+    def anomalies(self) -> AnomaliesResourceWithRawResponse:
+        return AnomaliesResourceWithRawResponse(self._corporate.anomalies)
+
 
 class AsyncCorporateResourceWithRawResponse:
     def __init__(self, corporate: AsyncCorporateResource) -> None:
         self._corporate = corporate
+
+    @cached_property
+    def sanction_screening(self) -> AsyncSanctionScreeningResourceWithRawResponse:
+        return AsyncSanctionScreeningResourceWithRawResponse(self._corporate.sanction_screening)
 
     @cached_property
     def compliance(self) -> AsyncComplianceResourceWithRawResponse:
@@ -155,10 +199,18 @@ class AsyncCorporateResourceWithRawResponse:
     def risk(self) -> AsyncRiskResourceWithRawResponse:
         return AsyncRiskResourceWithRawResponse(self._corporate.risk)
 
+    @cached_property
+    def anomalies(self) -> AsyncAnomaliesResourceWithRawResponse:
+        return AsyncAnomaliesResourceWithRawResponse(self._corporate.anomalies)
+
 
 class CorporateResourceWithStreamingResponse:
     def __init__(self, corporate: CorporateResource) -> None:
         self._corporate = corporate
+
+    @cached_property
+    def sanction_screening(self) -> SanctionScreeningResourceWithStreamingResponse:
+        return SanctionScreeningResourceWithStreamingResponse(self._corporate.sanction_screening)
 
     @cached_property
     def compliance(self) -> ComplianceResourceWithStreamingResponse:
@@ -176,10 +228,18 @@ class CorporateResourceWithStreamingResponse:
     def risk(self) -> RiskResourceWithStreamingResponse:
         return RiskResourceWithStreamingResponse(self._corporate.risk)
 
+    @cached_property
+    def anomalies(self) -> AnomaliesResourceWithStreamingResponse:
+        return AnomaliesResourceWithStreamingResponse(self._corporate.anomalies)
+
 
 class AsyncCorporateResourceWithStreamingResponse:
     def __init__(self, corporate: AsyncCorporateResource) -> None:
         self._corporate = corporate
+
+    @cached_property
+    def sanction_screening(self) -> AsyncSanctionScreeningResourceWithStreamingResponse:
+        return AsyncSanctionScreeningResourceWithStreamingResponse(self._corporate.sanction_screening)
 
     @cached_property
     def compliance(self) -> AsyncComplianceResourceWithStreamingResponse:
@@ -196,3 +256,7 @@ class AsyncCorporateResourceWithStreamingResponse:
     @cached_property
     def risk(self) -> AsyncRiskResourceWithStreamingResponse:
         return AsyncRiskResourceWithStreamingResponse(self._corporate.risk)
+
+    @cached_property
+    def anomalies(self) -> AsyncAnomaliesResourceWithStreamingResponse:
+        return AsyncAnomaliesResourceWithStreamingResponse(self._corporate.anomalies)
