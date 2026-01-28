@@ -10,6 +10,8 @@ import pytest
 from jocall3 import Jocall3, AsyncJocall3
 from tests.utils import assert_matches_type
 from jocall3.types import (
+    AccountLinkResponse,
+    AccountRetrieveMeResponse,
     AccountRetrieveDetailsResponse,
     AccountRetrieveStatementsResponse,
 )
@@ -23,28 +25,37 @@ class TestAccounts:
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_link(self, client: Jocall3) -> None:
-        account = client.accounts.link()
-        assert_matches_type(object, account, path=["response"])
+        account = client.accounts.link(
+            country_code="US",
+            institution_name="Bank of America",
+        )
+        assert_matches_type(AccountLinkResponse, account, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_link(self, client: Jocall3) -> None:
-        response = client.accounts.with_raw_response.link()
+        response = client.accounts.with_raw_response.link(
+            country_code="US",
+            institution_name="Bank of America",
+        )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         account = response.parse()
-        assert_matches_type(object, account, path=["response"])
+        assert_matches_type(AccountLinkResponse, account, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_link(self, client: Jocall3) -> None:
-        with client.accounts.with_streaming_response.link() as response:
+        with client.accounts.with_streaming_response.link(
+            country_code="US",
+            institution_name="Bank of America",
+        ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             account = response.parse()
-            assert_matches_type(object, account, path=["response"])
+            assert_matches_type(AccountLinkResponse, account, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -94,7 +105,7 @@ class TestAccounts:
     @parametrize
     def test_method_retrieve_me(self, client: Jocall3) -> None:
         account = client.accounts.retrieve_me()
-        assert_matches_type(object, account, path=["response"])
+        assert_matches_type(AccountRetrieveMeResponse, account, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -103,7 +114,7 @@ class TestAccounts:
             limit=0,
             offset=0,
         )
-        assert_matches_type(object, account, path=["response"])
+        assert_matches_type(AccountRetrieveMeResponse, account, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -113,7 +124,7 @@ class TestAccounts:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         account = response.parse()
-        assert_matches_type(object, account, path=["response"])
+        assert_matches_type(AccountRetrieveMeResponse, account, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -123,7 +134,7 @@ class TestAccounts:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             account = response.parse()
-            assert_matches_type(object, account, path=["response"])
+            assert_matches_type(AccountRetrieveMeResponse, account, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -189,28 +200,37 @@ class TestAsyncAccounts:
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_link(self, async_client: AsyncJocall3) -> None:
-        account = await async_client.accounts.link()
-        assert_matches_type(object, account, path=["response"])
+        account = await async_client.accounts.link(
+            country_code="US",
+            institution_name="Bank of America",
+        )
+        assert_matches_type(AccountLinkResponse, account, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_link(self, async_client: AsyncJocall3) -> None:
-        response = await async_client.accounts.with_raw_response.link()
+        response = await async_client.accounts.with_raw_response.link(
+            country_code="US",
+            institution_name="Bank of America",
+        )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         account = await response.parse()
-        assert_matches_type(object, account, path=["response"])
+        assert_matches_type(AccountLinkResponse, account, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_link(self, async_client: AsyncJocall3) -> None:
-        async with async_client.accounts.with_streaming_response.link() as response:
+        async with async_client.accounts.with_streaming_response.link(
+            country_code="US",
+            institution_name="Bank of America",
+        ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             account = await response.parse()
-            assert_matches_type(object, account, path=["response"])
+            assert_matches_type(AccountLinkResponse, account, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -260,7 +280,7 @@ class TestAsyncAccounts:
     @parametrize
     async def test_method_retrieve_me(self, async_client: AsyncJocall3) -> None:
         account = await async_client.accounts.retrieve_me()
-        assert_matches_type(object, account, path=["response"])
+        assert_matches_type(AccountRetrieveMeResponse, account, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -269,7 +289,7 @@ class TestAsyncAccounts:
             limit=0,
             offset=0,
         )
-        assert_matches_type(object, account, path=["response"])
+        assert_matches_type(AccountRetrieveMeResponse, account, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -279,7 +299,7 @@ class TestAsyncAccounts:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         account = await response.parse()
-        assert_matches_type(object, account, path=["response"])
+        assert_matches_type(AccountRetrieveMeResponse, account, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -289,7 +309,7 @@ class TestAsyncAccounts:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             account = await response.parse()
-            assert_matches_type(object, account, path=["response"])
+            assert_matches_type(AccountRetrieveMeResponse, account, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
