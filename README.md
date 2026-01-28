@@ -29,7 +29,7 @@ import os
 from jocall3 import Jocall3
 
 client = Jocall3(
-    api_key=os.environ.get("JOCALL3_API_KEY"),  # This is the default and can be omitted
+    gemini_api_key=os.environ.get("GEMINI_API_KEY"),  # This is the default and can be omitted
     # or 'production' | 'gemini_direct'; defaults to "production".
     environment="sandbox",
 )
@@ -37,10 +37,10 @@ client = Jocall3(
 response = client.ai.oracle.simulate.run_advanced()
 ```
 
-While you can provide an `api_key` keyword argument,
+While you can provide a `gemini_api_key` keyword argument,
 we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)
-to add `JOCALL3_API_KEY="My API Key"` to your `.env` file
-so that your API Key is not stored in source control.
+to add `GEMINI_API_KEY="My Gemini API Key"` to your `.env` file
+so that your Gemini API Key is not stored in source control.
 
 ## Async usage
 
@@ -52,7 +52,7 @@ import asyncio
 from jocall3 import AsyncJocall3
 
 client = AsyncJocall3(
-    api_key=os.environ.get("JOCALL3_API_KEY"),  # This is the default and can be omitted
+    gemini_api_key=os.environ.get("GEMINI_API_KEY"),  # This is the default and can be omitted
     # or 'production' | 'gemini_direct'; defaults to "production".
     environment="sandbox",
 )
@@ -89,7 +89,7 @@ from jocall3 import AsyncJocall3
 
 async def main() -> None:
     async with AsyncJocall3(
-        api_key=os.environ.get("JOCALL3_API_KEY"),  # This is the default and can be omitted
+        gemini_api_key=os.environ.get("GEMINI_API_KEY"),  # This is the default and can be omitted
         http_client=DefaultAioHttpClient(),
     ) as client:
         response = await client.ai.oracle.simulate.run_advanced()

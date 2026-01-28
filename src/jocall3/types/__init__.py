@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
+from .budget_list_params import BudgetListParams as BudgetListParams
 from .account_list_params import AccountListParams as AccountListParams
 from .user_register_params import UserRegisterParams as UserRegisterParams
 from .user_register_response import UserRegisterResponse as UserRegisterResponse
 from .transaction_list_params import TransactionListParams as TransactionListParams
 from .account_retrieve_response import AccountRetrieveResponse as AccountRetrieveResponse
 from .transaction_retrieve_response import TransactionRetrieveResponse as TransactionRetrieveResponse
+from .transaction_add_notes_response import TransactionAddNotesResponse as TransactionAddNotesResponse
 from .transaction_categorize_response import TransactionCategorizeResponse as TransactionCategorizeResponse
-from .marketplace_list_products_params import MarketplaceListProductsParams as MarketplaceListProductsParams

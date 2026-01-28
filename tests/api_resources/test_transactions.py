@@ -9,7 +9,11 @@ import pytest
 
 from jocall3 import Jocall3, AsyncJocall3
 from tests.utils import assert_matches_type
-from jocall3.types import TransactionRetrieveResponse, TransactionCategorizeResponse
+from jocall3.types import (
+    TransactionAddNotesResponse,
+    TransactionRetrieveResponse,
+    TransactionCategorizeResponse,
+)
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -102,6 +106,48 @@ class TestTransactions:
             assert_matches_type(object, transaction, path=["response"])
 
         assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_method_add_notes(self, client: Jocall3) -> None:
+        transaction = client.transactions.add_notes(
+            "txn_quantum-2024-07-21-A7B8C9",
+        )
+        assert_matches_type(TransactionAddNotesResponse, transaction, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_raw_response_add_notes(self, client: Jocall3) -> None:
+        response = client.transactions.with_raw_response.add_notes(
+            "txn_quantum-2024-07-21-A7B8C9",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        transaction = response.parse()
+        assert_matches_type(TransactionAddNotesResponse, transaction, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_streaming_response_add_notes(self, client: Jocall3) -> None:
+        with client.transactions.with_streaming_response.add_notes(
+            "txn_quantum-2024-07-21-A7B8C9",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            transaction = response.parse()
+            assert_matches_type(TransactionAddNotesResponse, transaction, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_path_params_add_notes(self, client: Jocall3) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `transaction_id` but received ''"):
+            client.transactions.with_raw_response.add_notes(
+                "",
+            )
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -236,6 +282,48 @@ class TestAsyncTransactions:
             assert_matches_type(object, transaction, path=["response"])
 
         assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_method_add_notes(self, async_client: AsyncJocall3) -> None:
+        transaction = await async_client.transactions.add_notes(
+            "txn_quantum-2024-07-21-A7B8C9",
+        )
+        assert_matches_type(TransactionAddNotesResponse, transaction, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_raw_response_add_notes(self, async_client: AsyncJocall3) -> None:
+        response = await async_client.transactions.with_raw_response.add_notes(
+            "txn_quantum-2024-07-21-A7B8C9",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        transaction = await response.parse()
+        assert_matches_type(TransactionAddNotesResponse, transaction, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_streaming_response_add_notes(self, async_client: AsyncJocall3) -> None:
+        async with async_client.transactions.with_streaming_response.add_notes(
+            "txn_quantum-2024-07-21-A7B8C9",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            transaction = await response.parse()
+            assert_matches_type(TransactionAddNotesResponse, transaction, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_path_params_add_notes(self, async_client: AsyncJocall3) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `transaction_id` but received ''"):
+            await async_client.transactions.with_raw_response.add_notes(
+                "",
+            )
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize

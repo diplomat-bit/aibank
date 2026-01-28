@@ -13,12 +13,24 @@ from ..._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
+from .investments import (
+    InvestmentsResource,
+    AsyncInvestmentsResource,
+    InvestmentsResourceWithRawResponse,
+    AsyncInvestmentsResourceWithRawResponse,
+    InvestmentsResourceWithStreamingResponse,
+    AsyncInvestmentsResourceWithStreamingResponse,
+)
 from ..._base_client import make_request_options
 
 __all__ = ["SustainabilityResource", "AsyncSustainabilityResource"]
 
 
 class SustainabilityResource(SyncAPIResource):
+    @cached_property
+    def investments(self) -> InvestmentsResource:
+        return InvestmentsResource(self._client)
+
     @cached_property
     def with_raw_response(self) -> SustainabilityResourceWithRawResponse:
         """
@@ -63,6 +75,10 @@ class SustainabilityResource(SyncAPIResource):
 
 
 class AsyncSustainabilityResource(AsyncAPIResource):
+    @cached_property
+    def investments(self) -> AsyncInvestmentsResource:
+        return AsyncInvestmentsResource(self._client)
+
     @cached_property
     def with_raw_response(self) -> AsyncSustainabilityResourceWithRawResponse:
         """
@@ -114,6 +130,10 @@ class SustainabilityResourceWithRawResponse:
             sustainability.get_footprint,
         )
 
+    @cached_property
+    def investments(self) -> InvestmentsResourceWithRawResponse:
+        return InvestmentsResourceWithRawResponse(self._sustainability.investments)
+
 
 class AsyncSustainabilityResourceWithRawResponse:
     def __init__(self, sustainability: AsyncSustainabilityResource) -> None:
@@ -122,6 +142,10 @@ class AsyncSustainabilityResourceWithRawResponse:
         self.get_footprint = async_to_raw_response_wrapper(
             sustainability.get_footprint,
         )
+
+    @cached_property
+    def investments(self) -> AsyncInvestmentsResourceWithRawResponse:
+        return AsyncInvestmentsResourceWithRawResponse(self._sustainability.investments)
 
 
 class SustainabilityResourceWithStreamingResponse:
@@ -132,6 +156,10 @@ class SustainabilityResourceWithStreamingResponse:
             sustainability.get_footprint,
         )
 
+    @cached_property
+    def investments(self) -> InvestmentsResourceWithStreamingResponse:
+        return InvestmentsResourceWithStreamingResponse(self._sustainability.investments)
+
 
 class AsyncSustainabilityResourceWithStreamingResponse:
     def __init__(self, sustainability: AsyncSustainabilityResource) -> None:
@@ -140,3 +168,7 @@ class AsyncSustainabilityResourceWithStreamingResponse:
         self.get_footprint = async_to_streamed_response_wrapper(
             sustainability.get_footprint,
         )
+
+    @cached_property
+    def investments(self) -> AsyncInvestmentsResourceWithStreamingResponse:
+        return AsyncInvestmentsResourceWithStreamingResponse(self._sustainability.investments)

@@ -16,8 +16,22 @@ from .payments import (
     PaymentsResourceWithStreamingResponse,
     AsyncPaymentsResourceWithStreamingResponse,
 )
+from .international import (
+    InternationalResource,
+    AsyncInternationalResource,
+    InternationalResourceWithRawResponse,
+    AsyncInternationalResourceWithRawResponse,
+    InternationalResourceWithStreamingResponse,
+    AsyncInternationalResourceWithStreamingResponse,
+)
 
 __all__ = [
+    "InternationalResource",
+    "AsyncInternationalResource",
+    "InternationalResourceWithRawResponse",
+    "AsyncInternationalResourceWithRawResponse",
+    "InternationalResourceWithStreamingResponse",
+    "AsyncInternationalResourceWithStreamingResponse",
     "FxResource",
     "AsyncFxResource",
     "FxResourceWithRawResponse",

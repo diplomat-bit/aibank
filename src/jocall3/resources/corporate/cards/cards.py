@@ -23,7 +23,7 @@ from ...._response import (
     async_to_streamed_response_wrapper,
 )
 from ...._base_client import make_request_options
-from ....types.corporate import card_list_params, card_issue_virtual_params
+from ....types.corporate import card_list_params, card_issue_virtual_params, card_list_transactions_params
 from ....types.corporate.card_freeze_response import CardFreezeResponse
 from ....types.corporate.card_issue_virtual_response import CardIssueVirtualResponse
 
@@ -173,6 +173,64 @@ class CardsResource(SyncAPIResource):
             cast_to=CardIssueVirtualResponse,
         )
 
+    def list_transactions(
+        self,
+        card_id: str,
+        *,
+        end_date: str | Omit = omit,
+        limit: int | Omit = omit,
+        offset: int | Omit = omit,
+        start_date: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> object:
+        """
+        Retrieves a paginated list of transactions made with a specific corporate card,
+        including AI categorization and compliance flags.
+
+        Args:
+          end_date: End date for filtering results (inclusive, YYYY-MM-DD).
+
+          limit: Maximum number of items to return in a single page.
+
+          offset: Number of items to skip before starting to collect the result set.
+
+          start_date: Start date for filtering results (inclusive, YYYY-MM-DD).
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not card_id:
+            raise ValueError(f"Expected a non-empty value for `card_id` but received {card_id!r}")
+        return self._get(
+            f"/corporate/cards/{card_id}/transactions",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "end_date": end_date,
+                        "limit": limit,
+                        "offset": offset,
+                        "start_date": start_date,
+                    },
+                    card_list_transactions_params.CardListTransactionsParams,
+                ),
+            ),
+            cast_to=object,
+        )
+
 
 class AsyncCardsResource(AsyncAPIResource):
     @cached_property
@@ -317,6 +375,64 @@ class AsyncCardsResource(AsyncAPIResource):
             cast_to=CardIssueVirtualResponse,
         )
 
+    async def list_transactions(
+        self,
+        card_id: str,
+        *,
+        end_date: str | Omit = omit,
+        limit: int | Omit = omit,
+        offset: int | Omit = omit,
+        start_date: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> object:
+        """
+        Retrieves a paginated list of transactions made with a specific corporate card,
+        including AI categorization and compliance flags.
+
+        Args:
+          end_date: End date for filtering results (inclusive, YYYY-MM-DD).
+
+          limit: Maximum number of items to return in a single page.
+
+          offset: Number of items to skip before starting to collect the result set.
+
+          start_date: Start date for filtering results (inclusive, YYYY-MM-DD).
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not card_id:
+            raise ValueError(f"Expected a non-empty value for `card_id` but received {card_id!r}")
+        return await self._get(
+            f"/corporate/cards/{card_id}/transactions",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=await async_maybe_transform(
+                    {
+                        "end_date": end_date,
+                        "limit": limit,
+                        "offset": offset,
+                        "start_date": start_date,
+                    },
+                    card_list_transactions_params.CardListTransactionsParams,
+                ),
+            ),
+            cast_to=object,
+        )
+
 
 class CardsResourceWithRawResponse:
     def __init__(self, cards: CardsResource) -> None:
@@ -330,6 +446,9 @@ class CardsResourceWithRawResponse:
         )
         self.issue_virtual = to_raw_response_wrapper(
             cards.issue_virtual,
+        )
+        self.list_transactions = to_raw_response_wrapper(
+            cards.list_transactions,
         )
 
     @cached_property
@@ -350,6 +469,9 @@ class AsyncCardsResourceWithRawResponse:
         self.issue_virtual = async_to_raw_response_wrapper(
             cards.issue_virtual,
         )
+        self.list_transactions = async_to_raw_response_wrapper(
+            cards.list_transactions,
+        )
 
     @cached_property
     def controls(self) -> AsyncControlsResourceWithRawResponse:
@@ -369,6 +491,9 @@ class CardsResourceWithStreamingResponse:
         self.issue_virtual = to_streamed_response_wrapper(
             cards.issue_virtual,
         )
+        self.list_transactions = to_streamed_response_wrapper(
+            cards.list_transactions,
+        )
 
     @cached_property
     def controls(self) -> ControlsResourceWithStreamingResponse:
@@ -387,6 +512,9 @@ class AsyncCardsResourceWithStreamingResponse:
         )
         self.issue_virtual = async_to_streamed_response_wrapper(
             cards.issue_virtual,
+        )
+        self.list_transactions = async_to_streamed_response_wrapper(
+            cards.list_transactions,
         )
 
     @cached_property

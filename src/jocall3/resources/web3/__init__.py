@@ -24,6 +24,14 @@ from .wallets import (
     WalletsResourceWithStreamingResponse,
     AsyncWalletsResourceWithStreamingResponse,
 )
+from .transactions import (
+    TransactionsResource,
+    AsyncTransactionsResource,
+    TransactionsResourceWithRawResponse,
+    AsyncTransactionsResourceWithRawResponse,
+    TransactionsResourceWithStreamingResponse,
+    AsyncTransactionsResourceWithStreamingResponse,
+)
 
 __all__ = [
     "WalletsResource",
@@ -32,6 +40,12 @@ __all__ = [
     "AsyncWalletsResourceWithRawResponse",
     "WalletsResourceWithStreamingResponse",
     "AsyncWalletsResourceWithStreamingResponse",
+    "TransactionsResource",
+    "AsyncTransactionsResource",
+    "TransactionsResourceWithRawResponse",
+    "AsyncTransactionsResourceWithRawResponse",
+    "TransactionsResourceWithStreamingResponse",
+    "AsyncTransactionsResourceWithStreamingResponse",
     "NFTsResource",
     "AsyncNFTsResource",
     "NFTsResourceWithRawResponse",
