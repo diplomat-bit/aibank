@@ -48,6 +48,14 @@ from .corporate import (
     CorporateResourceWithStreamingResponse,
     AsyncCorporateResourceWithStreamingResponse,
 )
+from .marketplace import (
+    MarketplaceResource,
+    AsyncMarketplaceResource,
+    MarketplaceResourceWithRawResponse,
+    AsyncMarketplaceResourceWithRawResponse,
+    MarketplaceResourceWithStreamingResponse,
+    AsyncMarketplaceResourceWithStreamingResponse,
+)
 from .transactions import (
     TransactionsResource,
     AsyncTransactionsResource,
@@ -114,4 +122,10 @@ __all__ = [
     "AsyncSustainabilityResourceWithRawResponse",
     "SustainabilityResourceWithStreamingResponse",
     "AsyncSustainabilityResourceWithStreamingResponse",
+    "MarketplaceResource",
+    "AsyncMarketplaceResource",
+    "MarketplaceResourceWithRawResponse",
+    "AsyncMarketplaceResourceWithRawResponse",
+    "MarketplaceResourceWithStreamingResponse",
+    "AsyncMarketplaceResourceWithStreamingResponse",
 ]

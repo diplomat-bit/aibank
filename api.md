@@ -3,12 +3,12 @@
 Types:
 
 ```python
-from jocall3.types import UserLoginResponse, UserRegisterResponse
+from jocall3.types import UserRegisterResponse
 ```
 
 Methods:
 
-- <code title="post /users/login">client.users.<a href="./src/jocall3/resources/users/users.py">login</a>(\*\*<a href="src/jocall3/types/user_login_params.py">params</a>) -> <a href="./src/jocall3/types/user_login_response.py">UserLoginResponse</a></code>
+- <code title="post /users/login">client.users.<a href="./src/jocall3/resources/users/users.py">login</a>() -> object</code>
 - <code title="post /users/register">client.users.<a href="./src/jocall3/resources/users/users.py">register</a>(\*\*<a href="src/jocall3/types/user_register_params.py">params</a>) -> <a href="./src/jocall3/types/user_register_response.py">UserRegisterResponse</a></code>
 
 ## Me
@@ -26,54 +26,36 @@ Methods:
 
 ### Devices
 
-Types:
-
-```python
-from jocall3.types.users.me import DeviceListResponse
-```
-
 Methods:
 
-- <code title="get /users/me/devices">client.users.me.devices.<a href="./src/jocall3/resources/users/me/devices.py">list</a>(\*\*<a href="src/jocall3/types/users/me/device_list_params.py">params</a>) -> <a href="./src/jocall3/types/users/me/device_list_response.py">DeviceListResponse</a></code>
+- <code title="get /users/me/devices">client.users.me.devices.<a href="./src/jocall3/resources/users/me/devices.py">list</a>(\*\*<a href="src/jocall3/types/users/me/device_list_params.py">params</a>) -> object</code>
 
 ### Biometrics
 
-Types:
-
-```python
-from jocall3.types.users.me import BiometricRetrieveStatusResponse, BiometricVerifyResponse
-```
-
 Methods:
 
-- <code title="get /users/me/biometrics">client.users.me.biometrics.<a href="./src/jocall3/resources/users/me/biometrics.py">retrieve_status</a>() -> <a href="./src/jocall3/types/users/me/biometric_retrieve_status_response.py">BiometricRetrieveStatusResponse</a></code>
-- <code title="post /users/me/biometrics/verify">client.users.me.biometrics.<a href="./src/jocall3/resources/users/me/biometrics.py">verify</a>(\*\*<a href="src/jocall3/types/users/me/biometric_verify_params.py">params</a>) -> <a href="./src/jocall3/types/users/me/biometric_verify_response.py">BiometricVerifyResponse</a></code>
+- <code title="get /users/me/biometrics">client.users.me.biometrics.<a href="./src/jocall3/resources/users/me/biometrics.py">retrieve_status</a>() -> object</code>
+- <code title="post /users/me/biometrics/verify">client.users.me.biometrics.<a href="./src/jocall3/resources/users/me/biometrics.py">verify</a>() -> object</code>
 
 # Accounts
 
 Types:
 
 ```python
-from jocall3.types import AccountRetrieveResponse, AccountListResponse, AccountLinkResponse
+from jocall3.types import AccountRetrieveResponse
 ```
 
 Methods:
 
 - <code title="get /accounts/{accountId}/details">client.accounts.<a href="./src/jocall3/resources/accounts/accounts.py">retrieve</a>(account_id) -> <a href="./src/jocall3/types/account_retrieve_response.py">AccountRetrieveResponse</a></code>
-- <code title="get /accounts/me">client.accounts.<a href="./src/jocall3/resources/accounts/accounts.py">list</a>(\*\*<a href="src/jocall3/types/account_list_params.py">params</a>) -> <a href="./src/jocall3/types/account_list_response.py">AccountListResponse</a></code>
-- <code title="post /accounts/link">client.accounts.<a href="./src/jocall3/resources/accounts/accounts.py">link</a>(\*\*<a href="src/jocall3/types/account_link_params.py">params</a>) -> <a href="./src/jocall3/types/account_link_response.py">AccountLinkResponse</a></code>
+- <code title="get /accounts/me">client.accounts.<a href="./src/jocall3/resources/accounts/accounts.py">list</a>(\*\*<a href="src/jocall3/types/account_list_params.py">params</a>) -> object</code>
+- <code title="post /accounts/link">client.accounts.<a href="./src/jocall3/resources/accounts/accounts.py">link</a>() -> object</code>
 
 ## Transactions
 
-Types:
-
-```python
-from jocall3.types.accounts import TransactionListPendingResponse
-```
-
 Methods:
 
-- <code title="get /accounts/{accountId}/transactions/pending">client.accounts.transactions.<a href="./src/jocall3/resources/accounts/transactions.py">list_pending</a>(account_id, \*\*<a href="src/jocall3/types/accounts/transaction_list_pending_params.py">params</a>) -> <a href="./src/jocall3/types/accounts/transaction_list_pending_response.py">TransactionListPendingResponse</a></code>
+- <code title="get /accounts/{accountId}/transactions/pending">client.accounts.transactions.<a href="./src/jocall3/resources/accounts/transactions.py">list_pending</a>(account_id, \*\*<a href="src/jocall3/types/accounts/transaction_list_pending_params.py">params</a>) -> object</code>
 
 ## Statements
 
@@ -89,58 +71,36 @@ Methods:
 
 ## Overdraft
 
-Types:
-
-```python
-from jocall3.types.accounts import OverdraftUpdateResponse, OverdraftGetResponse
-```
-
 Methods:
 
-- <code title="put /accounts/{accountId}/overdraft-settings">client.accounts.overdraft.<a href="./src/jocall3/resources/accounts/overdraft.py">update</a>(account_id, \*\*<a href="src/jocall3/types/accounts/overdraft_update_params.py">params</a>) -> <a href="./src/jocall3/types/accounts/overdraft_update_response.py">OverdraftUpdateResponse</a></code>
-- <code title="get /accounts/{accountId}/overdraft-settings">client.accounts.overdraft.<a href="./src/jocall3/resources/accounts/overdraft.py">get</a>(account_id) -> <a href="./src/jocall3/types/accounts/overdraft_get_response.py">OverdraftGetResponse</a></code>
+- <code title="put /accounts/{accountId}/overdraft-settings">client.accounts.overdraft.<a href="./src/jocall3/resources/accounts/overdraft.py">update</a>(account_id) -> object</code>
+- <code title="get /accounts/{accountId}/overdraft-settings">client.accounts.overdraft.<a href="./src/jocall3/resources/accounts/overdraft.py">get</a>(account_id) -> object</code>
 
 # Transactions
 
 Types:
 
 ```python
-from jocall3.types import (
-    TransactionRetrieveResponse,
-    TransactionListResponse,
-    TransactionCategorizeResponse,
-)
+from jocall3.types import TransactionRetrieveResponse, TransactionCategorizeResponse
 ```
 
 Methods:
 
 - <code title="get /transactions/{transactionId}">client.transactions.<a href="./src/jocall3/resources/transactions/transactions.py">retrieve</a>(transaction_id) -> <a href="./src/jocall3/types/transaction_retrieve_response.py">TransactionRetrieveResponse</a></code>
-- <code title="get /transactions">client.transactions.<a href="./src/jocall3/resources/transactions/transactions.py">list</a>(\*\*<a href="src/jocall3/types/transaction_list_params.py">params</a>) -> <a href="./src/jocall3/types/transaction_list_response.py">TransactionListResponse</a></code>
-- <code title="put /transactions/{transactionId}/categorize">client.transactions.<a href="./src/jocall3/resources/transactions/transactions.py">categorize</a>(transaction_id, \*\*<a href="src/jocall3/types/transaction_categorize_params.py">params</a>) -> <a href="./src/jocall3/types/transaction_categorize_response.py">TransactionCategorizeResponse</a></code>
+- <code title="get /transactions">client.transactions.<a href="./src/jocall3/resources/transactions/transactions.py">list</a>(\*\*<a href="src/jocall3/types/transaction_list_params.py">params</a>) -> object</code>
+- <code title="put /transactions/{transactionId}/categorize">client.transactions.<a href="./src/jocall3/resources/transactions/transactions.py">categorize</a>(transaction_id) -> <a href="./src/jocall3/types/transaction_categorize_response.py">TransactionCategorizeResponse</a></code>
 
 ## Recurring
 
-Types:
-
-```python
-from jocall3.types.transactions import RecurringListResponse
-```
-
 Methods:
 
-- <code title="get /transactions/recurring">client.transactions.recurring.<a href="./src/jocall3/resources/transactions/recurring.py">list</a>(\*\*<a href="src/jocall3/types/transactions/recurring_list_params.py">params</a>) -> <a href="./src/jocall3/types/transactions/recurring_list_response.py">RecurringListResponse</a></code>
+- <code title="get /transactions/recurring">client.transactions.recurring.<a href="./src/jocall3/resources/transactions/recurring.py">list</a>(\*\*<a href="src/jocall3/types/transactions/recurring_list_params.py">params</a>) -> object</code>
 
 ## Insights
 
-Types:
-
-```python
-from jocall3.types.transactions import InsightGetTrendsResponse
-```
-
 Methods:
 
-- <code title="get /transactions/insights/spending-trends">client.transactions.insights.<a href="./src/jocall3/resources/transactions/insights.py">get_trends</a>() -> <a href="./src/jocall3/types/transactions/insight_get_trends_response.py">InsightGetTrendsResponse</a></code>
+- <code title="get /transactions/insights/spending-trends">client.transactions.insights.<a href="./src/jocall3/resources/transactions/insights.py">get_trends</a>() -> object</code>
 
 # AI
 
@@ -269,3 +229,15 @@ Methods:
 Methods:
 
 - <code title="get /sustainability/carbon-footprint">client.sustainability.<a href="./src/jocall3/resources/sustainability/sustainability.py">get_footprint</a>() -> object</code>
+
+# Marketplace
+
+Methods:
+
+- <code title="get /marketplace/products">client.marketplace.<a href="./src/jocall3/resources/marketplace/marketplace.py">list_products</a>(\*\*<a href="src/jocall3/types/marketplace_list_products_params.py">params</a>) -> object</code>
+
+## Offers
+
+Methods:
+
+- <code title="post /marketplace/offers/{offerId}/redeem">client.marketplace.offers.<a href="./src/jocall3/resources/marketplace/offers.py">redeem</a>(offer_id) -> object</code>

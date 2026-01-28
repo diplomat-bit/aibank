@@ -55,28 +55,8 @@ class TestMe:
     @parametrize
     def test_method_update_with_all_params(self, client: Jocall3) -> None:
         me = client.users.me.update(
-            address={
-                "city": "city",
-                "country": "country",
-                "state": "state",
-                "street": "street",
-                "zip": "zip",
-            },
-            name="Quantum Visionary Pro",
-            phone="+1-555-999-0000",
-            preferences={
-                "ai_interaction_mode": "aiInteractionMode",
-                "data_sharing_consent": True,
-                "notification_channels": {
-                    "email": True,
-                    "in_app": True,
-                    "push": True,
-                    "sms": True,
-                },
-                "preferred_language": "preferredLanguage",
-                "theme": "theme",
-                "transaction_grouping": "transactionGrouping",
-            },
+            address={},
+            preferences={"notification_channels": {}},
         )
         assert_matches_type(MeUpdateResponse, me, path=["response"])
 
@@ -146,28 +126,8 @@ class TestAsyncMe:
     @parametrize
     async def test_method_update_with_all_params(self, async_client: AsyncJocall3) -> None:
         me = await async_client.users.me.update(
-            address={
-                "city": "city",
-                "country": "country",
-                "state": "state",
-                "street": "street",
-                "zip": "zip",
-            },
-            name="Quantum Visionary Pro",
-            phone="+1-555-999-0000",
-            preferences={
-                "ai_interaction_mode": "aiInteractionMode",
-                "data_sharing_consent": True,
-                "notification_channels": {
-                    "email": True,
-                    "in_app": True,
-                    "push": True,
-                    "sms": True,
-                },
-                "preferred_language": "preferredLanguage",
-                "theme": "theme",
-                "transaction_grouping": "transactionGrouping",
-            },
+            address={},
+            preferences={"notification_channels": {}},
         )
         assert_matches_type(MeUpdateResponse, me, path=["response"])
 
