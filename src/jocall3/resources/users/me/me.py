@@ -34,7 +34,6 @@ from ....types.users import me_update_params, me_list_devices_params
 from ...._base_client import make_request_options
 from ....types.users.me_update_response import MeUpdateResponse
 from ....types.users.me_retrieve_response import MeRetrieveResponse
-from ....types.users.me_list_devices_response import MeListDevicesResponse
 
 __all__ = ["MeResource", "AsyncMeResource"]
 
@@ -93,9 +92,7 @@ class MeResource(SyncAPIResource):
     def update(
         self,
         *,
-        address: me_update_params.Address | Omit = omit,
-        name: str | Omit = omit,
-        phone: str | Omit = omit,
+        address: object | Omit = omit,
         preferences: me_update_params.Preferences | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -124,8 +121,6 @@ class MeResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "address": address,
-                    "name": name,
-                    "phone": phone,
                     "preferences": preferences,
                 },
                 me_update_params.MeUpdateParams,
@@ -147,7 +142,7 @@ class MeResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> MeListDevicesResponse:
+    ) -> object:
         """
         Retrieves a list of all devices linked to the user's account, including mobile
         phones, tablets, and desktops, indicating their last active status and security
@@ -181,7 +176,7 @@ class MeResource(SyncAPIResource):
                     me_list_devices_params.MeListDevicesParams,
                 ),
             ),
-            cast_to=MeListDevicesResponse,
+            cast_to=object,
         )
 
 
@@ -239,9 +234,7 @@ class AsyncMeResource(AsyncAPIResource):
     async def update(
         self,
         *,
-        address: me_update_params.Address | Omit = omit,
-        name: str | Omit = omit,
-        phone: str | Omit = omit,
+        address: object | Omit = omit,
         preferences: me_update_params.Preferences | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -270,8 +263,6 @@ class AsyncMeResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "address": address,
-                    "name": name,
-                    "phone": phone,
                     "preferences": preferences,
                 },
                 me_update_params.MeUpdateParams,
@@ -293,7 +284,7 @@ class AsyncMeResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> MeListDevicesResponse:
+    ) -> object:
         """
         Retrieves a list of all devices linked to the user's account, including mobile
         phones, tablets, and desktops, indicating their last active status and security
@@ -327,7 +318,7 @@ class AsyncMeResource(AsyncAPIResource):
                     me_list_devices_params.MeListDevicesParams,
                 ),
             ),
-            cast_to=MeListDevicesResponse,
+            cast_to=object,
         )
 
 
