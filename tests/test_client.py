@@ -757,7 +757,7 @@ class TestJocall3:
                 _strict_response_validation=True,
                 environment="production",
             )
-            assert str(client.base_url).startswith("https://api.quantum-core.finance/v1")
+            assert str(client.base_url).startswith("https://75975599-8fdc-4274-8701-05fc0b8089cc.mock.pstmn.io")
 
             client.close()
 
@@ -1761,7 +1761,7 @@ class TestAsyncJocall3:
                 _strict_response_validation=True,
                 environment="production",
             )
-            assert str(client.base_url).startswith("https://api.quantum-core.finance/v1")
+            assert str(client.base_url).startswith("https://75975599-8fdc-4274-8701-05fc0b8089cc.mock.pstmn.io")
 
             await client.close()
 
