@@ -1,7 +1,7 @@
 # Jocall3 Python API library
 
 <!-- prettier-ignore -->
-[![PyPI version](https://img.shields.io/pypi/v/ai_banking.svg?label=pypi%20(stable))](https://pypi.org/project/ai_banking/)
+[![PyPI version](https://img.shields.io/pypi/v/aibanking.svg?label=pypi%20(stable))](https://pypi.org/project/aibanking/)
 
 The Jocall3 Python library provides convenient access to the Jocall3 REST API from any Python 3.9+
 application. The library includes type definitions for all request params and response fields,
@@ -17,7 +17,7 @@ The full API of this library can be found in [api.md](api.md).
 
 ```sh
 # install from PyPI
-pip install ai_banking
+pip install aibanking
 ```
 
 ## Usage
@@ -81,7 +81,7 @@ You can enable this by installing `aiohttp`:
 
 ```sh
 # install from PyPI
-pip install ai_banking[aiohttp]
+pip install aibanking[aiohttp]
 ```
 
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
@@ -282,9 +282,9 @@ user = response.parse()  # get the object that `users.register()` would have ret
 print(user.id)
 ```
 
-These methods return an [`APIResponse`](https://github.com/diplomat-bit/ai_banking/tree/main/src/jocall3/_response.py) object.
+These methods return an [`APIResponse`](https://github.com/diplomat-bit/aibank/tree/main/src/jocall3/_response.py) object.
 
-The async client returns an [`AsyncAPIResponse`](https://github.com/diplomat-bit/ai_banking/tree/main/src/jocall3/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
+The async client returns an [`AsyncAPIResponse`](https://github.com/diplomat-bit/aibank/tree/main/src/jocall3/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
 
 #### `.with_streaming_response`
 
@@ -392,7 +392,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/diplomat-bit/ai_banking/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/diplomat-bit/aibank/issues) with questions, bugs, or suggestions.
 
 ### Determining the installed version
 
