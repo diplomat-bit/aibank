@@ -861,7 +861,9 @@ class TestJocall3:
         respx_mock.post("/users/register").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
-            client.users.with_streaming_response.register().__enter__()
+            client.users.with_streaming_response.register(
+                email="alice.w@example.com", name="Alice Wonderland", password="SecureP@ssw0rd2024!"
+            ).__enter__()
 
         assert _get_open_connections(client) == 0
 
@@ -871,7 +873,9 @@ class TestJocall3:
         respx_mock.post("/users/register").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
-            client.users.with_streaming_response.register().__enter__()
+            client.users.with_streaming_response.register(
+                email="alice.w@example.com", name="Alice Wonderland", password="SecureP@ssw0rd2024!"
+            ).__enter__()
         assert _get_open_connections(client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
@@ -900,7 +904,9 @@ class TestJocall3:
 
         respx_mock.post("/users/register").mock(side_effect=retry_handler)
 
-        response = client.users.with_raw_response.register()
+        response = client.users.with_raw_response.register(
+            email="alice.w@example.com", name="Alice Wonderland", password="SecureP@ssw0rd2024!"
+        )
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -924,7 +930,12 @@ class TestJocall3:
 
         respx_mock.post("/users/register").mock(side_effect=retry_handler)
 
-        response = client.users.with_raw_response.register(extra_headers={"x-stainless-retry-count": Omit()})
+        response = client.users.with_raw_response.register(
+            email="alice.w@example.com",
+            name="Alice Wonderland",
+            password="SecureP@ssw0rd2024!",
+            extra_headers={"x-stainless-retry-count": Omit()},
+        )
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
 
@@ -947,7 +958,12 @@ class TestJocall3:
 
         respx_mock.post("/users/register").mock(side_effect=retry_handler)
 
-        response = client.users.with_raw_response.register(extra_headers={"x-stainless-retry-count": "42"})
+        response = client.users.with_raw_response.register(
+            email="alice.w@example.com",
+            name="Alice Wonderland",
+            password="SecureP@ssw0rd2024!",
+            extra_headers={"x-stainless-retry-count": "42"},
+        )
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
 
@@ -1770,7 +1786,9 @@ class TestAsyncJocall3:
         respx_mock.post("/users/register").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
-            await async_client.users.with_streaming_response.register().__aenter__()
+            await async_client.users.with_streaming_response.register(
+                email="alice.w@example.com", name="Alice Wonderland", password="SecureP@ssw0rd2024!"
+            ).__aenter__()
 
         assert _get_open_connections(async_client) == 0
 
@@ -1780,7 +1798,9 @@ class TestAsyncJocall3:
         respx_mock.post("/users/register").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
-            await async_client.users.with_streaming_response.register().__aenter__()
+            await async_client.users.with_streaming_response.register(
+                email="alice.w@example.com", name="Alice Wonderland", password="SecureP@ssw0rd2024!"
+            ).__aenter__()
         assert _get_open_connections(async_client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
@@ -1809,7 +1829,9 @@ class TestAsyncJocall3:
 
         respx_mock.post("/users/register").mock(side_effect=retry_handler)
 
-        response = await client.users.with_raw_response.register()
+        response = await client.users.with_raw_response.register(
+            email="alice.w@example.com", name="Alice Wonderland", password="SecureP@ssw0rd2024!"
+        )
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -1833,7 +1855,12 @@ class TestAsyncJocall3:
 
         respx_mock.post("/users/register").mock(side_effect=retry_handler)
 
-        response = await client.users.with_raw_response.register(extra_headers={"x-stainless-retry-count": Omit()})
+        response = await client.users.with_raw_response.register(
+            email="alice.w@example.com",
+            name="Alice Wonderland",
+            password="SecureP@ssw0rd2024!",
+            extra_headers={"x-stainless-retry-count": Omit()},
+        )
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
 
@@ -1856,7 +1883,12 @@ class TestAsyncJocall3:
 
         respx_mock.post("/users/register").mock(side_effect=retry_handler)
 
-        response = await client.users.with_raw_response.register(extra_headers={"x-stainless-retry-count": "42"})
+        response = await client.users.with_raw_response.register(
+            email="alice.w@example.com",
+            name="Alice Wonderland",
+            password="SecureP@ssw0rd2024!",
+            extra_headers={"x-stainless-retry-count": "42"},
+        )
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
 

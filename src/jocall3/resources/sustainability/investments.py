@@ -53,6 +53,13 @@ class InvestmentsResource(SyncAPIResource):
         Provides an AI-driven analysis of the Environmental, Social, and Governance
         (ESG) impact of the user's entire investment portfolio, benchmarking against
         industry standards and suggesting more sustainable alternatives.
+
+              example:
+                code: UNAUTHENTICATED
+                message: 'Authentication failed: Invalid or missing access token.'
+                timestamp: '2024-07-22T08:00:00Z'
+
+        '403': description: >-
         """
         return self._get(
             "/sustainability/investments/impact",
@@ -97,6 +104,13 @@ class AsyncInvestmentsResource(AsyncAPIResource):
         Provides an AI-driven analysis of the Environmental, Social, and Governance
         (ESG) impact of the user's entire investment portfolio, benchmarking against
         industry standards and suggesting more sustainable alternatives.
+
+              example:
+                code: UNAUTHENTICATED
+                message: 'Authentication failed: Invalid or missing access token.'
+                timestamp: '2024-07-22T08:00:00Z'
+
+        '403': description: >-
         """
         return await self._get(
             "/sustainability/investments/impact",
