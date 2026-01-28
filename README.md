@@ -1,7 +1,7 @@
 # Jocall3 Python API library
 
 <!-- prettier-ignore -->
-[![PyPI version](https://pypi-camo.freetls.fastly.net/1bb07094781ba1b0c2460c7cf5cd262d3f20bd79/68747470733a2f2f696d672e736869656c64732e696f2f707970692f762f616962616e6b696e672e7376673f6c6162656c3d7079706925323028737461626c6529)
+![PyPI version](https://pypi-camo.freetls.fastly.net/1bb07094781ba1b0c2460c7cf5cd262d3f20bd79/68747470733a2f2f696d672e736869656c64732e696f2f707970692f762f616962616e6b696e672e7376673f6c6162656c3d7079706925323028737461626c6529)
 
 The Jocall3 Python library provides convenient access to the Jocall3 REST API from any Python 3.9+
 application. The library includes type definitions for all request params and response fields,
