@@ -3,5 +3,9 @@
 from __future__ import annotations
 
 from .statement_list_params import StatementListParams as StatementListParams
+from .overdraft_get_response import OverdraftGetResponse as OverdraftGetResponse
+from .overdraft_update_params import OverdraftUpdateParams as OverdraftUpdateParams
 from .statement_list_response import StatementListResponse as StatementListResponse
+from .overdraft_update_response import OverdraftUpdateResponse as OverdraftUpdateResponse
 from .transaction_list_pending_params import TransactionListPendingParams as TransactionListPendingParams
+from .transaction_list_pending_response import TransactionListPendingResponse as TransactionListPendingResponse

@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import httpx
 
-from ..._types import Body, Query, Headers, NotGiven, not_given
+from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from ..._utils import maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -14,6 +15,9 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ..._base_client import make_request_options
+from ...types.accounts import overdraft_update_params
+from ...types.accounts.overdraft_get_response import OverdraftGetResponse
+from ...types.accounts.overdraft_update_response import OverdraftUpdateResponse
 
 __all__ = ["OverdraftResource", "AsyncOverdraftResource"]
 
@@ -42,13 +46,16 @@ class OverdraftResource(SyncAPIResource):
         self,
         account_id: str,
         *,
+        enabled: bool | Omit = omit,
+        fee_preference: str | Omit = omit,
+        link_to_savings: bool | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> OverdraftUpdateResponse:
         """
         Updates the overdraft protection settings for a specific account, enabling or
         disabling protection and configuring preferences.
@@ -66,10 +73,18 @@ class OverdraftResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `account_id` but received {account_id!r}")
         return self._put(
             f"/accounts/{account_id}/overdraft-settings",
+            body=maybe_transform(
+                {
+                    "enabled": enabled,
+                    "fee_preference": fee_preference,
+                    "link_to_savings": link_to_savings,
+                },
+                overdraft_update_params.OverdraftUpdateParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            cast_to=OverdraftUpdateResponse,
         )
 
     def get(
@@ -82,7 +97,7 @@ class OverdraftResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> OverdraftGetResponse:
         """
         Retrieves the current overdraft protection settings for a specific account.
 
@@ -102,7 +117,7 @@ class OverdraftResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            cast_to=OverdraftGetResponse,
         )
 
 
@@ -130,13 +145,16 @@ class AsyncOverdraftResource(AsyncAPIResource):
         self,
         account_id: str,
         *,
+        enabled: bool | Omit = omit,
+        fee_preference: str | Omit = omit,
+        link_to_savings: bool | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> OverdraftUpdateResponse:
         """
         Updates the overdraft protection settings for a specific account, enabling or
         disabling protection and configuring preferences.
@@ -154,10 +172,18 @@ class AsyncOverdraftResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `account_id` but received {account_id!r}")
         return await self._put(
             f"/accounts/{account_id}/overdraft-settings",
+            body=await async_maybe_transform(
+                {
+                    "enabled": enabled,
+                    "fee_preference": fee_preference,
+                    "link_to_savings": link_to_savings,
+                },
+                overdraft_update_params.OverdraftUpdateParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            cast_to=OverdraftUpdateResponse,
         )
 
     async def get(
@@ -170,7 +196,7 @@ class AsyncOverdraftResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> OverdraftGetResponse:
         """
         Retrieves the current overdraft protection settings for a specific account.
 
@@ -190,7 +216,7 @@ class AsyncOverdraftResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            cast_to=OverdraftGetResponse,
         )
 
 

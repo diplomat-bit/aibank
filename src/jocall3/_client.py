@@ -12,7 +12,6 @@ from . import _exceptions
 from ._qs import Querystring
 from ._types import (
     Omit,
-    Headers,
     Timeout,
     NotGiven,
     Transport,
@@ -32,28 +31,13 @@ from ._base_client import (
 )
 
 if TYPE_CHECKING:
-    from .resources import (
-        ai,
-        web3,
-        users,
-        budgets,
-        accounts,
-        payments,
-        corporate,
-        investments,
-        transactions,
-        sustainability,
-    )
+    from .resources import ai, users, budgets, accounts, investments, transactions
     from .resources.ai.ai import AIResource, AsyncAIResource
     from .resources.budgets import BudgetsResource, AsyncBudgetsResource
-    from .resources.web3.web3 import Web3Resource, AsyncWeb3Resource
     from .resources.users.users import UsersResource, AsyncUsersResource
     from .resources.accounts.accounts import AccountsResource, AsyncAccountsResource
-    from .resources.payments.payments import PaymentsResource, AsyncPaymentsResource
-    from .resources.corporate.corporate import CorporateResource, AsyncCorporateResource
     from .resources.investments.investments import InvestmentsResource, AsyncInvestmentsResource
     from .resources.transactions.transactions import TransactionsResource, AsyncTransactionsResource
-    from .resources.sustainability.sustainability import SustainabilityResource, AsyncSustainabilityResource
 
 __all__ = [
     "ENVIRONMENTS",
@@ -76,6 +60,7 @@ ENVIRONMENTS: Dict[str, str] = {
 
 class Jocall3(SyncAPIClient):
     # client options
+    api_key: str | None
     gemini_api_key: str | None
 
     _environment: Literal["production", "sandbox", "gemini_direct"] | NotGiven
@@ -83,6 +68,7 @@ class Jocall3(SyncAPIClient):
     def __init__(
         self,
         *,
+        api_key: str | None = None,
         gemini_api_key: str | None = None,
         environment: Literal["production", "sandbox", "gemini_direct"] | NotGiven = not_given,
         base_url: str | httpx.URL | None | NotGiven = not_given,
@@ -106,8 +92,14 @@ class Jocall3(SyncAPIClient):
     ) -> None:
         """Construct a new synchronous Jocall3 client instance.
 
-        This automatically infers the `gemini_api_key` argument from the `GEMINI_API_KEY` environment variable if it is not provided.
+        This automatically infers the following arguments from their corresponding environment variables if they are not provided:
+        - `api_key` from `JOCALL3_API_KEY`
+        - `gemini_api_key` from `GEMINI_API_KEY`
         """
+        if api_key is None:
+            api_key = os.environ.get("JOCALL3_API_KEY")
+        self.api_key = api_key
+
         if gemini_api_key is None:
             gemini_api_key = os.environ.get("GEMINI_API_KEY")
         self.gemini_api_key = gemini_api_key
@@ -186,30 +178,6 @@ class Jocall3(SyncAPIClient):
         return AIResource(self)
 
     @cached_property
-    def corporate(self) -> CorporateResource:
-        from .resources.corporate import CorporateResource
-
-        return CorporateResource(self)
-
-    @cached_property
-    def web3(self) -> Web3Resource:
-        from .resources.web3 import Web3Resource
-
-        return Web3Resource(self)
-
-    @cached_property
-    def payments(self) -> PaymentsResource:
-        from .resources.payments import PaymentsResource
-
-        return PaymentsResource(self)
-
-    @cached_property
-    def sustainability(self) -> SustainabilityResource:
-        from .resources.sustainability import SustainabilityResource
-
-        return SustainabilityResource(self)
-
-    @cached_property
     def with_raw_response(self) -> Jocall3WithRawResponse:
         return Jocall3WithRawResponse(self)
 
@@ -224,14 +192,6 @@ class Jocall3(SyncAPIClient):
 
     @property
     @override
-    def auth_headers(self) -> dict[str, str]:
-        gemini_api_key = self.gemini_api_key
-        if gemini_api_key is None:
-            return {}
-        return {"x-goog-api-key": gemini_api_key}
-
-    @property
-    @override
     def default_headers(self) -> dict[str, str | Omit]:
         return {
             **super().default_headers,
@@ -239,18 +199,10 @@ class Jocall3(SyncAPIClient):
             **self._custom_headers,
         }
 
-    @override
-    def _validate_headers(self, headers: Headers, custom_headers: Headers) -> None:
-        if headers.get("x-goog-api-key") or isinstance(custom_headers.get("x-goog-api-key"), Omit):
-            return
-
-        raise TypeError(
-            '"Could not resolve authentication method. Expected the gemini_api_key to be set. Or for the `x-goog-api-key` headers to be explicitly omitted"'
-        )
-
     def copy(
         self,
         *,
+        api_key: str | None = None,
         gemini_api_key: str | None = None,
         environment: Literal["production", "sandbox", "gemini_direct"] | None = None,
         base_url: str | httpx.URL | None = None,
@@ -286,6 +238,7 @@ class Jocall3(SyncAPIClient):
 
         http_client = http_client or self._client
         return self.__class__(
+            api_key=api_key or self.api_key,
             gemini_api_key=gemini_api_key or self.gemini_api_key,
             base_url=base_url or self.base_url,
             environment=environment or self._environment,
@@ -337,6 +290,7 @@ class Jocall3(SyncAPIClient):
 
 class AsyncJocall3(AsyncAPIClient):
     # client options
+    api_key: str | None
     gemini_api_key: str | None
 
     _environment: Literal["production", "sandbox", "gemini_direct"] | NotGiven
@@ -344,6 +298,7 @@ class AsyncJocall3(AsyncAPIClient):
     def __init__(
         self,
         *,
+        api_key: str | None = None,
         gemini_api_key: str | None = None,
         environment: Literal["production", "sandbox", "gemini_direct"] | NotGiven = not_given,
         base_url: str | httpx.URL | None | NotGiven = not_given,
@@ -367,8 +322,14 @@ class AsyncJocall3(AsyncAPIClient):
     ) -> None:
         """Construct a new async AsyncJocall3 client instance.
 
-        This automatically infers the `gemini_api_key` argument from the `GEMINI_API_KEY` environment variable if it is not provided.
+        This automatically infers the following arguments from their corresponding environment variables if they are not provided:
+        - `api_key` from `JOCALL3_API_KEY`
+        - `gemini_api_key` from `GEMINI_API_KEY`
         """
+        if api_key is None:
+            api_key = os.environ.get("JOCALL3_API_KEY")
+        self.api_key = api_key
+
         if gemini_api_key is None:
             gemini_api_key = os.environ.get("GEMINI_API_KEY")
         self.gemini_api_key = gemini_api_key
@@ -447,30 +408,6 @@ class AsyncJocall3(AsyncAPIClient):
         return AsyncAIResource(self)
 
     @cached_property
-    def corporate(self) -> AsyncCorporateResource:
-        from .resources.corporate import AsyncCorporateResource
-
-        return AsyncCorporateResource(self)
-
-    @cached_property
-    def web3(self) -> AsyncWeb3Resource:
-        from .resources.web3 import AsyncWeb3Resource
-
-        return AsyncWeb3Resource(self)
-
-    @cached_property
-    def payments(self) -> AsyncPaymentsResource:
-        from .resources.payments import AsyncPaymentsResource
-
-        return AsyncPaymentsResource(self)
-
-    @cached_property
-    def sustainability(self) -> AsyncSustainabilityResource:
-        from .resources.sustainability import AsyncSustainabilityResource
-
-        return AsyncSustainabilityResource(self)
-
-    @cached_property
     def with_raw_response(self) -> AsyncJocall3WithRawResponse:
         return AsyncJocall3WithRawResponse(self)
 
@@ -485,14 +422,6 @@ class AsyncJocall3(AsyncAPIClient):
 
     @property
     @override
-    def auth_headers(self) -> dict[str, str]:
-        gemini_api_key = self.gemini_api_key
-        if gemini_api_key is None:
-            return {}
-        return {"x-goog-api-key": gemini_api_key}
-
-    @property
-    @override
     def default_headers(self) -> dict[str, str | Omit]:
         return {
             **super().default_headers,
@@ -500,18 +429,10 @@ class AsyncJocall3(AsyncAPIClient):
             **self._custom_headers,
         }
 
-    @override
-    def _validate_headers(self, headers: Headers, custom_headers: Headers) -> None:
-        if headers.get("x-goog-api-key") or isinstance(custom_headers.get("x-goog-api-key"), Omit):
-            return
-
-        raise TypeError(
-            '"Could not resolve authentication method. Expected the gemini_api_key to be set. Or for the `x-goog-api-key` headers to be explicitly omitted"'
-        )
-
     def copy(
         self,
         *,
+        api_key: str | None = None,
         gemini_api_key: str | None = None,
         environment: Literal["production", "sandbox", "gemini_direct"] | None = None,
         base_url: str | httpx.URL | None = None,
@@ -547,6 +468,7 @@ class AsyncJocall3(AsyncAPIClient):
 
         http_client = http_client or self._client
         return self.__class__(
+            api_key=api_key or self.api_key,
             gemini_api_key=gemini_api_key or self.gemini_api_key,
             base_url=base_url or self.base_url,
             environment=environment or self._environment,
@@ -638,30 +560,6 @@ class Jocall3WithRawResponse:
 
         return AIResourceWithRawResponse(self._client.ai)
 
-    @cached_property
-    def corporate(self) -> corporate.CorporateResourceWithRawResponse:
-        from .resources.corporate import CorporateResourceWithRawResponse
-
-        return CorporateResourceWithRawResponse(self._client.corporate)
-
-    @cached_property
-    def web3(self) -> web3.Web3ResourceWithRawResponse:
-        from .resources.web3 import Web3ResourceWithRawResponse
-
-        return Web3ResourceWithRawResponse(self._client.web3)
-
-    @cached_property
-    def payments(self) -> payments.PaymentsResourceWithRawResponse:
-        from .resources.payments import PaymentsResourceWithRawResponse
-
-        return PaymentsResourceWithRawResponse(self._client.payments)
-
-    @cached_property
-    def sustainability(self) -> sustainability.SustainabilityResourceWithRawResponse:
-        from .resources.sustainability import SustainabilityResourceWithRawResponse
-
-        return SustainabilityResourceWithRawResponse(self._client.sustainability)
-
 
 class AsyncJocall3WithRawResponse:
     _client: AsyncJocall3
@@ -704,30 +602,6 @@ class AsyncJocall3WithRawResponse:
         from .resources.ai import AsyncAIResourceWithRawResponse
 
         return AsyncAIResourceWithRawResponse(self._client.ai)
-
-    @cached_property
-    def corporate(self) -> corporate.AsyncCorporateResourceWithRawResponse:
-        from .resources.corporate import AsyncCorporateResourceWithRawResponse
-
-        return AsyncCorporateResourceWithRawResponse(self._client.corporate)
-
-    @cached_property
-    def web3(self) -> web3.AsyncWeb3ResourceWithRawResponse:
-        from .resources.web3 import AsyncWeb3ResourceWithRawResponse
-
-        return AsyncWeb3ResourceWithRawResponse(self._client.web3)
-
-    @cached_property
-    def payments(self) -> payments.AsyncPaymentsResourceWithRawResponse:
-        from .resources.payments import AsyncPaymentsResourceWithRawResponse
-
-        return AsyncPaymentsResourceWithRawResponse(self._client.payments)
-
-    @cached_property
-    def sustainability(self) -> sustainability.AsyncSustainabilityResourceWithRawResponse:
-        from .resources.sustainability import AsyncSustainabilityResourceWithRawResponse
-
-        return AsyncSustainabilityResourceWithRawResponse(self._client.sustainability)
 
 
 class Jocall3WithStreamedResponse:
@@ -772,30 +646,6 @@ class Jocall3WithStreamedResponse:
 
         return AIResourceWithStreamingResponse(self._client.ai)
 
-    @cached_property
-    def corporate(self) -> corporate.CorporateResourceWithStreamingResponse:
-        from .resources.corporate import CorporateResourceWithStreamingResponse
-
-        return CorporateResourceWithStreamingResponse(self._client.corporate)
-
-    @cached_property
-    def web3(self) -> web3.Web3ResourceWithStreamingResponse:
-        from .resources.web3 import Web3ResourceWithStreamingResponse
-
-        return Web3ResourceWithStreamingResponse(self._client.web3)
-
-    @cached_property
-    def payments(self) -> payments.PaymentsResourceWithStreamingResponse:
-        from .resources.payments import PaymentsResourceWithStreamingResponse
-
-        return PaymentsResourceWithStreamingResponse(self._client.payments)
-
-    @cached_property
-    def sustainability(self) -> sustainability.SustainabilityResourceWithStreamingResponse:
-        from .resources.sustainability import SustainabilityResourceWithStreamingResponse
-
-        return SustainabilityResourceWithStreamingResponse(self._client.sustainability)
-
 
 class AsyncJocall3WithStreamedResponse:
     _client: AsyncJocall3
@@ -838,30 +688,6 @@ class AsyncJocall3WithStreamedResponse:
         from .resources.ai import AsyncAIResourceWithStreamingResponse
 
         return AsyncAIResourceWithStreamingResponse(self._client.ai)
-
-    @cached_property
-    def corporate(self) -> corporate.AsyncCorporateResourceWithStreamingResponse:
-        from .resources.corporate import AsyncCorporateResourceWithStreamingResponse
-
-        return AsyncCorporateResourceWithStreamingResponse(self._client.corporate)
-
-    @cached_property
-    def web3(self) -> web3.AsyncWeb3ResourceWithStreamingResponse:
-        from .resources.web3 import AsyncWeb3ResourceWithStreamingResponse
-
-        return AsyncWeb3ResourceWithStreamingResponse(self._client.web3)
-
-    @cached_property
-    def payments(self) -> payments.AsyncPaymentsResourceWithStreamingResponse:
-        from .resources.payments import AsyncPaymentsResourceWithStreamingResponse
-
-        return AsyncPaymentsResourceWithStreamingResponse(self._client.payments)
-
-    @cached_property
-    def sustainability(self) -> sustainability.AsyncSustainabilityResourceWithStreamingResponse:
-        from .resources.sustainability import AsyncSustainabilityResourceWithStreamingResponse
-
-        return AsyncSustainabilityResourceWithStreamingResponse(self._client.sustainability)
 
 
 Client = Jocall3

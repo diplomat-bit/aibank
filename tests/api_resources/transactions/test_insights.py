@@ -9,6 +9,7 @@ import pytest
 
 from jocall3 import Jocall3, AsyncJocall3
 from tests.utils import assert_matches_type
+from jocall3.types.transactions import InsightGetTrendsResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -20,7 +21,7 @@ class TestInsights:
     @parametrize
     def test_method_get_trends(self, client: Jocall3) -> None:
         insight = client.transactions.insights.get_trends()
-        assert_matches_type(object, insight, path=["response"])
+        assert_matches_type(InsightGetTrendsResponse, insight, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -30,7 +31,7 @@ class TestInsights:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         insight = response.parse()
-        assert_matches_type(object, insight, path=["response"])
+        assert_matches_type(InsightGetTrendsResponse, insight, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -40,7 +41,7 @@ class TestInsights:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             insight = response.parse()
-            assert_matches_type(object, insight, path=["response"])
+            assert_matches_type(InsightGetTrendsResponse, insight, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -54,7 +55,7 @@ class TestAsyncInsights:
     @parametrize
     async def test_method_get_trends(self, async_client: AsyncJocall3) -> None:
         insight = await async_client.transactions.insights.get_trends()
-        assert_matches_type(object, insight, path=["response"])
+        assert_matches_type(InsightGetTrendsResponse, insight, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -64,7 +65,7 @@ class TestAsyncInsights:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         insight = await response.parse()
-        assert_matches_type(object, insight, path=["response"])
+        assert_matches_type(InsightGetTrendsResponse, insight, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -74,6 +75,6 @@ class TestAsyncInsights:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             insight = await response.parse()
-            assert_matches_type(object, insight, path=["response"])
+            assert_matches_type(InsightGetTrendsResponse, insight, path=["response"])
 
         assert cast(Any, response.is_closed) is True

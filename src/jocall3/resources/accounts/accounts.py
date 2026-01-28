@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import httpx
 
-from ...types import account_list_params
+from ...types import account_link_params, account_list_params
 from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ..._utils import maybe_transform, async_maybe_transform
 from ..._compat import cached_property
@@ -40,6 +40,8 @@ from .transactions import (
     AsyncTransactionsResourceWithStreamingResponse,
 )
 from ..._base_client import make_request_options
+from ...types.account_link_response import AccountLinkResponse
+from ...types.account_list_response import AccountListResponse
 from ...types.account_retrieve_response import AccountRetrieveResponse
 
 __all__ = ["AccountsResource", "AsyncAccountsResource"]
@@ -123,7 +125,7 @@ class AccountsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> AccountListResponse:
         """
         Fetches a comprehensive, real-time list of all external financial accounts
         linked to the user's profile, including consolidated balances and institutional
@@ -157,30 +159,48 @@ class AccountsResource(SyncAPIResource):
                     account_list_params.AccountListParams,
                 ),
             ),
-            cast_to=object,
+            cast_to=AccountListResponse,
         )
 
     def link(
         self,
         *,
+        country_code: str,
+        institution_name: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> AccountLinkResponse:
         """
         Begins the secure process of linking a new external financial institution (e.g.,
         another bank, investment platform) to the user's profile, typically involving a
         third-party tokenized flow.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._post(
             "/accounts/link",
+            body=maybe_transform(
+                {
+                    "country_code": country_code,
+                    "institution_name": institution_name,
+                },
+                account_link_params.AccountLinkParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            cast_to=AccountLinkResponse,
         )
 
 
@@ -262,7 +282,7 @@ class AsyncAccountsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> AccountListResponse:
         """
         Fetches a comprehensive, real-time list of all external financial accounts
         linked to the user's profile, including consolidated balances and institutional
@@ -296,30 +316,48 @@ class AsyncAccountsResource(AsyncAPIResource):
                     account_list_params.AccountListParams,
                 ),
             ),
-            cast_to=object,
+            cast_to=AccountListResponse,
         )
 
     async def link(
         self,
         *,
+        country_code: str,
+        institution_name: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> AccountLinkResponse:
         """
         Begins the secure process of linking a new external financial institution (e.g.,
         another bank, investment platform) to the user's profile, typically involving a
         third-party tokenized flow.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
         """
         return await self._post(
             "/accounts/link",
+            body=await async_maybe_transform(
+                {
+                    "country_code": country_code,
+                    "institution_name": institution_name,
+                },
+                account_link_params.AccountLinkParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            cast_to=AccountLinkResponse,
         )
 
 
