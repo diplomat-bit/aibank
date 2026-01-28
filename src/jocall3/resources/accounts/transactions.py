@@ -16,7 +16,6 @@ from ..._response import (
 )
 from ..._base_client import make_request_options
 from ...types.accounts import transaction_retrieve_pending_params
-from ...types.accounts.transaction_retrieve_pending_response import TransactionRetrievePendingResponse
 
 __all__ = ["TransactionsResource", "AsyncTransactionsResource"]
 
@@ -53,7 +52,7 @@ class TransactionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> TransactionRetrievePendingResponse:
+    ) -> object:
         """
         Retrieves a list of pending transactions that have not yet cleared for a
         specific financial account.
@@ -88,7 +87,7 @@ class TransactionsResource(SyncAPIResource):
                     transaction_retrieve_pending_params.TransactionRetrievePendingParams,
                 ),
             ),
-            cast_to=TransactionRetrievePendingResponse,
+            cast_to=object,
         )
 
 
@@ -124,7 +123,7 @@ class AsyncTransactionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> TransactionRetrievePendingResponse:
+    ) -> object:
         """
         Retrieves a list of pending transactions that have not yet cleared for a
         specific financial account.
@@ -159,7 +158,7 @@ class AsyncTransactionsResource(AsyncAPIResource):
                     transaction_retrieve_pending_params.TransactionRetrievePendingParams,
                 ),
             ),
-            cast_to=TransactionRetrievePendingResponse,
+            cast_to=object,
         )
 
 

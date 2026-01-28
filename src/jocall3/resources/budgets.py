@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import httpx
 
-from ..types import budget_list_params, budget_update_params
+from ..types import budget_list_params
 from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from .._utils import maybe_transform, async_maybe_transform
 from .._compat import cached_property
@@ -16,9 +16,6 @@ from .._response import (
     async_to_streamed_response_wrapper,
 )
 from .._base_client import make_request_options
-from ..types.budget_list_response import BudgetListResponse
-from ..types.budget_update_response import BudgetUpdateResponse
-from ..types.budget_retrieve_response import BudgetRetrieveResponse
 
 __all__ = ["BudgetsResource", "AsyncBudgetsResource"]
 
@@ -53,7 +50,7 @@ class BudgetsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> BudgetRetrieveResponse:
+    ) -> object:
         """
         Retrieves detailed information for a specific budget, including current
         spending, remaining amounts, and AI recommendations.
@@ -74,22 +71,20 @@ class BudgetsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=BudgetRetrieveResponse,
+            cast_to=object,
         )
 
     def update(
         self,
         budget_id: str,
         *,
-        alert_threshold: int | Omit = omit,
-        total_amount: float | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> BudgetUpdateResponse:
+    ) -> object:
         """
         Updates the parameters of an existing budget, such as total amount, dates, or
         categories.
@@ -107,17 +102,10 @@ class BudgetsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `budget_id` but received {budget_id!r}")
         return self._put(
             f"/budgets/{budget_id}",
-            body=maybe_transform(
-                {
-                    "alert_threshold": alert_threshold,
-                    "total_amount": total_amount,
-                },
-                budget_update_params.BudgetUpdateParams,
-            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=BudgetUpdateResponse,
+            cast_to=object,
         )
 
     def list(
@@ -131,7 +119,7 @@ class BudgetsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> BudgetListResponse:
+    ) -> object:
         """
         Retrieves a list of all active and historical budgets for the authenticated
         user.
@@ -164,7 +152,7 @@ class BudgetsResource(SyncAPIResource):
                     budget_list_params.BudgetListParams,
                 ),
             ),
-            cast_to=BudgetListResponse,
+            cast_to=object,
         )
 
 
@@ -198,7 +186,7 @@ class AsyncBudgetsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> BudgetRetrieveResponse:
+    ) -> object:
         """
         Retrieves detailed information for a specific budget, including current
         spending, remaining amounts, and AI recommendations.
@@ -219,22 +207,20 @@ class AsyncBudgetsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=BudgetRetrieveResponse,
+            cast_to=object,
         )
 
     async def update(
         self,
         budget_id: str,
         *,
-        alert_threshold: int | Omit = omit,
-        total_amount: float | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> BudgetUpdateResponse:
+    ) -> object:
         """
         Updates the parameters of an existing budget, such as total amount, dates, or
         categories.
@@ -252,17 +238,10 @@ class AsyncBudgetsResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `budget_id` but received {budget_id!r}")
         return await self._put(
             f"/budgets/{budget_id}",
-            body=await async_maybe_transform(
-                {
-                    "alert_threshold": alert_threshold,
-                    "total_amount": total_amount,
-                },
-                budget_update_params.BudgetUpdateParams,
-            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=BudgetUpdateResponse,
+            cast_to=object,
         )
 
     async def list(
@@ -276,7 +255,7 @@ class AsyncBudgetsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> BudgetListResponse:
+    ) -> object:
         """
         Retrieves a list of all active and historical budgets for the authenticated
         user.
@@ -309,7 +288,7 @@ class AsyncBudgetsResource(AsyncAPIResource):
                     budget_list_params.BudgetListParams,
                 ),
             ),
-            cast_to=BudgetListResponse,
+            cast_to=object,
         )
 
 
