@@ -1,7 +1,7 @@
 # Jocall3 Python API library
 
 <!-- prettier-ignore -->
-[![PyPI version](https://img.shields.io/pypi/v/aibanking.svg?label=pypi%20(stable))](https://pypi.org/project/aibanking/)
+[![PyPI version](https://img.shields.io/pypi/v/aibanking.svg?label=pypi%20(stable))]([https://pypi.org/project/aibanking/](https://pypi.org/project/aibanking/))
 
 The Jocall3 Python library provides convenient access to the Jocall3 REST API from any Python 3.9+
 application. The library includes type definitions for all request params and response fields,
