@@ -8,22 +8,6 @@ from .ai import (
     AIResourceWithStreamingResponse,
     AsyncAIResourceWithStreamingResponse,
 )
-from .ads import (
-    AdsResource,
-    AsyncAdsResource,
-    AdsResourceWithRawResponse,
-    AsyncAdsResourceWithRawResponse,
-    AdsResourceWithStreamingResponse,
-    AsyncAdsResourceWithStreamingResponse,
-)
-from .oracle import (
-    OracleResource,
-    AsyncOracleResource,
-    OracleResourceWithRawResponse,
-    AsyncOracleResourceWithRawResponse,
-    OracleResourceWithStreamingResponse,
-    AsyncOracleResourceWithStreamingResponse,
-)
 from .advisor import (
     AdvisorResource,
     AsyncAdvisorResource,
@@ -31,14 +15,6 @@ from .advisor import (
     AsyncAdvisorResourceWithRawResponse,
     AdvisorResourceWithStreamingResponse,
     AsyncAdvisorResourceWithStreamingResponse,
-)
-from .incubator import (
-    IncubatorResource,
-    AsyncIncubatorResource,
-    IncubatorResourceWithRawResponse,
-    AsyncIncubatorResourceWithRawResponse,
-    IncubatorResourceWithStreamingResponse,
-    AsyncIncubatorResourceWithStreamingResponse,
 )
 
 __all__ = [
@@ -48,24 +24,6 @@ __all__ = [
     "AsyncAdvisorResourceWithRawResponse",
     "AdvisorResourceWithStreamingResponse",
     "AsyncAdvisorResourceWithStreamingResponse",
-    "OracleResource",
-    "AsyncOracleResource",
-    "OracleResourceWithRawResponse",
-    "AsyncOracleResourceWithRawResponse",
-    "OracleResourceWithStreamingResponse",
-    "AsyncOracleResourceWithStreamingResponse",
-    "IncubatorResource",
-    "AsyncIncubatorResource",
-    "IncubatorResourceWithRawResponse",
-    "AsyncIncubatorResourceWithRawResponse",
-    "IncubatorResourceWithStreamingResponse",
-    "AsyncIncubatorResourceWithStreamingResponse",
-    "AdsResource",
-    "AsyncAdsResource",
-    "AdsResourceWithRawResponse",
-    "AsyncAdsResourceWithRawResponse",
-    "AdsResourceWithStreamingResponse",
-    "AsyncAdsResourceWithStreamingResponse",
     "AIResource",
     "AsyncAIResource",
     "AIResourceWithRawResponse",

@@ -25,41 +25,44 @@ pip install aibanking
 The full API of this library can be found in [api.md](api.md).
 
 ```python
-import os
 from jocall3 import Jocall3
 
 client = Jocall3(
-    gemini_api_key=os.environ.get("GEMINI_API_KEY"),  # This is the default and can be omitted
     # or 'production' | 'gemini_direct'; defaults to "production".
     environment="sandbox",
 )
 
-response = client.ai.oracle.simulate.run_advanced()
+response = client.users.register(
+    email="executive@corp.com",
+    name="Alice Wonderland",
+    password="ComplexPassword99!",
+    phone="+1-555-0199",
+)
+print(response.id)
 ```
-
-While you can provide a `gemini_api_key` keyword argument,
-we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)
-to add `GEMINI_API_KEY="My Gemini API Key"` to your `.env` file
-so that your Gemini API Key is not stored in source control.
 
 ## Async usage
 
 Simply import `AsyncJocall3` instead of `Jocall3` and use `await` with each API call:
 
 ```python
-import os
 import asyncio
 from jocall3 import AsyncJocall3
 
 client = AsyncJocall3(
-    gemini_api_key=os.environ.get("GEMINI_API_KEY"),  # This is the default and can be omitted
     # or 'production' | 'gemini_direct'; defaults to "production".
     environment="sandbox",
 )
 
 
 async def main() -> None:
-    response = await client.ai.oracle.simulate.run_advanced()
+    response = await client.users.register(
+        email="executive@corp.com",
+        name="Alice Wonderland",
+        password="ComplexPassword99!",
+        phone="+1-555-0199",
+    )
+    print(response.id)
 
 
 asyncio.run(main())
@@ -81,7 +84,6 @@ pip install aibanking[aiohttp]
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
 
 ```python
-import os
 import asyncio
 from jocall3 import DefaultAioHttpClient
 from jocall3 import AsyncJocall3
@@ -89,10 +91,15 @@ from jocall3 import AsyncJocall3
 
 async def main() -> None:
     async with AsyncJocall3(
-        gemini_api_key=os.environ.get("GEMINI_API_KEY"),  # This is the default and can be omitted
         http_client=DefaultAioHttpClient(),
     ) as client:
-        response = await client.ai.oracle.simulate.run_advanced()
+        response = await client.users.register(
+            email="executive@corp.com",
+            name="Alice Wonderland",
+            password="ComplexPassword99!",
+            phone="+1-555-0199",
+        )
+        print(response.id)
 
 
 asyncio.run(main())
@@ -116,10 +123,13 @@ from jocall3 import Jocall3
 
 client = Jocall3()
 
-me = client.users.me.update(
-    preferences={},
+response = client.users.register(
+    email="alice.w@example.com",
+    name="Alice Wonderland",
+    password="SecureP@ssw0rd2024!",
+    address={},
 )
-print(me.preferences)
+print(response.address)
 ```
 
 ## Handling errors
@@ -138,7 +148,12 @@ from jocall3 import Jocall3
 client = Jocall3()
 
 try:
-    client.users.register()
+    client.users.register(
+        email="executive@corp.com",
+        name="Alice Wonderland",
+        password="ComplexPassword99!",
+        phone="+1-555-0199",
+    )
 except jocall3.APIConnectionError as e:
     print("The server could not be reached")
     print(e.__cause__)  # an underlying Exception, likely raised within httpx.
@@ -181,7 +196,12 @@ client = Jocall3(
 )
 
 # Or, configure per-request:
-client.with_options(max_retries=5).users.register()
+client.with_options(max_retries=5).users.register(
+    email="executive@corp.com",
+    name="Alice Wonderland",
+    password="ComplexPassword99!",
+    phone="+1-555-0199",
+)
 ```
 
 ### Timeouts
@@ -204,7 +224,12 @@ client = Jocall3(
 )
 
 # Override per-request:
-client.with_options(timeout=5.0).users.register()
+client.with_options(timeout=5.0).users.register(
+    email="executive@corp.com",
+    name="Alice Wonderland",
+    password="ComplexPassword99!",
+    phone="+1-555-0199",
+)
 ```
 
 On timeout, an `APITimeoutError` is thrown.
@@ -245,11 +270,16 @@ The "raw" Response object can be accessed by prefixing `.with_raw_response.` to 
 from jocall3 import Jocall3
 
 client = Jocall3()
-response = client.users.with_raw_response.register()
+response = client.users.with_raw_response.register(
+    email="executive@corp.com",
+    name="Alice Wonderland",
+    password="ComplexPassword99!",
+    phone="+1-555-0199",
+)
 print(response.headers.get('X-My-Header'))
 
 user = response.parse()  # get the object that `users.register()` would have returned
-print(user.address)
+print(user.id)
 ```
 
 These methods return an [`APIResponse`](https://github.com/diplomat-bit/aibank/tree/main/src/jocall3/_response.py) object.
@@ -263,7 +293,12 @@ The above interface eagerly reads the full response body when you make the reque
 To stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.
 
 ```python
-with client.users.with_streaming_response.register() as response:
+with client.users.with_streaming_response.register(
+    email="executive@corp.com",
+    name="Alice Wonderland",
+    password="ComplexPassword99!",
+    phone="+1-555-0199",
+) as response:
     print(response.headers.get("X-My-Header"))
 
     for line in response.iter_lines():
