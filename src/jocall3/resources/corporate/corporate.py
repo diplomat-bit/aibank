@@ -2,28 +2,7 @@
 
 from __future__ import annotations
 
-import httpx
-
-from .cards import (
-    CardsResource,
-    AsyncCardsResource,
-    CardsResourceWithRawResponse,
-    AsyncCardsResourceWithRawResponse,
-    CardsResourceWithStreamingResponse,
-    AsyncCardsResourceWithStreamingResponse,
-)
-from ...types import corporate_perform_sanction_screening_params
-from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from ..._utils import maybe_transform, async_maybe_transform
 from ..._compat import cached_property
-from .anomalies import (
-    AnomaliesResource,
-    AsyncAnomaliesResource,
-    AnomaliesResourceWithRawResponse,
-    AsyncAnomaliesResourceWithRawResponse,
-    AnomaliesResourceWithStreamingResponse,
-    AsyncAnomaliesResourceWithStreamingResponse,
-)
 from .risk.risk import (
     RiskResource,
     AsyncRiskResource,
@@ -33,13 +12,14 @@ from .risk.risk import (
     AsyncRiskResourceWithStreamingResponse,
 )
 from ..._resource import SyncAPIResource, AsyncAPIResource
-from ..._response import (
-    to_raw_response_wrapper,
-    to_streamed_response_wrapper,
-    async_to_raw_response_wrapper,
-    async_to_streamed_response_wrapper,
+from .cards.cards import (
+    CardsResource,
+    AsyncCardsResource,
+    CardsResourceWithRawResponse,
+    AsyncCardsResourceWithRawResponse,
+    CardsResourceWithStreamingResponse,
+    AsyncCardsResourceWithStreamingResponse,
 )
-from ..._base_client import make_request_options
 from .treasury.treasury import (
     TreasuryResource,
     AsyncTreasuryResource,
@@ -62,20 +42,16 @@ __all__ = ["CorporateResource", "AsyncCorporateResource"]
 
 class CorporateResource(SyncAPIResource):
     @cached_property
-    def cards(self) -> CardsResource:
-        return CardsResource(self._client)
-
-    @cached_property
-    def anomalies(self) -> AnomaliesResource:
-        return AnomaliesResource(self._client)
-
-    @cached_property
     def compliance(self) -> ComplianceResource:
         return ComplianceResource(self._client)
 
     @cached_property
     def treasury(self) -> TreasuryResource:
         return TreasuryResource(self._client)
+
+    @cached_property
+    def cards(self) -> CardsResource:
+        return CardsResource(self._client)
 
     @cached_property
     def risk(self) -> RiskResource:
@@ -100,52 +76,8 @@ class CorporateResource(SyncAPIResource):
         """
         return CorporateResourceWithStreamingResponse(self)
 
-    def perform_sanction_screening(
-        self,
-        *,
-        address: object | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
-        """
-        Executes a real-time screening of an individual or entity against global
-        sanction lists and watchlists.
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        return self._post(
-            "/corporate/sanction-screening",
-            body=maybe_transform(
-                {"address": address},
-                corporate_perform_sanction_screening_params.CorporatePerformSanctionScreeningParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=object,
-        )
-
 
 class AsyncCorporateResource(AsyncAPIResource):
-    @cached_property
-    def cards(self) -> AsyncCardsResource:
-        return AsyncCardsResource(self._client)
-
-    @cached_property
-    def anomalies(self) -> AsyncAnomaliesResource:
-        return AsyncAnomaliesResource(self._client)
-
     @cached_property
     def compliance(self) -> AsyncComplianceResource:
         return AsyncComplianceResource(self._client)
@@ -153,6 +85,10 @@ class AsyncCorporateResource(AsyncAPIResource):
     @cached_property
     def treasury(self) -> AsyncTreasuryResource:
         return AsyncTreasuryResource(self._client)
+
+    @cached_property
+    def cards(self) -> AsyncCardsResource:
+        return AsyncCardsResource(self._client)
 
     @cached_property
     def risk(self) -> AsyncRiskResource:
@@ -177,58 +113,10 @@ class AsyncCorporateResource(AsyncAPIResource):
         """
         return AsyncCorporateResourceWithStreamingResponse(self)
 
-    async def perform_sanction_screening(
-        self,
-        *,
-        address: object | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
-        """
-        Executes a real-time screening of an individual or entity against global
-        sanction lists and watchlists.
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        return await self._post(
-            "/corporate/sanction-screening",
-            body=await async_maybe_transform(
-                {"address": address},
-                corporate_perform_sanction_screening_params.CorporatePerformSanctionScreeningParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=object,
-        )
-
 
 class CorporateResourceWithRawResponse:
     def __init__(self, corporate: CorporateResource) -> None:
         self._corporate = corporate
-
-        self.perform_sanction_screening = to_raw_response_wrapper(
-            corporate.perform_sanction_screening,
-        )
-
-    @cached_property
-    def cards(self) -> CardsResourceWithRawResponse:
-        return CardsResourceWithRawResponse(self._corporate.cards)
-
-    @cached_property
-    def anomalies(self) -> AnomaliesResourceWithRawResponse:
-        return AnomaliesResourceWithRawResponse(self._corporate.anomalies)
 
     @cached_property
     def compliance(self) -> ComplianceResourceWithRawResponse:
@@ -239,6 +127,10 @@ class CorporateResourceWithRawResponse:
         return TreasuryResourceWithRawResponse(self._corporate.treasury)
 
     @cached_property
+    def cards(self) -> CardsResourceWithRawResponse:
+        return CardsResourceWithRawResponse(self._corporate.cards)
+
+    @cached_property
     def risk(self) -> RiskResourceWithRawResponse:
         return RiskResourceWithRawResponse(self._corporate.risk)
 
@@ -246,18 +138,6 @@ class CorporateResourceWithRawResponse:
 class AsyncCorporateResourceWithRawResponse:
     def __init__(self, corporate: AsyncCorporateResource) -> None:
         self._corporate = corporate
-
-        self.perform_sanction_screening = async_to_raw_response_wrapper(
-            corporate.perform_sanction_screening,
-        )
-
-    @cached_property
-    def cards(self) -> AsyncCardsResourceWithRawResponse:
-        return AsyncCardsResourceWithRawResponse(self._corporate.cards)
-
-    @cached_property
-    def anomalies(self) -> AsyncAnomaliesResourceWithRawResponse:
-        return AsyncAnomaliesResourceWithRawResponse(self._corporate.anomalies)
 
     @cached_property
     def compliance(self) -> AsyncComplianceResourceWithRawResponse:
@@ -268,6 +148,10 @@ class AsyncCorporateResourceWithRawResponse:
         return AsyncTreasuryResourceWithRawResponse(self._corporate.treasury)
 
     @cached_property
+    def cards(self) -> AsyncCardsResourceWithRawResponse:
+        return AsyncCardsResourceWithRawResponse(self._corporate.cards)
+
+    @cached_property
     def risk(self) -> AsyncRiskResourceWithRawResponse:
         return AsyncRiskResourceWithRawResponse(self._corporate.risk)
 
@@ -275,18 +159,6 @@ class AsyncCorporateResourceWithRawResponse:
 class CorporateResourceWithStreamingResponse:
     def __init__(self, corporate: CorporateResource) -> None:
         self._corporate = corporate
-
-        self.perform_sanction_screening = to_streamed_response_wrapper(
-            corporate.perform_sanction_screening,
-        )
-
-    @cached_property
-    def cards(self) -> CardsResourceWithStreamingResponse:
-        return CardsResourceWithStreamingResponse(self._corporate.cards)
-
-    @cached_property
-    def anomalies(self) -> AnomaliesResourceWithStreamingResponse:
-        return AnomaliesResourceWithStreamingResponse(self._corporate.anomalies)
 
     @cached_property
     def compliance(self) -> ComplianceResourceWithStreamingResponse:
@@ -297,6 +169,10 @@ class CorporateResourceWithStreamingResponse:
         return TreasuryResourceWithStreamingResponse(self._corporate.treasury)
 
     @cached_property
+    def cards(self) -> CardsResourceWithStreamingResponse:
+        return CardsResourceWithStreamingResponse(self._corporate.cards)
+
+    @cached_property
     def risk(self) -> RiskResourceWithStreamingResponse:
         return RiskResourceWithStreamingResponse(self._corporate.risk)
 
@@ -305,18 +181,6 @@ class AsyncCorporateResourceWithStreamingResponse:
     def __init__(self, corporate: AsyncCorporateResource) -> None:
         self._corporate = corporate
 
-        self.perform_sanction_screening = async_to_streamed_response_wrapper(
-            corporate.perform_sanction_screening,
-        )
-
-    @cached_property
-    def cards(self) -> AsyncCardsResourceWithStreamingResponse:
-        return AsyncCardsResourceWithStreamingResponse(self._corporate.cards)
-
-    @cached_property
-    def anomalies(self) -> AsyncAnomaliesResourceWithStreamingResponse:
-        return AsyncAnomaliesResourceWithStreamingResponse(self._corporate.anomalies)
-
     @cached_property
     def compliance(self) -> AsyncComplianceResourceWithStreamingResponse:
         return AsyncComplianceResourceWithStreamingResponse(self._corporate.compliance)
@@ -324,6 +188,10 @@ class AsyncCorporateResourceWithStreamingResponse:
     @cached_property
     def treasury(self) -> AsyncTreasuryResourceWithStreamingResponse:
         return AsyncTreasuryResourceWithStreamingResponse(self._corporate.treasury)
+
+    @cached_property
+    def cards(self) -> AsyncCardsResourceWithStreamingResponse:
+        return AsyncCardsResourceWithStreamingResponse(self._corporate.cards)
 
     @cached_property
     def risk(self) -> AsyncRiskResourceWithStreamingResponse:

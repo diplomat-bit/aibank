@@ -82,43 +82,6 @@ class TestMe:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    def test_method_list_devices(self, client: Jocall3) -> None:
-        me = client.users.me.list_devices()
-        assert_matches_type(object, me, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    def test_method_list_devices_with_all_params(self, client: Jocall3) -> None:
-        me = client.users.me.list_devices(
-            limit=0,
-            offset=0,
-        )
-        assert_matches_type(object, me, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    def test_raw_response_list_devices(self, client: Jocall3) -> None:
-        response = client.users.me.with_raw_response.list_devices()
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        me = response.parse()
-        assert_matches_type(object, me, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    def test_streaming_response_list_devices(self, client: Jocall3) -> None:
-        with client.users.me.with_streaming_response.list_devices() as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            me = response.parse()
-            assert_matches_type(object, me, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
 
 class TestAsyncMe:
     parametrize = pytest.mark.parametrize(
@@ -187,42 +150,5 @@ class TestAsyncMe:
 
             me = await response.parse()
             assert_matches_type(MeUpdateResponse, me, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    async def test_method_list_devices(self, async_client: AsyncJocall3) -> None:
-        me = await async_client.users.me.list_devices()
-        assert_matches_type(object, me, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    async def test_method_list_devices_with_all_params(self, async_client: AsyncJocall3) -> None:
-        me = await async_client.users.me.list_devices(
-            limit=0,
-            offset=0,
-        )
-        assert_matches_type(object, me, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    async def test_raw_response_list_devices(self, async_client: AsyncJocall3) -> None:
-        response = await async_client.users.me.with_raw_response.list_devices()
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        me = await response.parse()
-        assert_matches_type(object, me, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    async def test_streaming_response_list_devices(self, async_client: AsyncJocall3) -> None:
-        async with async_client.users.me.with_streaming_response.list_devices() as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            me = await response.parse()
-            assert_matches_type(object, me, path=["response"])
 
         assert cast(Any, response.is_closed) is True

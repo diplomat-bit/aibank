@@ -24,14 +24,6 @@ from .treasury import (
     TreasuryResourceWithStreamingResponse,
     AsyncTreasuryResourceWithStreamingResponse,
 )
-from .anomalies import (
-    AnomaliesResource,
-    AsyncAnomaliesResource,
-    AnomaliesResourceWithRawResponse,
-    AsyncAnomaliesResourceWithRawResponse,
-    AnomaliesResourceWithStreamingResponse,
-    AsyncAnomaliesResourceWithStreamingResponse,
-)
 from .corporate import (
     CorporateResource,
     AsyncCorporateResource,
@@ -50,18 +42,6 @@ from .compliance import (
 )
 
 __all__ = [
-    "CardsResource",
-    "AsyncCardsResource",
-    "CardsResourceWithRawResponse",
-    "AsyncCardsResourceWithRawResponse",
-    "CardsResourceWithStreamingResponse",
-    "AsyncCardsResourceWithStreamingResponse",
-    "AnomaliesResource",
-    "AsyncAnomaliesResource",
-    "AnomaliesResourceWithRawResponse",
-    "AsyncAnomaliesResourceWithRawResponse",
-    "AnomaliesResourceWithStreamingResponse",
-    "AsyncAnomaliesResourceWithStreamingResponse",
     "ComplianceResource",
     "AsyncComplianceResource",
     "ComplianceResourceWithRawResponse",
@@ -74,6 +54,12 @@ __all__ = [
     "AsyncTreasuryResourceWithRawResponse",
     "TreasuryResourceWithStreamingResponse",
     "AsyncTreasuryResourceWithStreamingResponse",
+    "CardsResource",
+    "AsyncCardsResource",
+    "CardsResourceWithRawResponse",
+    "AsyncCardsResourceWithRawResponse",
+    "CardsResourceWithStreamingResponse",
+    "AsyncCardsResourceWithStreamingResponse",
     "RiskResource",
     "AsyncRiskResource",
     "RiskResourceWithRawResponse",

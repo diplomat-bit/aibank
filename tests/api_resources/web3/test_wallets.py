@@ -83,16 +83,16 @@ class TestWallets:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_method_retrieve_balances(self, client: Jocall3) -> None:
-        wallet = client.web3.wallets.retrieve_balances(
+    def test_method_get_balance(self, client: Jocall3) -> None:
+        wallet = client.web3.wallets.get_balance(
             wallet_id="wallet_conn_eth_0xabc123",
         )
         assert_matches_type(object, wallet, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_method_retrieve_balances_with_all_params(self, client: Jocall3) -> None:
-        wallet = client.web3.wallets.retrieve_balances(
+    def test_method_get_balance_with_all_params(self, client: Jocall3) -> None:
+        wallet = client.web3.wallets.get_balance(
             wallet_id="wallet_conn_eth_0xabc123",
             limit=0,
             offset=0,
@@ -101,8 +101,8 @@ class TestWallets:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_raw_response_retrieve_balances(self, client: Jocall3) -> None:
-        response = client.web3.wallets.with_raw_response.retrieve_balances(
+    def test_raw_response_get_balance(self, client: Jocall3) -> None:
+        response = client.web3.wallets.with_raw_response.get_balance(
             wallet_id="wallet_conn_eth_0xabc123",
         )
 
@@ -113,8 +113,8 @@ class TestWallets:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_streaming_response_retrieve_balances(self, client: Jocall3) -> None:
-        with client.web3.wallets.with_streaming_response.retrieve_balances(
+    def test_streaming_response_get_balance(self, client: Jocall3) -> None:
+        with client.web3.wallets.with_streaming_response.get_balance(
             wallet_id="wallet_conn_eth_0xabc123",
         ) as response:
             assert not response.is_closed
@@ -127,9 +127,9 @@ class TestWallets:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_path_params_retrieve_balances(self, client: Jocall3) -> None:
+    def test_path_params_get_balance(self, client: Jocall3) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
-            client.web3.wallets.with_raw_response.retrieve_balances(
+            client.web3.wallets.with_raw_response.get_balance(
                 wallet_id="",
             )
 
@@ -206,16 +206,16 @@ class TestAsyncWallets:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_method_retrieve_balances(self, async_client: AsyncJocall3) -> None:
-        wallet = await async_client.web3.wallets.retrieve_balances(
+    async def test_method_get_balance(self, async_client: AsyncJocall3) -> None:
+        wallet = await async_client.web3.wallets.get_balance(
             wallet_id="wallet_conn_eth_0xabc123",
         )
         assert_matches_type(object, wallet, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_method_retrieve_balances_with_all_params(self, async_client: AsyncJocall3) -> None:
-        wallet = await async_client.web3.wallets.retrieve_balances(
+    async def test_method_get_balance_with_all_params(self, async_client: AsyncJocall3) -> None:
+        wallet = await async_client.web3.wallets.get_balance(
             wallet_id="wallet_conn_eth_0xabc123",
             limit=0,
             offset=0,
@@ -224,8 +224,8 @@ class TestAsyncWallets:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_raw_response_retrieve_balances(self, async_client: AsyncJocall3) -> None:
-        response = await async_client.web3.wallets.with_raw_response.retrieve_balances(
+    async def test_raw_response_get_balance(self, async_client: AsyncJocall3) -> None:
+        response = await async_client.web3.wallets.with_raw_response.get_balance(
             wallet_id="wallet_conn_eth_0xabc123",
         )
 
@@ -236,8 +236,8 @@ class TestAsyncWallets:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_streaming_response_retrieve_balances(self, async_client: AsyncJocall3) -> None:
-        async with async_client.web3.wallets.with_streaming_response.retrieve_balances(
+    async def test_streaming_response_get_balance(self, async_client: AsyncJocall3) -> None:
+        async with async_client.web3.wallets.with_streaming_response.get_balance(
             wallet_id="wallet_conn_eth_0xabc123",
         ) as response:
             assert not response.is_closed
@@ -250,8 +250,8 @@ class TestAsyncWallets:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_path_params_retrieve_balances(self, async_client: AsyncJocall3) -> None:
+    async def test_path_params_get_balance(self, async_client: AsyncJocall3) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
-            await async_client.web3.wallets.with_raw_response.retrieve_balances(
+            await async_client.web3.wallets.with_raw_response.get_balance(
                 wallet_id="",
             )

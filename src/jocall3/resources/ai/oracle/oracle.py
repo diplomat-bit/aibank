@@ -11,14 +11,6 @@ from .simulate import (
     AsyncSimulateResourceWithStreamingResponse,
 )
 from ...._compat import cached_property
-from .simulations import (
-    SimulationsResource,
-    AsyncSimulationsResource,
-    SimulationsResourceWithRawResponse,
-    AsyncSimulationsResourceWithRawResponse,
-    SimulationsResourceWithStreamingResponse,
-    AsyncSimulationsResourceWithStreamingResponse,
-)
 from ...._resource import SyncAPIResource, AsyncAPIResource
 
 __all__ = ["OracleResource", "AsyncOracleResource"]
@@ -28,10 +20,6 @@ class OracleResource(SyncAPIResource):
     @cached_property
     def simulate(self) -> SimulateResource:
         return SimulateResource(self._client)
-
-    @cached_property
-    def simulations(self) -> SimulationsResource:
-        return SimulationsResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> OracleResourceWithRawResponse:
@@ -57,10 +45,6 @@ class AsyncOracleResource(AsyncAPIResource):
     @cached_property
     def simulate(self) -> AsyncSimulateResource:
         return AsyncSimulateResource(self._client)
-
-    @cached_property
-    def simulations(self) -> AsyncSimulationsResource:
-        return AsyncSimulationsResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AsyncOracleResourceWithRawResponse:
@@ -90,10 +74,6 @@ class OracleResourceWithRawResponse:
     def simulate(self) -> SimulateResourceWithRawResponse:
         return SimulateResourceWithRawResponse(self._oracle.simulate)
 
-    @cached_property
-    def simulations(self) -> SimulationsResourceWithRawResponse:
-        return SimulationsResourceWithRawResponse(self._oracle.simulations)
-
 
 class AsyncOracleResourceWithRawResponse:
     def __init__(self, oracle: AsyncOracleResource) -> None:
@@ -102,10 +82,6 @@ class AsyncOracleResourceWithRawResponse:
     @cached_property
     def simulate(self) -> AsyncSimulateResourceWithRawResponse:
         return AsyncSimulateResourceWithRawResponse(self._oracle.simulate)
-
-    @cached_property
-    def simulations(self) -> AsyncSimulationsResourceWithRawResponse:
-        return AsyncSimulationsResourceWithRawResponse(self._oracle.simulations)
 
 
 class OracleResourceWithStreamingResponse:
@@ -116,10 +92,6 @@ class OracleResourceWithStreamingResponse:
     def simulate(self) -> SimulateResourceWithStreamingResponse:
         return SimulateResourceWithStreamingResponse(self._oracle.simulate)
 
-    @cached_property
-    def simulations(self) -> SimulationsResourceWithStreamingResponse:
-        return SimulationsResourceWithStreamingResponse(self._oracle.simulations)
-
 
 class AsyncOracleResourceWithStreamingResponse:
     def __init__(self, oracle: AsyncOracleResource) -> None:
@@ -128,7 +100,3 @@ class AsyncOracleResourceWithStreamingResponse:
     @cached_property
     def simulate(self) -> AsyncSimulateResourceWithStreamingResponse:
         return AsyncSimulateResourceWithStreamingResponse(self._oracle.simulate)
-
-    @cached_property
-    def simulations(self) -> AsyncSimulationsResourceWithStreamingResponse:
-        return AsyncSimulationsResourceWithStreamingResponse(self._oracle.simulations)

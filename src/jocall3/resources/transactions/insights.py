@@ -38,7 +38,7 @@ class InsightsResource(SyncAPIResource):
         """
         return InsightsResourceWithStreamingResponse(self)
 
-    def get_spending_trends(
+    def get_trends(
         self,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -81,7 +81,7 @@ class AsyncInsightsResource(AsyncAPIResource):
         """
         return AsyncInsightsResourceWithStreamingResponse(self)
 
-    async def get_spending_trends(
+    async def get_trends(
         self,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -108,8 +108,8 @@ class InsightsResourceWithRawResponse:
     def __init__(self, insights: InsightsResource) -> None:
         self._insights = insights
 
-        self.get_spending_trends = to_raw_response_wrapper(
-            insights.get_spending_trends,
+        self.get_trends = to_raw_response_wrapper(
+            insights.get_trends,
         )
 
 
@@ -117,8 +117,8 @@ class AsyncInsightsResourceWithRawResponse:
     def __init__(self, insights: AsyncInsightsResource) -> None:
         self._insights = insights
 
-        self.get_spending_trends = async_to_raw_response_wrapper(
-            insights.get_spending_trends,
+        self.get_trends = async_to_raw_response_wrapper(
+            insights.get_trends,
         )
 
 
@@ -126,8 +126,8 @@ class InsightsResourceWithStreamingResponse:
     def __init__(self, insights: InsightsResource) -> None:
         self._insights = insights
 
-        self.get_spending_trends = to_streamed_response_wrapper(
-            insights.get_spending_trends,
+        self.get_trends = to_streamed_response_wrapper(
+            insights.get_trends,
         )
 
 
@@ -135,6 +135,6 @@ class AsyncInsightsResourceWithStreamingResponse:
     def __init__(self, insights: AsyncInsightsResource) -> None:
         self._insights = insights
 
-        self.get_spending_trends = async_to_streamed_response_wrapper(
-            insights.get_spending_trends,
+        self.get_trends = async_to_streamed_response_wrapper(
+            insights.get_trends,
         )

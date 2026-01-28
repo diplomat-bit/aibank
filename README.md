@@ -11,7 +11,7 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 ## Documentation
 
-The full API of this library can be found in [api.md](api.md).
+The REST API documentation can be found on [github.com](https://github.com/diplomat-bit/aibank). The full API of this library can be found in [api.md](api.md).
 
 ## Installation
 
@@ -30,10 +30,11 @@ from jocall3 import Jocall3
 
 client = Jocall3(
     api_key=os.environ.get("JOCALL3_API_KEY"),  # This is the default and can be omitted
+    # or 'production' | 'gemini_direct'; defaults to "production".
+    environment="sandbox",
 )
 
-response = client.users.register()
-print(response.address)
+response = client.ai.oracle.simulate.run_advanced()
 ```
 
 While you can provide an `api_key` keyword argument,
@@ -52,12 +53,13 @@ from jocall3 import AsyncJocall3
 
 client = AsyncJocall3(
     api_key=os.environ.get("JOCALL3_API_KEY"),  # This is the default and can be omitted
+    # or 'production' | 'gemini_direct'; defaults to "production".
+    environment="sandbox",
 )
 
 
 async def main() -> None:
-    response = await client.users.register()
-    print(response.address)
+    response = await client.ai.oracle.simulate.run_advanced()
 
 
 asyncio.run(main())
@@ -90,8 +92,7 @@ async def main() -> None:
         api_key=os.environ.get("JOCALL3_API_KEY"),  # This is the default and can be omitted
         http_client=DefaultAioHttpClient(),
     ) as client:
-        response = await client.users.register()
-        print(response.address)
+        response = await client.ai.oracle.simulate.run_advanced()
 
 
 asyncio.run(main())

@@ -15,8 +15,8 @@ from ...._response import (
     async_to_streamed_response_wrapper,
 )
 from ...._base_client import make_request_options
-from ....types.ai.oracle import simulate_run_advanced_simulation_params
-from ....types.ai.oracle.simulate_run_standard_simulation_response import SimulateRunStandardSimulationResponse
+from ....types.ai.oracle import simulate_run_advanced_params
+from ....types.ai.oracle.simulate_run_standard_response import SimulateRunStandardResponse
 
 __all__ = ["SimulateResource", "AsyncSimulateResource"]
 
@@ -41,7 +41,7 @@ class SimulateResource(SyncAPIResource):
         """
         return SimulateResourceWithStreamingResponse(self)
 
-    def run_advanced_simulation(
+    def run_advanced(
         self,
         *,
         global_economic_factors: object | Omit = omit,
@@ -79,7 +79,7 @@ class SimulateResource(SyncAPIResource):
                     "global_economic_factors": global_economic_factors,
                     "personal_assumptions": personal_assumptions,
                 },
-                simulate_run_advanced_simulation_params.SimulateRunAdvancedSimulationParams,
+                simulate_run_advanced_params.SimulateRunAdvancedParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -87,7 +87,7 @@ class SimulateResource(SyncAPIResource):
             cast_to=object,
         )
 
-    def run_standard_simulation(
+    def run_standard(
         self,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -96,7 +96,7 @@ class SimulateResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> SimulateRunStandardSimulationResponse:
+    ) -> SimulateRunStandardResponse:
         """
         Submits a hypothetical scenario to the Quantum Oracle AI for standard financial
         impact analysis. The AI simulates the effect on the user's current financial
@@ -107,7 +107,7 @@ class SimulateResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=SimulateRunStandardSimulationResponse,
+            cast_to=SimulateRunStandardResponse,
         )
 
 
@@ -131,7 +131,7 @@ class AsyncSimulateResource(AsyncAPIResource):
         """
         return AsyncSimulateResourceWithStreamingResponse(self)
 
-    async def run_advanced_simulation(
+    async def run_advanced(
         self,
         *,
         global_economic_factors: object | Omit = omit,
@@ -169,7 +169,7 @@ class AsyncSimulateResource(AsyncAPIResource):
                     "global_economic_factors": global_economic_factors,
                     "personal_assumptions": personal_assumptions,
                 },
-                simulate_run_advanced_simulation_params.SimulateRunAdvancedSimulationParams,
+                simulate_run_advanced_params.SimulateRunAdvancedParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -177,7 +177,7 @@ class AsyncSimulateResource(AsyncAPIResource):
             cast_to=object,
         )
 
-    async def run_standard_simulation(
+    async def run_standard(
         self,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -186,7 +186,7 @@ class AsyncSimulateResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> SimulateRunStandardSimulationResponse:
+    ) -> SimulateRunStandardResponse:
         """
         Submits a hypothetical scenario to the Quantum Oracle AI for standard financial
         impact analysis. The AI simulates the effect on the user's current financial
@@ -197,7 +197,7 @@ class AsyncSimulateResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=SimulateRunStandardSimulationResponse,
+            cast_to=SimulateRunStandardResponse,
         )
 
 
@@ -205,11 +205,11 @@ class SimulateResourceWithRawResponse:
     def __init__(self, simulate: SimulateResource) -> None:
         self._simulate = simulate
 
-        self.run_advanced_simulation = to_raw_response_wrapper(
-            simulate.run_advanced_simulation,
+        self.run_advanced = to_raw_response_wrapper(
+            simulate.run_advanced,
         )
-        self.run_standard_simulation = to_raw_response_wrapper(
-            simulate.run_standard_simulation,
+        self.run_standard = to_raw_response_wrapper(
+            simulate.run_standard,
         )
 
 
@@ -217,11 +217,11 @@ class AsyncSimulateResourceWithRawResponse:
     def __init__(self, simulate: AsyncSimulateResource) -> None:
         self._simulate = simulate
 
-        self.run_advanced_simulation = async_to_raw_response_wrapper(
-            simulate.run_advanced_simulation,
+        self.run_advanced = async_to_raw_response_wrapper(
+            simulate.run_advanced,
         )
-        self.run_standard_simulation = async_to_raw_response_wrapper(
-            simulate.run_standard_simulation,
+        self.run_standard = async_to_raw_response_wrapper(
+            simulate.run_standard,
         )
 
 
@@ -229,11 +229,11 @@ class SimulateResourceWithStreamingResponse:
     def __init__(self, simulate: SimulateResource) -> None:
         self._simulate = simulate
 
-        self.run_advanced_simulation = to_streamed_response_wrapper(
-            simulate.run_advanced_simulation,
+        self.run_advanced = to_streamed_response_wrapper(
+            simulate.run_advanced,
         )
-        self.run_standard_simulation = to_streamed_response_wrapper(
-            simulate.run_standard_simulation,
+        self.run_standard = to_streamed_response_wrapper(
+            simulate.run_standard,
         )
 
 
@@ -241,9 +241,9 @@ class AsyncSimulateResourceWithStreamingResponse:
     def __init__(self, simulate: AsyncSimulateResource) -> None:
         self._simulate = simulate
 
-        self.run_advanced_simulation = async_to_streamed_response_wrapper(
-            simulate.run_advanced_simulation,
+        self.run_advanced = async_to_streamed_response_wrapper(
+            simulate.run_advanced,
         )
-        self.run_standard_simulation = async_to_streamed_response_wrapper(
-            simulate.run_standard_simulation,
+        self.run_standard = async_to_streamed_response_wrapper(
+            simulate.run_standard,
         )

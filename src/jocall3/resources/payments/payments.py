@@ -12,23 +12,11 @@ from .fx import (
 )
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
-from .international import (
-    InternationalResource,
-    AsyncInternationalResource,
-    InternationalResourceWithRawResponse,
-    AsyncInternationalResourceWithRawResponse,
-    InternationalResourceWithStreamingResponse,
-    AsyncInternationalResourceWithStreamingResponse,
-)
 
 __all__ = ["PaymentsResource", "AsyncPaymentsResource"]
 
 
 class PaymentsResource(SyncAPIResource):
-    @cached_property
-    def international(self) -> InternationalResource:
-        return InternationalResource(self._client)
-
     @cached_property
     def fx(self) -> FxResource:
         return FxResource(self._client)
@@ -54,10 +42,6 @@ class PaymentsResource(SyncAPIResource):
 
 
 class AsyncPaymentsResource(AsyncAPIResource):
-    @cached_property
-    def international(self) -> AsyncInternationalResource:
-        return AsyncInternationalResource(self._client)
-
     @cached_property
     def fx(self) -> AsyncFxResource:
         return AsyncFxResource(self._client)
@@ -87,10 +71,6 @@ class PaymentsResourceWithRawResponse:
         self._payments = payments
 
     @cached_property
-    def international(self) -> InternationalResourceWithRawResponse:
-        return InternationalResourceWithRawResponse(self._payments.international)
-
-    @cached_property
     def fx(self) -> FxResourceWithRawResponse:
         return FxResourceWithRawResponse(self._payments.fx)
 
@@ -98,10 +78,6 @@ class PaymentsResourceWithRawResponse:
 class AsyncPaymentsResourceWithRawResponse:
     def __init__(self, payments: AsyncPaymentsResource) -> None:
         self._payments = payments
-
-    @cached_property
-    def international(self) -> AsyncInternationalResourceWithRawResponse:
-        return AsyncInternationalResourceWithRawResponse(self._payments.international)
 
     @cached_property
     def fx(self) -> AsyncFxResourceWithRawResponse:
@@ -113,10 +89,6 @@ class PaymentsResourceWithStreamingResponse:
         self._payments = payments
 
     @cached_property
-    def international(self) -> InternationalResourceWithStreamingResponse:
-        return InternationalResourceWithStreamingResponse(self._payments.international)
-
-    @cached_property
     def fx(self) -> FxResourceWithStreamingResponse:
         return FxResourceWithStreamingResponse(self._payments.fx)
 
@@ -124,10 +96,6 @@ class PaymentsResourceWithStreamingResponse:
 class AsyncPaymentsResourceWithStreamingResponse:
     def __init__(self, payments: AsyncPaymentsResource) -> None:
         self._payments = payments
-
-    @cached_property
-    def international(self) -> AsyncInternationalResourceWithStreamingResponse:
-        return AsyncInternationalResourceWithStreamingResponse(self._payments.international)
 
     @cached_property
     def fx(self) -> AsyncFxResourceWithStreamingResponse:

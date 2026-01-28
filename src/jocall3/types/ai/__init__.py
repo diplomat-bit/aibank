@@ -2,6 +2,5 @@
 
 from __future__ import annotations
 
-from .advisor_list_tools_params import AdvisorListToolsParams as AdvisorListToolsParams
-from .ad_list_generated_ads_params import AdListGeneratedAdsParams as AdListGeneratedAdsParams
-from .incubator_list_pitches_params import IncubatorListPitchesParams as IncubatorListPitchesParams
+from .advisor_chat_params import AdvisorChatParams as AdvisorChatParams
+from .incubator_generate_pitch_params import IncubatorGeneratePitchParams as IncubatorGeneratePitchParams
