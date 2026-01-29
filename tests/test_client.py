@@ -23,7 +23,7 @@ from aibanking import Jocall3, AsyncJocall3, APIResponseValidationError
 from aibanking._types import Omit
 from aibanking._utils import asyncify
 from aibanking._models import BaseModel, FinalRequestOptions
-from aibanking._exceptions import APIStatusError, APITimeoutError, APIResponseValidationError
+from aibanking._exceptions import Jocall3Error, APIStatusError, APITimeoutError, APIResponseValidationError
 from aibanking._base_client import (
     DEFAULT_TIMEOUT,
     HTTPX_DEFAULT_TIMEOUT,
@@ -400,21 +400,12 @@ class TestJocall3:
     def test_validate_headers(self) -> None:
         client = Jocall3(base_url=base_url, api_key=api_key, _strict_response_validation=True)
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
-        assert request.headers.get("Authorization") == f"Bearer {api_key}"
+        assert request.headers.get("x-api-key") == api_key
 
-        with update_env(**{"JOCALL3_API_KEY": Omit()}):
-            client2 = Jocall3(base_url=base_url, api_key=None, _strict_response_validation=True)
-
-        with pytest.raises(
-            TypeError,
-            match="Could not resolve authentication method. Expected the api_key to be set. Or for the `Authorization` headers to be explicitly omitted",
-        ):
-            client2._build_request(FinalRequestOptions(method="get", url="/foo"))
-
-        request2 = client2._build_request(
-            FinalRequestOptions(method="get", url="/foo", headers={"Authorization": Omit()})
-        )
-        assert request2.headers.get("Authorization") is None
+        with pytest.raises(Jocall3Error):
+            with update_env(**{"X_API_KEY": Omit()}):
+                client2 = Jocall3(base_url=base_url, api_key=None, _strict_response_validation=True)
+            _ = client2
 
     def test_default_query_option(self) -> None:
         client = Jocall3(
@@ -861,7 +852,7 @@ class TestJocall3:
         respx_mock.post("/users/password-reset/initiate").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
-            client.users.password_reset.with_streaming_response.initiate().__enter__()
+            client.users.password_reset.with_streaming_response.initiate(identifier="string").__enter__()
 
         assert _get_open_connections(client) == 0
 
@@ -871,7 +862,7 @@ class TestJocall3:
         respx_mock.post("/users/password-reset/initiate").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
-            client.users.password_reset.with_streaming_response.initiate().__enter__()
+            client.users.password_reset.with_streaming_response.initiate(identifier="string").__enter__()
         assert _get_open_connections(client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
@@ -900,7 +891,7 @@ class TestJocall3:
 
         respx_mock.post("/users/password-reset/initiate").mock(side_effect=retry_handler)
 
-        response = client.users.password_reset.with_raw_response.initiate()
+        response = client.users.password_reset.with_raw_response.initiate(identifier="string")
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -925,7 +916,7 @@ class TestJocall3:
         respx_mock.post("/users/password-reset/initiate").mock(side_effect=retry_handler)
 
         response = client.users.password_reset.with_raw_response.initiate(
-            extra_headers={"x-stainless-retry-count": Omit()}
+            identifier="string", extra_headers={"x-stainless-retry-count": Omit()}
         )
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
@@ -950,7 +941,7 @@ class TestJocall3:
         respx_mock.post("/users/password-reset/initiate").mock(side_effect=retry_handler)
 
         response = client.users.password_reset.with_raw_response.initiate(
-            extra_headers={"x-stainless-retry-count": "42"}
+            identifier="string", extra_headers={"x-stainless-retry-count": "42"}
         )
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
@@ -1296,21 +1287,12 @@ class TestAsyncJocall3:
     def test_validate_headers(self) -> None:
         client = AsyncJocall3(base_url=base_url, api_key=api_key, _strict_response_validation=True)
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
-        assert request.headers.get("Authorization") == f"Bearer {api_key}"
+        assert request.headers.get("x-api-key") == api_key
 
-        with update_env(**{"JOCALL3_API_KEY": Omit()}):
-            client2 = AsyncJocall3(base_url=base_url, api_key=None, _strict_response_validation=True)
-
-        with pytest.raises(
-            TypeError,
-            match="Could not resolve authentication method. Expected the api_key to be set. Or for the `Authorization` headers to be explicitly omitted",
-        ):
-            client2._build_request(FinalRequestOptions(method="get", url="/foo"))
-
-        request2 = client2._build_request(
-            FinalRequestOptions(method="get", url="/foo", headers={"Authorization": Omit()})
-        )
-        assert request2.headers.get("Authorization") is None
+        with pytest.raises(Jocall3Error):
+            with update_env(**{"X_API_KEY": Omit()}):
+                client2 = AsyncJocall3(base_url=base_url, api_key=None, _strict_response_validation=True)
+            _ = client2
 
     async def test_default_query_option(self) -> None:
         client = AsyncJocall3(
@@ -1774,7 +1756,7 @@ class TestAsyncJocall3:
         respx_mock.post("/users/password-reset/initiate").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
-            await async_client.users.password_reset.with_streaming_response.initiate().__aenter__()
+            await async_client.users.password_reset.with_streaming_response.initiate(identifier="string").__aenter__()
 
         assert _get_open_connections(async_client) == 0
 
@@ -1784,7 +1766,7 @@ class TestAsyncJocall3:
         respx_mock.post("/users/password-reset/initiate").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
-            await async_client.users.password_reset.with_streaming_response.initiate().__aenter__()
+            await async_client.users.password_reset.with_streaming_response.initiate(identifier="string").__aenter__()
         assert _get_open_connections(async_client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
@@ -1813,7 +1795,7 @@ class TestAsyncJocall3:
 
         respx_mock.post("/users/password-reset/initiate").mock(side_effect=retry_handler)
 
-        response = await client.users.password_reset.with_raw_response.initiate()
+        response = await client.users.password_reset.with_raw_response.initiate(identifier="string")
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -1838,7 +1820,7 @@ class TestAsyncJocall3:
         respx_mock.post("/users/password-reset/initiate").mock(side_effect=retry_handler)
 
         response = await client.users.password_reset.with_raw_response.initiate(
-            extra_headers={"x-stainless-retry-count": Omit()}
+            identifier="string", extra_headers={"x-stainless-retry-count": Omit()}
         )
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
@@ -1863,7 +1845,7 @@ class TestAsyncJocall3:
         respx_mock.post("/users/password-reset/initiate").mock(side_effect=retry_handler)
 
         response = await client.users.password_reset.with_raw_response.initiate(
-            extra_headers={"x-stainless-retry-count": "42"}
+            identifier="string", extra_headers={"x-stainless-retry-count": "42"}
         )
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"

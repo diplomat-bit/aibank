@@ -9,6 +9,11 @@ import pytest
 
 from aibanking import Jocall3, AsyncJocall3
 from tests.utils import assert_matches_type
+from aibanking.types.web3 import (
+    WalletListResponse,
+    WalletCreateResponse,
+    WalletGetBalancesResponse,
+)
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -19,28 +24,34 @@ class TestWallets:
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_create(self, client: Jocall3) -> None:
-        wallet = client.web3.wallets.create()
-        assert_matches_type(object, wallet, path=["response"])
+        wallet = client.web3.wallets.create(
+            network="ETH",
+        )
+        assert_matches_type(WalletCreateResponse, wallet, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_create(self, client: Jocall3) -> None:
-        response = client.web3.wallets.with_raw_response.create()
+        response = client.web3.wallets.with_raw_response.create(
+            network="ETH",
+        )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         wallet = response.parse()
-        assert_matches_type(object, wallet, path=["response"])
+        assert_matches_type(WalletCreateResponse, wallet, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_create(self, client: Jocall3) -> None:
-        with client.web3.wallets.with_streaming_response.create() as response:
+        with client.web3.wallets.with_streaming_response.create(
+            network="ETH",
+        ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             wallet = response.parse()
-            assert_matches_type(object, wallet, path=["response"])
+            assert_matches_type(WalletCreateResponse, wallet, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -48,16 +59,7 @@ class TestWallets:
     @parametrize
     def test_method_list(self, client: Jocall3) -> None:
         wallet = client.web3.wallets.list()
-        assert_matches_type(object, wallet, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    def test_method_list_with_all_params(self, client: Jocall3) -> None:
-        wallet = client.web3.wallets.list(
-            limit=0,
-            offset=0,
-        )
-        assert_matches_type(object, wallet, path=["response"])
+        assert_matches_type(WalletListResponse, wallet, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -67,7 +69,7 @@ class TestWallets:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         wallet = response.parse()
-        assert_matches_type(object, wallet, path=["response"])
+        assert_matches_type(WalletListResponse, wallet, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -77,7 +79,7 @@ class TestWallets:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             wallet = response.parse()
-            assert_matches_type(object, wallet, path=["response"])
+            assert_matches_type(WalletListResponse, wallet, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -85,43 +87,33 @@ class TestWallets:
     @parametrize
     def test_method_get_balances(self, client: Jocall3) -> None:
         wallet = client.web3.wallets.get_balances(
-            wallet_id="wallet_conn_eth_0xabc123",
+            "string",
         )
-        assert_matches_type(object, wallet, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    def test_method_get_balances_with_all_params(self, client: Jocall3) -> None:
-        wallet = client.web3.wallets.get_balances(
-            wallet_id="wallet_conn_eth_0xabc123",
-            limit=0,
-            offset=0,
-        )
-        assert_matches_type(object, wallet, path=["response"])
+        assert_matches_type(WalletGetBalancesResponse, wallet, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_get_balances(self, client: Jocall3) -> None:
         response = client.web3.wallets.with_raw_response.get_balances(
-            wallet_id="wallet_conn_eth_0xabc123",
+            "string",
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         wallet = response.parse()
-        assert_matches_type(object, wallet, path=["response"])
+        assert_matches_type(WalletGetBalancesResponse, wallet, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_get_balances(self, client: Jocall3) -> None:
         with client.web3.wallets.with_streaming_response.get_balances(
-            wallet_id="wallet_conn_eth_0xabc123",
+            "string",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             wallet = response.parse()
-            assert_matches_type(object, wallet, path=["response"])
+            assert_matches_type(WalletGetBalancesResponse, wallet, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -130,8 +122,48 @@ class TestWallets:
     def test_path_params_get_balances(self, client: Jocall3) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
             client.web3.wallets.with_raw_response.get_balances(
-                wallet_id="",
+                "",
             )
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_method_link(self, client: Jocall3) -> None:
+        wallet = client.web3.wallets.link(
+            address="string",
+            provider="string",
+            signature="string",
+        )
+        assert wallet is None
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_raw_response_link(self, client: Jocall3) -> None:
+        response = client.web3.wallets.with_raw_response.link(
+            address="string",
+            provider="string",
+            signature="string",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert wallet is None
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_streaming_response_link(self, client: Jocall3) -> None:
+        with client.web3.wallets.with_streaming_response.link(
+            address="string",
+            provider="string",
+            signature="string",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert wallet is None
+
+        assert cast(Any, response.is_closed) is True
 
 
 class TestAsyncWallets:
@@ -142,28 +174,34 @@ class TestAsyncWallets:
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_create(self, async_client: AsyncJocall3) -> None:
-        wallet = await async_client.web3.wallets.create()
-        assert_matches_type(object, wallet, path=["response"])
+        wallet = await async_client.web3.wallets.create(
+            network="ETH",
+        )
+        assert_matches_type(WalletCreateResponse, wallet, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncJocall3) -> None:
-        response = await async_client.web3.wallets.with_raw_response.create()
+        response = await async_client.web3.wallets.with_raw_response.create(
+            network="ETH",
+        )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         wallet = await response.parse()
-        assert_matches_type(object, wallet, path=["response"])
+        assert_matches_type(WalletCreateResponse, wallet, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncJocall3) -> None:
-        async with async_client.web3.wallets.with_streaming_response.create() as response:
+        async with async_client.web3.wallets.with_streaming_response.create(
+            network="ETH",
+        ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             wallet = await response.parse()
-            assert_matches_type(object, wallet, path=["response"])
+            assert_matches_type(WalletCreateResponse, wallet, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -171,16 +209,7 @@ class TestAsyncWallets:
     @parametrize
     async def test_method_list(self, async_client: AsyncJocall3) -> None:
         wallet = await async_client.web3.wallets.list()
-        assert_matches_type(object, wallet, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    async def test_method_list_with_all_params(self, async_client: AsyncJocall3) -> None:
-        wallet = await async_client.web3.wallets.list(
-            limit=0,
-            offset=0,
-        )
-        assert_matches_type(object, wallet, path=["response"])
+        assert_matches_type(WalletListResponse, wallet, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -190,7 +219,7 @@ class TestAsyncWallets:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         wallet = await response.parse()
-        assert_matches_type(object, wallet, path=["response"])
+        assert_matches_type(WalletListResponse, wallet, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -200,7 +229,7 @@ class TestAsyncWallets:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             wallet = await response.parse()
-            assert_matches_type(object, wallet, path=["response"])
+            assert_matches_type(WalletListResponse, wallet, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -208,43 +237,33 @@ class TestAsyncWallets:
     @parametrize
     async def test_method_get_balances(self, async_client: AsyncJocall3) -> None:
         wallet = await async_client.web3.wallets.get_balances(
-            wallet_id="wallet_conn_eth_0xabc123",
+            "string",
         )
-        assert_matches_type(object, wallet, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    async def test_method_get_balances_with_all_params(self, async_client: AsyncJocall3) -> None:
-        wallet = await async_client.web3.wallets.get_balances(
-            wallet_id="wallet_conn_eth_0xabc123",
-            limit=0,
-            offset=0,
-        )
-        assert_matches_type(object, wallet, path=["response"])
+        assert_matches_type(WalletGetBalancesResponse, wallet, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_get_balances(self, async_client: AsyncJocall3) -> None:
         response = await async_client.web3.wallets.with_raw_response.get_balances(
-            wallet_id="wallet_conn_eth_0xabc123",
+            "string",
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         wallet = await response.parse()
-        assert_matches_type(object, wallet, path=["response"])
+        assert_matches_type(WalletGetBalancesResponse, wallet, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_get_balances(self, async_client: AsyncJocall3) -> None:
         async with async_client.web3.wallets.with_streaming_response.get_balances(
-            wallet_id="wallet_conn_eth_0xabc123",
+            "string",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             wallet = await response.parse()
-            assert_matches_type(object, wallet, path=["response"])
+            assert_matches_type(WalletGetBalancesResponse, wallet, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -253,5 +272,45 @@ class TestAsyncWallets:
     async def test_path_params_get_balances(self, async_client: AsyncJocall3) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
             await async_client.web3.wallets.with_raw_response.get_balances(
-                wallet_id="",
+                "",
             )
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_method_link(self, async_client: AsyncJocall3) -> None:
+        wallet = await async_client.web3.wallets.link(
+            address="string",
+            provider="string",
+            signature="string",
+        )
+        assert wallet is None
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_raw_response_link(self, async_client: AsyncJocall3) -> None:
+        response = await async_client.web3.wallets.with_raw_response.link(
+            address="string",
+            provider="string",
+            signature="string",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = await response.parse()
+        assert wallet is None
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_streaming_response_link(self, async_client: AsyncJocall3) -> None:
+        async with async_client.web3.wallets.with_streaming_response.link(
+            address="string",
+            provider="string",
+            signature="string",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = await response.parse()
+            assert wallet is None
+
+        assert cast(Any, response.is_closed) is True

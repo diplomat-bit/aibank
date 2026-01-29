@@ -2,16 +2,19 @@
 
 from __future__ import annotations
 
-from typing_extensions import Annotated, TypedDict
+from typing_extensions import Required, Annotated, TypedDict
 
+from ...._types import SequenceNotStr
 from ...._utils import PropertyInfo
 
 __all__ = ["ChatCreateParams"]
 
 
 class ChatCreateParams(TypedDict, total=False):
-    function_response: Annotated[object, PropertyInfo(alias="functionResponse")]
-    """
-    Optional: The output from a tool function that the AI previously requested to be
-    executed.
-    """
+    message: Required[str]
+
+    context_account_ids: Annotated[SequenceNotStr[str], PropertyInfo(alias="contextAccountIds")]
+
+    mode: str
+
+    stream: bool
