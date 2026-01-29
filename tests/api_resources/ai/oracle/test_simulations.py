@@ -9,7 +9,7 @@ import pytest
 
 from jocall3 import Jocall3, AsyncJocall3
 from tests.utils import assert_matches_type
-from jocall3.types.ai.oracle import SimulationListResponse, SimulationRetrieveResponse
+from jocall3.types.ai.oracle import SimulationRetrieveResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -20,14 +20,14 @@ class TestSimulations:
     @parametrize
     def test_method_retrieve(self, client: Jocall3) -> None:
         simulation = client.ai.oracle.simulations.retrieve(
-            "simulationId",
+            "sim_oracle-growth-2024-xyz",
         )
         assert_matches_type(SimulationRetrieveResponse, simulation, path=["response"])
 
     @parametrize
     def test_raw_response_retrieve(self, client: Jocall3) -> None:
         response = client.ai.oracle.simulations.with_raw_response.retrieve(
-            "simulationId",
+            "sim_oracle-growth-2024-xyz",
         )
 
         assert response.is_closed is True
@@ -38,7 +38,7 @@ class TestSimulations:
     @parametrize
     def test_streaming_response_retrieve(self, client: Jocall3) -> None:
         with client.ai.oracle.simulations.with_streaming_response.retrieve(
-            "simulationId",
+            "sim_oracle-growth-2024-xyz",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -58,7 +58,15 @@ class TestSimulations:
     @parametrize
     def test_method_list(self, client: Jocall3) -> None:
         simulation = client.ai.oracle.simulations.list()
-        assert_matches_type(SimulationListResponse, simulation, path=["response"])
+        assert_matches_type(object, simulation, path=["response"])
+
+    @parametrize
+    def test_method_list_with_all_params(self, client: Jocall3) -> None:
+        simulation = client.ai.oracle.simulations.list(
+            limit=0,
+            offset=0,
+        )
+        assert_matches_type(object, simulation, path=["response"])
 
     @parametrize
     def test_raw_response_list(self, client: Jocall3) -> None:
@@ -67,7 +75,7 @@ class TestSimulations:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         simulation = response.parse()
-        assert_matches_type(SimulationListResponse, simulation, path=["response"])
+        assert_matches_type(object, simulation, path=["response"])
 
     @parametrize
     def test_streaming_response_list(self, client: Jocall3) -> None:
@@ -76,7 +84,7 @@ class TestSimulations:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             simulation = response.parse()
-            assert_matches_type(SimulationListResponse, simulation, path=["response"])
+            assert_matches_type(object, simulation, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -89,14 +97,14 @@ class TestAsyncSimulations:
     @parametrize
     async def test_method_retrieve(self, async_client: AsyncJocall3) -> None:
         simulation = await async_client.ai.oracle.simulations.retrieve(
-            "simulationId",
+            "sim_oracle-growth-2024-xyz",
         )
         assert_matches_type(SimulationRetrieveResponse, simulation, path=["response"])
 
     @parametrize
     async def test_raw_response_retrieve(self, async_client: AsyncJocall3) -> None:
         response = await async_client.ai.oracle.simulations.with_raw_response.retrieve(
-            "simulationId",
+            "sim_oracle-growth-2024-xyz",
         )
 
         assert response.is_closed is True
@@ -107,7 +115,7 @@ class TestAsyncSimulations:
     @parametrize
     async def test_streaming_response_retrieve(self, async_client: AsyncJocall3) -> None:
         async with async_client.ai.oracle.simulations.with_streaming_response.retrieve(
-            "simulationId",
+            "sim_oracle-growth-2024-xyz",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -127,7 +135,15 @@ class TestAsyncSimulations:
     @parametrize
     async def test_method_list(self, async_client: AsyncJocall3) -> None:
         simulation = await async_client.ai.oracle.simulations.list()
-        assert_matches_type(SimulationListResponse, simulation, path=["response"])
+        assert_matches_type(object, simulation, path=["response"])
+
+    @parametrize
+    async def test_method_list_with_all_params(self, async_client: AsyncJocall3) -> None:
+        simulation = await async_client.ai.oracle.simulations.list(
+            limit=0,
+            offset=0,
+        )
+        assert_matches_type(object, simulation, path=["response"])
 
     @parametrize
     async def test_raw_response_list(self, async_client: AsyncJocall3) -> None:
@@ -136,7 +152,7 @@ class TestAsyncSimulations:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         simulation = await response.parse()
-        assert_matches_type(SimulationListResponse, simulation, path=["response"])
+        assert_matches_type(object, simulation, path=["response"])
 
     @parametrize
     async def test_streaming_response_list(self, async_client: AsyncJocall3) -> None:
@@ -145,6 +161,6 @@ class TestAsyncSimulations:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             simulation = await response.parse()
-            assert_matches_type(SimulationListResponse, simulation, path=["response"])
+            assert_matches_type(object, simulation, path=["response"])
 
         assert cast(Any, response.is_closed) is True

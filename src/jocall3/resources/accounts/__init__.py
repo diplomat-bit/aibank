@@ -32,14 +32,6 @@ from .transactions import (
     TransactionsResourceWithStreamingResponse,
     AsyncTransactionsResourceWithStreamingResponse,
 )
-from .balance_history import (
-    BalanceHistoryResource,
-    AsyncBalanceHistoryResource,
-    BalanceHistoryResourceWithRawResponse,
-    AsyncBalanceHistoryResourceWithRawResponse,
-    BalanceHistoryResourceWithStreamingResponse,
-    AsyncBalanceHistoryResourceWithStreamingResponse,
-)
 
 __all__ = [
     "TransactionsResource",
@@ -48,12 +40,6 @@ __all__ = [
     "AsyncTransactionsResourceWithRawResponse",
     "TransactionsResourceWithStreamingResponse",
     "AsyncTransactionsResourceWithStreamingResponse",
-    "BalanceHistoryResource",
-    "AsyncBalanceHistoryResource",
-    "BalanceHistoryResourceWithRawResponse",
-    "AsyncBalanceHistoryResourceWithRawResponse",
-    "BalanceHistoryResourceWithStreamingResponse",
-    "AsyncBalanceHistoryResourceWithStreamingResponse",
     "StatementsResource",
     "AsyncStatementsResource",
     "StatementsResourceWithRawResponse",

@@ -2,4 +2,4 @@
 
 from __future__ import annotations
 
-from .control_update_params import ControlUpdateParams as ControlUpdateParams
+from .control_update_response import ControlUpdateResponse as ControlUpdateResponse

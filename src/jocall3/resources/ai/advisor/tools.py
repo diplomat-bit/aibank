@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import httpx
 
-from ...._types import Body, Query, Headers, NoneType, NotGiven, not_given
+from ...._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from ...._utils import maybe_transform, async_maybe_transform
 from ...._compat import cached_property
 from ...._resource import SyncAPIResource, AsyncAPIResource
 from ...._response import (
@@ -14,7 +15,7 @@ from ...._response import (
     async_to_streamed_response_wrapper,
 )
 from ...._base_client import make_request_options
-from ....types.ai.advisor.tool_list_response import ToolListResponse
+from ....types.ai.advisor import tool_list_params
 
 __all__ = ["ToolsResource", "AsyncToolsResource"]
 
@@ -42,37 +43,25 @@ class ToolsResource(SyncAPIResource):
     def list(
         self,
         *,
+        limit: int | Omit = omit,
+        offset: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> ToolListResponse:
-        """List AI-Executable Financial Tools"""
-        return self._get(
-            "/ai/advisor/tools",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=ToolListResponse,
-        )
-
-    def enable(
-        self,
-        tool_id: str,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
+    ) -> object:
         """
-        Grant AI Execution Permission for Tool
+        Retrieves a dynamic manifest of all integrated AI tools that Quantum can invoke
+        and execute, providing details on their capabilities, parameters, and access
+        requirements.
 
         Args:
+          limit: Maximum number of items to return in a single page.
+
+          offset: Number of items to skip before starting to collect the result set.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -81,15 +70,22 @@ class ToolsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not tool_id:
-            raise ValueError(f"Expected a non-empty value for `tool_id` but received {tool_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return self._post(
-            f"/ai/advisor/tools/{tool_id}/enable",
+        return self._get(
+            "/ai/advisor/tools",
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "limit": limit,
+                        "offset": offset,
+                    },
+                    tool_list_params.ToolListParams,
+                ),
             ),
-            cast_to=NoneType,
+            cast_to=object,
         )
 
 
@@ -116,37 +112,25 @@ class AsyncToolsResource(AsyncAPIResource):
     async def list(
         self,
         *,
+        limit: int | Omit = omit,
+        offset: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> ToolListResponse:
-        """List AI-Executable Financial Tools"""
-        return await self._get(
-            "/ai/advisor/tools",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=ToolListResponse,
-        )
-
-    async def enable(
-        self,
-        tool_id: str,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
+    ) -> object:
         """
-        Grant AI Execution Permission for Tool
+        Retrieves a dynamic manifest of all integrated AI tools that Quantum can invoke
+        and execute, providing details on their capabilities, parameters, and access
+        requirements.
 
         Args:
+          limit: Maximum number of items to return in a single page.
+
+          offset: Number of items to skip before starting to collect the result set.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -155,15 +139,22 @@ class AsyncToolsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not tool_id:
-            raise ValueError(f"Expected a non-empty value for `tool_id` but received {tool_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return await self._post(
-            f"/ai/advisor/tools/{tool_id}/enable",
+        return await self._get(
+            "/ai/advisor/tools",
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=await async_maybe_transform(
+                    {
+                        "limit": limit,
+                        "offset": offset,
+                    },
+                    tool_list_params.ToolListParams,
+                ),
             ),
-            cast_to=NoneType,
+            cast_to=object,
         )
 
 
@@ -174,9 +165,6 @@ class ToolsResourceWithRawResponse:
         self.list = to_raw_response_wrapper(
             tools.list,
         )
-        self.enable = to_raw_response_wrapper(
-            tools.enable,
-        )
 
 
 class AsyncToolsResourceWithRawResponse:
@@ -185,9 +173,6 @@ class AsyncToolsResourceWithRawResponse:
 
         self.list = async_to_raw_response_wrapper(
             tools.list,
-        )
-        self.enable = async_to_raw_response_wrapper(
-            tools.enable,
         )
 
 
@@ -198,9 +183,6 @@ class ToolsResourceWithStreamingResponse:
         self.list = to_streamed_response_wrapper(
             tools.list,
         )
-        self.enable = to_streamed_response_wrapper(
-            tools.enable,
-        )
 
 
 class AsyncToolsResourceWithStreamingResponse:
@@ -209,7 +191,4 @@ class AsyncToolsResourceWithStreamingResponse:
 
         self.list = async_to_streamed_response_wrapper(
             tools.list,
-        )
-        self.enable = async_to_streamed_response_wrapper(
-            tools.enable,
         )
