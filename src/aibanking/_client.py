@@ -12,7 +12,6 @@ from . import _exceptions
 from ._qs import Querystring
 from ._types import (
     Omit,
-    Headers,
     Timeout,
     NotGiven,
     Transport,
@@ -24,7 +23,7 @@ from ._utils import is_given, get_async_library
 from ._compat import cached_property
 from ._version import __version__
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
-from ._exceptions import APIStatusError
+from ._exceptions import Jocall3Error, APIStatusError
 from ._base_client import (
     DEFAULT_MAX_RETRIES,
     SyncAPIClient,
@@ -36,6 +35,8 @@ if TYPE_CHECKING:
         ai,
         web3,
         users,
+        system,
+        lending,
         accounts,
         payments,
         corporate,
@@ -47,6 +48,8 @@ if TYPE_CHECKING:
     from .resources.ai.ai import AIResource, AsyncAIResource
     from .resources.web3.web3 import Web3Resource, AsyncWeb3Resource
     from .resources.users.users import UsersResource, AsyncUsersResource
+    from .resources.system.system import SystemResource, AsyncSystemResource
+    from .resources.lending.lending import LendingResource, AsyncLendingResource
     from .resources.accounts.accounts import AccountsResource, AsyncAccountsResource
     from .resources.payments.payments import PaymentsResource, AsyncPaymentsResource
     from .resources.corporate.corporate import CorporateResource, AsyncCorporateResource
@@ -60,7 +63,7 @@ __all__ = ["Timeout", "Transport", "ProxiesTypes", "RequestOptions", "Jocall3", 
 
 class Jocall3(SyncAPIClient):
     # client options
-    api_key: str | None
+    api_key: str
 
     def __init__(
         self,
@@ -87,10 +90,14 @@ class Jocall3(SyncAPIClient):
     ) -> None:
         """Construct a new synchronous Jocall3 client instance.
 
-        This automatically infers the `api_key` argument from the `JOCALL3_API_KEY` environment variable if it is not provided.
+        This automatically infers the `api_key` argument from the `X_API_KEY` environment variable if it is not provided.
         """
         if api_key is None:
-            api_key = os.environ.get("JOCALL3_API_KEY")
+            api_key = os.environ.get("X_API_KEY")
+        if api_key is None:
+            raise Jocall3Error(
+                "The api_key client option must be set either by passing api_key to the client or by setting the X_API_KEY environment variable"
+            )
         self.api_key = api_key
 
         if base_url is None:
@@ -164,10 +171,22 @@ class Jocall3(SyncAPIClient):
         return MarketplaceResource(self)
 
     @cached_property
+    def lending(self) -> LendingResource:
+        from .resources.lending import LendingResource
+
+        return LendingResource(self)
+
+    @cached_property
     def investments(self) -> InvestmentsResource:
         from .resources.investments import InvestmentsResource
 
         return InvestmentsResource(self)
+
+    @cached_property
+    def system(self) -> SystemResource:
+        from .resources.system import SystemResource
+
+        return SystemResource(self)
 
     @cached_property
     def with_raw_response(self) -> Jocall3WithRawResponse:
@@ -186,9 +205,7 @@ class Jocall3(SyncAPIClient):
     @override
     def auth_headers(self) -> dict[str, str]:
         api_key = self.api_key
-        if api_key is None:
-            return {}
-        return {"Authorization": f"Bearer {api_key}"}
+        return {"x-api-key": api_key}
 
     @property
     @override
@@ -198,15 +215,6 @@ class Jocall3(SyncAPIClient):
             "X-Stainless-Async": "false",
             **self._custom_headers,
         }
-
-    @override
-    def _validate_headers(self, headers: Headers, custom_headers: Headers) -> None:
-        if headers.get("Authorization") or isinstance(custom_headers.get("Authorization"), Omit):
-            return
-
-        raise TypeError(
-            '"Could not resolve authentication method. Expected the api_key to be set. Or for the `Authorization` headers to be explicitly omitted"'
-        )
 
     def copy(
         self,
@@ -295,7 +303,7 @@ class Jocall3(SyncAPIClient):
 
 class AsyncJocall3(AsyncAPIClient):
     # client options
-    api_key: str | None
+    api_key: str
 
     def __init__(
         self,
@@ -322,10 +330,14 @@ class AsyncJocall3(AsyncAPIClient):
     ) -> None:
         """Construct a new async AsyncJocall3 client instance.
 
-        This automatically infers the `api_key` argument from the `JOCALL3_API_KEY` environment variable if it is not provided.
+        This automatically infers the `api_key` argument from the `X_API_KEY` environment variable if it is not provided.
         """
         if api_key is None:
-            api_key = os.environ.get("JOCALL3_API_KEY")
+            api_key = os.environ.get("X_API_KEY")
+        if api_key is None:
+            raise Jocall3Error(
+                "The api_key client option must be set either by passing api_key to the client or by setting the X_API_KEY environment variable"
+            )
         self.api_key = api_key
 
         if base_url is None:
@@ -399,10 +411,22 @@ class AsyncJocall3(AsyncAPIClient):
         return AsyncMarketplaceResource(self)
 
     @cached_property
+    def lending(self) -> AsyncLendingResource:
+        from .resources.lending import AsyncLendingResource
+
+        return AsyncLendingResource(self)
+
+    @cached_property
     def investments(self) -> AsyncInvestmentsResource:
         from .resources.investments import AsyncInvestmentsResource
 
         return AsyncInvestmentsResource(self)
+
+    @cached_property
+    def system(self) -> AsyncSystemResource:
+        from .resources.system import AsyncSystemResource
+
+        return AsyncSystemResource(self)
 
     @cached_property
     def with_raw_response(self) -> AsyncJocall3WithRawResponse:
@@ -421,9 +445,7 @@ class AsyncJocall3(AsyncAPIClient):
     @override
     def auth_headers(self) -> dict[str, str]:
         api_key = self.api_key
-        if api_key is None:
-            return {}
-        return {"Authorization": f"Bearer {api_key}"}
+        return {"x-api-key": api_key}
 
     @property
     @override
@@ -433,15 +455,6 @@ class AsyncJocall3(AsyncAPIClient):
             "X-Stainless-Async": f"async:{get_async_library()}",
             **self._custom_headers,
         }
-
-    @override
-    def _validate_headers(self, headers: Headers, custom_headers: Headers) -> None:
-        if headers.get("Authorization") or isinstance(custom_headers.get("Authorization"), Omit):
-            return
-
-        raise TypeError(
-            '"Could not resolve authentication method. Expected the api_key to be set. Or for the `Authorization` headers to be explicitly omitted"'
-        )
 
     def copy(
         self,
@@ -589,10 +602,22 @@ class Jocall3WithRawResponse:
         return MarketplaceResourceWithRawResponse(self._client.marketplace)
 
     @cached_property
+    def lending(self) -> lending.LendingResourceWithRawResponse:
+        from .resources.lending import LendingResourceWithRawResponse
+
+        return LendingResourceWithRawResponse(self._client.lending)
+
+    @cached_property
     def investments(self) -> investments.InvestmentsResourceWithRawResponse:
         from .resources.investments import InvestmentsResourceWithRawResponse
 
         return InvestmentsResourceWithRawResponse(self._client.investments)
+
+    @cached_property
+    def system(self) -> system.SystemResourceWithRawResponse:
+        from .resources.system import SystemResourceWithRawResponse
+
+        return SystemResourceWithRawResponse(self._client.system)
 
 
 class AsyncJocall3WithRawResponse:
@@ -656,10 +681,22 @@ class AsyncJocall3WithRawResponse:
         return AsyncMarketplaceResourceWithRawResponse(self._client.marketplace)
 
     @cached_property
+    def lending(self) -> lending.AsyncLendingResourceWithRawResponse:
+        from .resources.lending import AsyncLendingResourceWithRawResponse
+
+        return AsyncLendingResourceWithRawResponse(self._client.lending)
+
+    @cached_property
     def investments(self) -> investments.AsyncInvestmentsResourceWithRawResponse:
         from .resources.investments import AsyncInvestmentsResourceWithRawResponse
 
         return AsyncInvestmentsResourceWithRawResponse(self._client.investments)
+
+    @cached_property
+    def system(self) -> system.AsyncSystemResourceWithRawResponse:
+        from .resources.system import AsyncSystemResourceWithRawResponse
+
+        return AsyncSystemResourceWithRawResponse(self._client.system)
 
 
 class Jocall3WithStreamedResponse:
@@ -723,10 +760,22 @@ class Jocall3WithStreamedResponse:
         return MarketplaceResourceWithStreamingResponse(self._client.marketplace)
 
     @cached_property
+    def lending(self) -> lending.LendingResourceWithStreamingResponse:
+        from .resources.lending import LendingResourceWithStreamingResponse
+
+        return LendingResourceWithStreamingResponse(self._client.lending)
+
+    @cached_property
     def investments(self) -> investments.InvestmentsResourceWithStreamingResponse:
         from .resources.investments import InvestmentsResourceWithStreamingResponse
 
         return InvestmentsResourceWithStreamingResponse(self._client.investments)
+
+    @cached_property
+    def system(self) -> system.SystemResourceWithStreamingResponse:
+        from .resources.system import SystemResourceWithStreamingResponse
+
+        return SystemResourceWithStreamingResponse(self._client.system)
 
 
 class AsyncJocall3WithStreamedResponse:
@@ -790,10 +839,22 @@ class AsyncJocall3WithStreamedResponse:
         return AsyncMarketplaceResourceWithStreamingResponse(self._client.marketplace)
 
     @cached_property
+    def lending(self) -> lending.AsyncLendingResourceWithStreamingResponse:
+        from .resources.lending import AsyncLendingResourceWithStreamingResponse
+
+        return AsyncLendingResourceWithStreamingResponse(self._client.lending)
+
+    @cached_property
     def investments(self) -> investments.AsyncInvestmentsResourceWithStreamingResponse:
         from .resources.investments import AsyncInvestmentsResourceWithStreamingResponse
 
         return AsyncInvestmentsResourceWithStreamingResponse(self._client.investments)
+
+    @cached_property
+    def system(self) -> system.AsyncSystemResourceWithStreamingResponse:
+        from .resources.system import AsyncSystemResourceWithStreamingResponse
+
+        return AsyncSystemResourceWithStreamingResponse(self._client.system)
 
 
 Client = Jocall3

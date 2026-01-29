@@ -8,8 +8,22 @@ from .ads import (
     AdsResourceWithStreamingResponse,
     AsyncAdsResourceWithStreamingResponse,
 )
+from .generate import (
+    GenerateResource,
+    AsyncGenerateResource,
+    GenerateResourceWithRawResponse,
+    AsyncGenerateResourceWithRawResponse,
+    GenerateResourceWithStreamingResponse,
+    AsyncGenerateResourceWithStreamingResponse,
+)
 
 __all__ = [
+    "GenerateResource",
+    "AsyncGenerateResource",
+    "GenerateResourceWithRawResponse",
+    "AsyncGenerateResourceWithRawResponse",
+    "GenerateResourceWithStreamingResponse",
+    "AsyncGenerateResourceWithStreamingResponse",
     "AdsResource",
     "AsyncAdsResource",
     "AdsResourceWithRawResponse",

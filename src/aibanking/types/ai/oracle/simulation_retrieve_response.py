@@ -1,18 +1,19 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Union, Optional
-from typing_extensions import TypeAlias
+from typing import Optional
 
 from pydantic import Field as FieldInfo
 
 from ...._models import BaseModel
 
-__all__ = ["SimulationRetrieveResponse", "RiskAnalysis"]
+__all__ = ["SimulationRetrieveResponse"]
 
 
-class RiskAnalysis(BaseModel):
-    risk_analysis: Optional[object] = FieldInfo(alias="riskAnalysis", default=None)
-    """AI-driven risk assessment of the simulated scenario."""
+class SimulationRetrieveResponse(BaseModel):
+    simulation_id: str = FieldInfo(alias="simulationId")
 
+    status: str
 
-SimulationRetrieveResponse: TypeAlias = Union[RiskAnalysis, object]
+    outcome_narrative: Optional[str] = FieldInfo(alias="outcomeNarrative", default=None)
+
+    projected_value: Optional[float] = FieldInfo(alias="projectedValue", default=None)

@@ -8,6 +8,14 @@ from .pitch import (
     PitchResourceWithStreamingResponse,
     AsyncPitchResourceWithStreamingResponse,
 )
+from .analysis import (
+    AnalysisResource,
+    AsyncAnalysisResource,
+    AnalysisResourceWithRawResponse,
+    AsyncAnalysisResourceWithRawResponse,
+    AnalysisResourceWithStreamingResponse,
+    AsyncAnalysisResourceWithStreamingResponse,
+)
 from .incubator import (
     IncubatorResource,
     AsyncIncubatorResource,
@@ -24,6 +32,12 @@ __all__ = [
     "AsyncPitchResourceWithRawResponse",
     "PitchResourceWithStreamingResponse",
     "AsyncPitchResourceWithStreamingResponse",
+    "AnalysisResource",
+    "AsyncAnalysisResource",
+    "AnalysisResourceWithRawResponse",
+    "AsyncAnalysisResourceWithRawResponse",
+    "AnalysisResourceWithStreamingResponse",
+    "AsyncAnalysisResourceWithStreamingResponse",
     "IncubatorResource",
     "AsyncIncubatorResource",
     "IncubatorResourceWithRawResponse",
