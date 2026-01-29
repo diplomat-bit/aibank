@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.8.0 (2026-01-29)
+
+Full Changelog: [v0.7.0...v0.8.0](https://github.com/diplomat-bit/aibank/compare/v0.7.0...v0.8.0)
+
+### Features
+
+* **api:** api update ([cab0038](https://github.com/diplomat-bit/aibank/commit/cab0038b93033a57212cadc30c715ff8a7fe952d))
+* **api:** api update ([5f43ea0](https://github.com/diplomat-bit/aibank/commit/5f43ea0bf3961f5aa56e952e55b0c6194438e6e6))
+* **api:** manual updates ([b8acba2](https://github.com/diplomat-bit/aibank/commit/b8acba273e831179b72db986503ece1a926d0864))
+* **api:** manual updates ([5c17c6b](https://github.com/diplomat-bit/aibank/commit/5c17c6b415f4e8db9c69bd29ffbf8d004c8e11ea))
+* **api:** manual updates ([a8a0f58](https://github.com/diplomat-bit/aibank/commit/a8a0f58bf097ea2d60fcc68bbabe549977cf99cd))
+* **api:** manual updates ([0a1bda0](https://github.com/diplomat-bit/aibank/commit/0a1bda0447ad8353f59e4200e661c01903347ff7))
+* **api:** manual updates ([43d6649](https://github.com/diplomat-bit/aibank/commit/43d6649bc4841df5a517f6e45f4d6ac9f5290129))
+
 ## 0.7.0 (2026-01-29)
 
 Full Changelog: [v0.6.0...v0.7.0](https://github.com/diplomat-bit/aibank/compare/v0.6.0...v0.7.0)
