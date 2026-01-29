@@ -2,19 +2,10 @@
 
 from __future__ import annotations
 
-from typing import Iterable
-from typing_extensions import Literal
-
 import httpx
 
-from ...types import (
-    transaction_list_params,
-    transaction_split_params,
-    transaction_dispute_params,
-    transaction_add_notes_params,
-    transaction_categorize_params,
-)
-from ..._types import Body, Omit, Query, Headers, NoneType, NotGiven, SequenceNotStr, omit, not_given
+from ...types import transaction_list_params
+from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ..._utils import maybe_transform, async_maybe_transform
 from .insights import (
     InsightsResource,
@@ -41,8 +32,8 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ..._base_client import make_request_options
-from ...types.transaction_list_response import TransactionListResponse
 from ...types.transaction_retrieve_response import TransactionRetrieveResponse
+from ...types.transaction_add_notes_response import TransactionAddNotesResponse
 from ...types.transaction_categorize_response import TransactionCategorizeResponse
 
 __all__ = ["TransactionsResource", "AsyncTransactionsResource"]
@@ -88,7 +79,9 @@ class TransactionsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> TransactionRetrieveResponse:
         """
-        Get Transaction Deep Metadata
+        Retrieves granular information for a single transaction by its unique ID,
+        including AI categorization confidence, merchant details, and associated carbon
+        footprint.
 
         Args:
           extra_headers: Send extra headers
@@ -112,10 +105,14 @@ class TransactionsResource(SyncAPIResource):
     def list(
         self,
         *,
+        category: str | Omit = omit,
+        end_date: str | Omit = omit,
         limit: int | Omit = omit,
-        max_amount: float | Omit = omit,
-        min_amount: float | Omit = omit,
+        max_amount: int | Omit = omit,
+        min_amount: int | Omit = omit,
         offset: int | Omit = omit,
+        search_query: str | Omit = omit,
+        start_date: str | Omit = omit,
         type: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -123,11 +120,31 @@ class TransactionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> TransactionListResponse:
+    ) -> object:
         """
-        Global Transaction Search & Filter
+        Retrieves a paginated list of the user's transactions, with extensive options
+        for filtering by type, category, date range, amount, and intelligent AI-driven
+        sorting and search capabilities.
 
         Args:
+          category: Filter transactions by their AI-assigned or user-defined category.
+
+          end_date: Retrieve transactions up to this date (inclusive).
+
+          limit: Maximum number of items to return in a single page.
+
+          max_amount: Filter for transactions with an amount less than or equal to this value.
+
+          min_amount: Filter for transactions with an amount greater than or equal to this value.
+
+          offset: Number of items to skip before starting to collect the result set.
+
+          search_query: Free-text search across transaction descriptions, merchants, and notes.
+
+          start_date: Retrieve transactions from this date (inclusive).
+
+          type: Filter transactions by type (e.g., income, expense, transfer).
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -145,32 +162,35 @@ class TransactionsResource(SyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "category": category,
+                        "end_date": end_date,
                         "limit": limit,
                         "max_amount": max_amount,
                         "min_amount": min_amount,
                         "offset": offset,
+                        "search_query": search_query,
+                        "start_date": start_date,
                         "type": type,
                     },
                     transaction_list_params.TransactionListParams,
                 ),
             ),
-            cast_to=TransactionListResponse,
+            cast_to=object,
         )
 
     def add_notes(
         self,
         transaction_id: str,
         *,
-        notes: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
+    ) -> TransactionAddNotesResponse:
         """
-        Attach Manual Notes to Transaction
+        Allows the user to add or update personal notes for a specific transaction.
 
         Args:
           extra_headers: Send extra headers
@@ -183,22 +203,18 @@ class TransactionsResource(SyncAPIResource):
         """
         if not transaction_id:
             raise ValueError(f"Expected a non-empty value for `transaction_id` but received {transaction_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._put(
             f"/transactions/{transaction_id}/notes",
-            body=maybe_transform({"notes": notes}, transaction_add_notes_params.TransactionAddNotesParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=TransactionAddNotesResponse,
         )
 
     def categorize(
         self,
         transaction_id: str,
         *,
-        category: str,
-        apply_to_future: bool | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -207,7 +223,8 @@ class TransactionsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> TransactionCategorizeResponse:
         """
-        Override AI Categorization
+        Allows the user to override or refine the AI's categorization for a transaction,
+        improving future AI accuracy and personal financial reporting.
 
         Args:
           extra_headers: Send extra headers
@@ -222,98 +239,10 @@ class TransactionsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `transaction_id` but received {transaction_id!r}")
         return self._put(
             f"/transactions/{transaction_id}/categorize",
-            body=maybe_transform(
-                {
-                    "category": category,
-                    "apply_to_future": apply_to_future,
-                },
-                transaction_categorize_params.TransactionCategorizeParams,
-            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=TransactionCategorizeResponse,
-        )
-
-    def dispute(
-        self,
-        transaction_id: str,
-        *,
-        reason: Literal["fraudulent", "duplicate", "incorrect_amount", "service_not_rendered"],
-        evidence_files: SequenceNotStr[str] | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
-        """
-        Initiate Transaction Dispute
-
-        Args:
-          evidence_files: URIs to evidence
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not transaction_id:
-            raise ValueError(f"Expected a non-empty value for `transaction_id` but received {transaction_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return self._post(
-            f"/transactions/{transaction_id}/dispute",
-            body=maybe_transform(
-                {
-                    "reason": reason,
-                    "evidence_files": evidence_files,
-                },
-                transaction_dispute_params.TransactionDisputeParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
-        )
-
-    def split(
-        self,
-        transaction_id: str,
-        *,
-        splits: Iterable[transaction_split_params.Split],
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
-        """
-        Split Transaction Across Multiple Categories
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not transaction_id:
-            raise ValueError(f"Expected a non-empty value for `transaction_id` but received {transaction_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return self._post(
-            f"/transactions/{transaction_id}/split",
-            body=maybe_transform({"splits": splits}, transaction_split_params.TransactionSplitParams),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
         )
 
 
@@ -357,7 +286,9 @@ class AsyncTransactionsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> TransactionRetrieveResponse:
         """
-        Get Transaction Deep Metadata
+        Retrieves granular information for a single transaction by its unique ID,
+        including AI categorization confidence, merchant details, and associated carbon
+        footprint.
 
         Args:
           extra_headers: Send extra headers
@@ -381,10 +312,14 @@ class AsyncTransactionsResource(AsyncAPIResource):
     async def list(
         self,
         *,
+        category: str | Omit = omit,
+        end_date: str | Omit = omit,
         limit: int | Omit = omit,
-        max_amount: float | Omit = omit,
-        min_amount: float | Omit = omit,
+        max_amount: int | Omit = omit,
+        min_amount: int | Omit = omit,
         offset: int | Omit = omit,
+        search_query: str | Omit = omit,
+        start_date: str | Omit = omit,
         type: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -392,11 +327,31 @@ class AsyncTransactionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> TransactionListResponse:
+    ) -> object:
         """
-        Global Transaction Search & Filter
+        Retrieves a paginated list of the user's transactions, with extensive options
+        for filtering by type, category, date range, amount, and intelligent AI-driven
+        sorting and search capabilities.
 
         Args:
+          category: Filter transactions by their AI-assigned or user-defined category.
+
+          end_date: Retrieve transactions up to this date (inclusive).
+
+          limit: Maximum number of items to return in a single page.
+
+          max_amount: Filter for transactions with an amount less than or equal to this value.
+
+          min_amount: Filter for transactions with an amount greater than or equal to this value.
+
+          offset: Number of items to skip before starting to collect the result set.
+
+          search_query: Free-text search across transaction descriptions, merchants, and notes.
+
+          start_date: Retrieve transactions from this date (inclusive).
+
+          type: Filter transactions by type (e.g., income, expense, transfer).
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -414,32 +369,35 @@ class AsyncTransactionsResource(AsyncAPIResource):
                 timeout=timeout,
                 query=await async_maybe_transform(
                     {
+                        "category": category,
+                        "end_date": end_date,
                         "limit": limit,
                         "max_amount": max_amount,
                         "min_amount": min_amount,
                         "offset": offset,
+                        "search_query": search_query,
+                        "start_date": start_date,
                         "type": type,
                     },
                     transaction_list_params.TransactionListParams,
                 ),
             ),
-            cast_to=TransactionListResponse,
+            cast_to=object,
         )
 
     async def add_notes(
         self,
         transaction_id: str,
         *,
-        notes: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
+    ) -> TransactionAddNotesResponse:
         """
-        Attach Manual Notes to Transaction
+        Allows the user to add or update personal notes for a specific transaction.
 
         Args:
           extra_headers: Send extra headers
@@ -452,22 +410,18 @@ class AsyncTransactionsResource(AsyncAPIResource):
         """
         if not transaction_id:
             raise ValueError(f"Expected a non-empty value for `transaction_id` but received {transaction_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._put(
             f"/transactions/{transaction_id}/notes",
-            body=await async_maybe_transform({"notes": notes}, transaction_add_notes_params.TransactionAddNotesParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=TransactionAddNotesResponse,
         )
 
     async def categorize(
         self,
         transaction_id: str,
         *,
-        category: str,
-        apply_to_future: bool | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -476,7 +430,8 @@ class AsyncTransactionsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> TransactionCategorizeResponse:
         """
-        Override AI Categorization
+        Allows the user to override or refine the AI's categorization for a transaction,
+        improving future AI accuracy and personal financial reporting.
 
         Args:
           extra_headers: Send extra headers
@@ -491,98 +446,10 @@ class AsyncTransactionsResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `transaction_id` but received {transaction_id!r}")
         return await self._put(
             f"/transactions/{transaction_id}/categorize",
-            body=await async_maybe_transform(
-                {
-                    "category": category,
-                    "apply_to_future": apply_to_future,
-                },
-                transaction_categorize_params.TransactionCategorizeParams,
-            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=TransactionCategorizeResponse,
-        )
-
-    async def dispute(
-        self,
-        transaction_id: str,
-        *,
-        reason: Literal["fraudulent", "duplicate", "incorrect_amount", "service_not_rendered"],
-        evidence_files: SequenceNotStr[str] | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
-        """
-        Initiate Transaction Dispute
-
-        Args:
-          evidence_files: URIs to evidence
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not transaction_id:
-            raise ValueError(f"Expected a non-empty value for `transaction_id` but received {transaction_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return await self._post(
-            f"/transactions/{transaction_id}/dispute",
-            body=await async_maybe_transform(
-                {
-                    "reason": reason,
-                    "evidence_files": evidence_files,
-                },
-                transaction_dispute_params.TransactionDisputeParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
-        )
-
-    async def split(
-        self,
-        transaction_id: str,
-        *,
-        splits: Iterable[transaction_split_params.Split],
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
-        """
-        Split Transaction Across Multiple Categories
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not transaction_id:
-            raise ValueError(f"Expected a non-empty value for `transaction_id` but received {transaction_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return await self._post(
-            f"/transactions/{transaction_id}/split",
-            body=await async_maybe_transform({"splits": splits}, transaction_split_params.TransactionSplitParams),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
         )
 
 
@@ -601,12 +468,6 @@ class TransactionsResourceWithRawResponse:
         )
         self.categorize = to_raw_response_wrapper(
             transactions.categorize,
-        )
-        self.dispute = to_raw_response_wrapper(
-            transactions.dispute,
-        )
-        self.split = to_raw_response_wrapper(
-            transactions.split,
         )
 
     @cached_property
@@ -634,12 +495,6 @@ class AsyncTransactionsResourceWithRawResponse:
         self.categorize = async_to_raw_response_wrapper(
             transactions.categorize,
         )
-        self.dispute = async_to_raw_response_wrapper(
-            transactions.dispute,
-        )
-        self.split = async_to_raw_response_wrapper(
-            transactions.split,
-        )
 
     @cached_property
     def recurring(self) -> AsyncRecurringResourceWithRawResponse:
@@ -666,12 +521,6 @@ class TransactionsResourceWithStreamingResponse:
         self.categorize = to_streamed_response_wrapper(
             transactions.categorize,
         )
-        self.dispute = to_streamed_response_wrapper(
-            transactions.dispute,
-        )
-        self.split = to_streamed_response_wrapper(
-            transactions.split,
-        )
 
     @cached_property
     def recurring(self) -> RecurringResourceWithStreamingResponse:
@@ -697,12 +546,6 @@ class AsyncTransactionsResourceWithStreamingResponse:
         )
         self.categorize = async_to_streamed_response_wrapper(
             transactions.categorize,
-        )
-        self.dispute = async_to_streamed_response_wrapper(
-            transactions.dispute,
-        )
-        self.split = async_to_streamed_response_wrapper(
-            transactions.split,
         )
 
     @cached_property

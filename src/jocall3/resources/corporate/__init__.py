@@ -48,14 +48,6 @@ from .compliance import (
     ComplianceResourceWithStreamingResponse,
     AsyncComplianceResourceWithStreamingResponse,
 )
-from .governance import (
-    GovernanceResource,
-    AsyncGovernanceResource,
-    GovernanceResourceWithRawResponse,
-    AsyncGovernanceResourceWithRawResponse,
-    GovernanceResourceWithStreamingResponse,
-    AsyncGovernanceResourceWithStreamingResponse,
-)
 
 __all__ = [
     "ComplianceResource",
@@ -82,12 +74,6 @@ __all__ = [
     "AsyncRiskResourceWithRawResponse",
     "RiskResourceWithStreamingResponse",
     "AsyncRiskResourceWithStreamingResponse",
-    "GovernanceResource",
-    "AsyncGovernanceResource",
-    "GovernanceResourceWithRawResponse",
-    "AsyncGovernanceResourceWithRawResponse",
-    "GovernanceResourceWithStreamingResponse",
-    "AsyncGovernanceResourceWithStreamingResponse",
     "AnomaliesResource",
     "AsyncAnomaliesResource",
     "AnomaliesResourceWithRawResponse",

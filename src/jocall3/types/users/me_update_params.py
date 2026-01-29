@@ -2,26 +2,22 @@
 
 from __future__ import annotations
 
-from typing_extensions import Required, TypedDict
+from typing_extensions import Annotated, TypedDict
 
-__all__ = ["MeUpdateParams", "Address"]
+from ..._utils import PropertyInfo
+
+__all__ = ["MeUpdateParams", "Preferences"]
 
 
 class MeUpdateParams(TypedDict, total=False):
-    address: Address
+    address: object
 
-    name: str
+    preferences: Preferences
+    """User's personalized preferences for the platform."""
 
-    phone: str
 
+class Preferences(TypedDict, total=False):
+    """User's personalized preferences for the platform."""
 
-class Address(TypedDict, total=False):
-    city: Required[str]
-
-    country: Required[str]
-
-    street: Required[str]
-
-    state: str
-
-    zip: str
+    notification_channels: Annotated[object, PropertyInfo(alias="notificationChannels")]
+    """Preferred channels for receiving notifications."""

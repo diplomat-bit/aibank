@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Dict, List, Optional
+from typing import Optional
 
 from pydantic import Field as FieldInfo
 
@@ -10,14 +10,5 @@ __all__ = ["SimulateRunStandardResponse"]
 
 
 class SimulateRunStandardResponse(BaseModel):
-    simulation_id: str = FieldInfo(alias="simulationId")
-
-    status: str
-
-    confidence_score: Optional[float] = FieldInfo(alias="confidenceScore", default=None)
-
-    data: Optional[List[Dict[str, object]]] = None
-
-    outcome_narrative: Optional[str] = FieldInfo(alias="outcomeNarrative", default=None)
-
-    projected_value: Optional[float] = FieldInfo(alias="projectedValue", default=None)
+    risk_analysis: Optional[object] = FieldInfo(alias="riskAnalysis", default=None)
+    """AI-driven risk assessment of the simulated scenario."""
