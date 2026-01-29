@@ -61,6 +61,6 @@
   ],
   "release-type": "python",
   "extra-files": [
-    "src/jocall3/_version.py"
+    "src/aibanking/_version.py"
   ]
 }

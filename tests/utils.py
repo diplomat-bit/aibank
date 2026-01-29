@@ -8,8 +8,8 @@ from typing import Any, TypeVar, Iterator, Sequence, cast
 from datetime import date, datetime
 from typing_extensions import Literal, get_args, get_origin, assert_type
 
-from jocall3._types import Omit, NoneType
-from jocall3._utils import (
+from aibanking._types import Omit, NoneType
+from aibanking._utils import (
     is_dict,
     is_list,
     is_list_type,
@@ -19,8 +19,8 @@ from jocall3._utils import (
     is_annotated_type,
     is_type_alias_type,
 )
-from jocall3._compat import PYDANTIC_V1, field_outer_type, get_model_fields
-from jocall3._models import BaseModel
+from aibanking._compat import PYDANTIC_V1, field_outer_type, get_model_fields
+from aibanking._models import BaseModel
 
 BaseModelT = TypeVar("BaseModelT", bound=BaseModel)
 
