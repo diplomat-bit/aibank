@@ -4,10 +4,13 @@ from __future__ import annotations
 
 from .ad_list_response import AdListResponse as AdListResponse
 from .advisor_chat_params import AdvisorChatParams as AdvisorChatParams
+from .model_list_response import ModelListResponse as ModelListResponse
 from .advisor_chat_response import AdvisorChatResponse as AdvisorChatResponse
+from .model_fine_tune_params import ModelFineTuneParams as ModelFineTuneParams
 from .ad_generate_copy_params import AdGenerateCopyParams as AdGenerateCopyParams
 from .ad_generate_video_params import AdGenerateVideoParams as AdGenerateVideoParams
 from .advisor_history_response import AdvisorHistoryResponse as AdvisorHistoryResponse
+from .model_fine_tune_response import ModelFineTuneResponse as ModelFineTuneResponse
 from .ad_generate_copy_response import AdGenerateCopyResponse as AdGenerateCopyResponse
 from .ad_get_operation_response import AdGetOperationResponse as AdGetOperationResponse
 from .ad_generate_video_response import AdGenerateVideoResponse as AdGenerateVideoResponse

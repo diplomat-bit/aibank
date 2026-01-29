@@ -15,6 +15,7 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ...types.web3 import (
+    transaction_initiate_params,
     transaction_send_crypto_params,
     transaction_swap_tokens_params,
     transaction_bridge_chain_params,
@@ -82,6 +83,48 @@ class TransactionsResource(SyncAPIResource):
                     "source_chain": source_chain,
                 },
                 transaction_bridge_chain_params.TransactionBridgeChainParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=NoneType,
+        )
+
+    def initiate(
+        self,
+        *,
+        amount: float,
+        asset: str,
+        wallet_id: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> None:
+        """
+        Initiate a Web3 transaction
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+        return self._post(
+            "/web3/transactions/initiate",
+            body=maybe_transform(
+                {
+                    "amount": amount,
+                    "asset": asset,
+                    "wallet_id": wallet_id,
+                },
+                transaction_initiate_params.TransactionInitiateParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -237,6 +280,48 @@ class AsyncTransactionsResource(AsyncAPIResource):
             cast_to=NoneType,
         )
 
+    async def initiate(
+        self,
+        *,
+        amount: float,
+        asset: str,
+        wallet_id: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> None:
+        """
+        Initiate a Web3 transaction
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+        return await self._post(
+            "/web3/transactions/initiate",
+            body=await async_maybe_transform(
+                {
+                    "amount": amount,
+                    "asset": asset,
+                    "wallet_id": wallet_id,
+                },
+                transaction_initiate_params.TransactionInitiateParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=NoneType,
+        )
+
     async def send_crypto(
         self,
         *,
@@ -328,6 +413,9 @@ class TransactionsResourceWithRawResponse:
         self.bridge_chain = to_raw_response_wrapper(
             transactions.bridge_chain,
         )
+        self.initiate = to_raw_response_wrapper(
+            transactions.initiate,
+        )
         self.send_crypto = to_raw_response_wrapper(
             transactions.send_crypto,
         )
@@ -342,6 +430,9 @@ class AsyncTransactionsResourceWithRawResponse:
 
         self.bridge_chain = async_to_raw_response_wrapper(
             transactions.bridge_chain,
+        )
+        self.initiate = async_to_raw_response_wrapper(
+            transactions.initiate,
         )
         self.send_crypto = async_to_raw_response_wrapper(
             transactions.send_crypto,
@@ -358,6 +449,9 @@ class TransactionsResourceWithStreamingResponse:
         self.bridge_chain = to_streamed_response_wrapper(
             transactions.bridge_chain,
         )
+        self.initiate = to_streamed_response_wrapper(
+            transactions.initiate,
+        )
         self.send_crypto = to_streamed_response_wrapper(
             transactions.send_crypto,
         )
@@ -372,6 +466,9 @@ class AsyncTransactionsResourceWithStreamingResponse:
 
         self.bridge_chain = async_to_streamed_response_wrapper(
             transactions.bridge_chain,
+        )
+        self.initiate = async_to_streamed_response_wrapper(
+            transactions.initiate,
         )
         self.send_crypto = async_to_streamed_response_wrapper(
             transactions.send_crypto,

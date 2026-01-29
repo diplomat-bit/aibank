@@ -4,3 +4,4 @@ from __future__ import annotations
 
 from .rule_create_params import RuleCreateParams as RuleCreateParams
 from .rule_list_response import RuleListResponse as RuleListResponse
+from .rule_update_params import RuleUpdateParams as RuleUpdateParams

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import httpx
 
-from ....._types import Body, Query, Headers, NoneType, NotGiven, not_given
+from ....._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
 from ....._utils import maybe_transform, async_maybe_transform
 from ....._compat import cached_property
 from ....._resource import SyncAPIResource, AsyncAPIResource
@@ -15,7 +15,7 @@ from ....._response import (
     async_to_streamed_response_wrapper,
 )
 from ....._base_client import make_request_options
-from .....types.corporate.risk.fraud import rule_create_params
+from .....types.corporate.risk.fraud import rule_create_params, rule_update_params
 from .....types.corporate.risk.fraud.rule_list_response import RuleListResponse
 
 __all__ = ["RulesResource", "AsyncRulesResource"]
@@ -74,6 +74,49 @@ class RulesResource(SyncAPIResource):
                     "name": name,
                 },
                 rule_create_params.RuleCreateParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=NoneType,
+        )
+
+    def update(
+        self,
+        rule_id: str,
+        *,
+        action: str | Omit = omit,
+        name: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> None:
+        """
+        Update a fraud rule
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not rule_id:
+            raise ValueError(f"Expected a non-empty value for `rule_id` but received {rule_id!r}")
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+        return self._put(
+            f"/corporate/risk/fraud/rules/{rule_id}",
+            body=maybe_transform(
+                {
+                    "action": action,
+                    "name": name,
+                },
+                rule_update_params.RuleUpdateParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -161,6 +204,49 @@ class AsyncRulesResource(AsyncAPIResource):
             cast_to=NoneType,
         )
 
+    async def update(
+        self,
+        rule_id: str,
+        *,
+        action: str | Omit = omit,
+        name: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> None:
+        """
+        Update a fraud rule
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not rule_id:
+            raise ValueError(f"Expected a non-empty value for `rule_id` but received {rule_id!r}")
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+        return await self._put(
+            f"/corporate/risk/fraud/rules/{rule_id}",
+            body=await async_maybe_transform(
+                {
+                    "action": action,
+                    "name": name,
+                },
+                rule_update_params.RuleUpdateParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=NoneType,
+        )
+
     async def list(
         self,
         *,
@@ -188,6 +274,9 @@ class RulesResourceWithRawResponse:
         self.create = to_raw_response_wrapper(
             rules.create,
         )
+        self.update = to_raw_response_wrapper(
+            rules.update,
+        )
         self.list = to_raw_response_wrapper(
             rules.list,
         )
@@ -199,6 +288,9 @@ class AsyncRulesResourceWithRawResponse:
 
         self.create = async_to_raw_response_wrapper(
             rules.create,
+        )
+        self.update = async_to_raw_response_wrapper(
+            rules.update,
         )
         self.list = async_to_raw_response_wrapper(
             rules.list,
@@ -212,6 +304,9 @@ class RulesResourceWithStreamingResponse:
         self.create = to_streamed_response_wrapper(
             rules.create,
         )
+        self.update = to_streamed_response_wrapper(
+            rules.update,
+        )
         self.list = to_streamed_response_wrapper(
             rules.list,
         )
@@ -223,6 +318,9 @@ class AsyncRulesResourceWithStreamingResponse:
 
         self.create = async_to_streamed_response_wrapper(
             rules.create,
+        )
+        self.update = async_to_streamed_response_wrapper(
+            rules.update,
         )
         self.list = async_to_streamed_response_wrapper(
             rules.list,

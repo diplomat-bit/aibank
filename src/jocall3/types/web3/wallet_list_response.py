@@ -1,9 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 from typing import List, Optional
-from datetime import datetime
-
-from pydantic import Field as FieldInfo
 
 from ..._models import BaseModel
 
@@ -13,15 +10,11 @@ __all__ = ["WalletListResponse", "Data"]
 class Data(BaseModel):
     id: str
 
-    blockchain_network: str = FieldInfo(alias="blockchainNetwork")
+    address: str
 
-    status: str
+    network: str
 
-    wallet_address: str = FieldInfo(alias="walletAddress")
-
-    last_synced: Optional[datetime] = FieldInfo(alias="lastSynced", default=None)
-
-    wallet_provider: Optional[str] = FieldInfo(alias="walletProvider", default=None)
+    label: Optional[str] = None
 
 
 class WalletListResponse(BaseModel):

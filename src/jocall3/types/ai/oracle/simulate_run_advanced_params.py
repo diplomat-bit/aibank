@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-from typing import Iterable
+from typing import Dict, Iterable
 from typing_extensions import Required, Annotated, TypedDict
 
 from ...._utils import PropertyInfo
 
-__all__ = ["SimulateRunAdvancedParams", "Scenario", "ScenarioEvent"]
+__all__ = ["SimulateRunAdvancedParams", "Scenario"]
 
 
 class SimulateRunAdvancedParams(TypedDict, total=False):
@@ -20,15 +20,9 @@ class SimulateRunAdvancedParams(TypedDict, total=False):
     personal_assumptions: Annotated[object, PropertyInfo(alias="personalAssumptions")]
 
 
-class ScenarioEvent(TypedDict, total=False):
-    details: object
-
-    type: str
-
-
 class Scenario(TypedDict, total=False):
-    duration_years: Required[Annotated[int, PropertyInfo(alias="durationYears")]]
-
     name: Required[str]
 
-    events: Iterable[ScenarioEvent]
+    description: str
+
+    variables: Dict[str, object]

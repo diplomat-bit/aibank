@@ -16,6 +16,7 @@ from ..._response import (
 )
 from ..._base_client import make_request_options
 from ...types.payments import international_sepa_params, international_swift_params
+from ...types.payments.international_get_status_response import InternationalGetStatusResponse
 
 __all__ = ["InternationalResource", "AsyncInternationalResource"]
 
@@ -39,6 +40,39 @@ class InternationalResource(SyncAPIResource):
         For more information, see https://www.github.com/diplomat-bit/aibank#with_streaming_response
         """
         return InternationalResourceWithStreamingResponse(self)
+
+    def get_status(
+        self,
+        payment_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> InternationalGetStatusResponse:
+        """
+        Get international payment status
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not payment_id:
+            raise ValueError(f"Expected a non-empty value for `payment_id` but received {payment_id!r}")
+        return self._get(
+            f"/payments/international/{payment_id}/status",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=InternationalGetStatusResponse,
+        )
 
     def sepa(
         self,
@@ -145,6 +179,39 @@ class AsyncInternationalResource(AsyncAPIResource):
         """
         return AsyncInternationalResourceWithStreamingResponse(self)
 
+    async def get_status(
+        self,
+        payment_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> InternationalGetStatusResponse:
+        """
+        Get international payment status
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not payment_id:
+            raise ValueError(f"Expected a non-empty value for `payment_id` but received {payment_id!r}")
+        return await self._get(
+            f"/payments/international/{payment_id}/status",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=InternationalGetStatusResponse,
+        )
+
     async def sepa(
         self,
         *,
@@ -234,6 +301,9 @@ class InternationalResourceWithRawResponse:
     def __init__(self, international: InternationalResource) -> None:
         self._international = international
 
+        self.get_status = to_raw_response_wrapper(
+            international.get_status,
+        )
         self.sepa = to_raw_response_wrapper(
             international.sepa,
         )
@@ -246,6 +316,9 @@ class AsyncInternationalResourceWithRawResponse:
     def __init__(self, international: AsyncInternationalResource) -> None:
         self._international = international
 
+        self.get_status = async_to_raw_response_wrapper(
+            international.get_status,
+        )
         self.sepa = async_to_raw_response_wrapper(
             international.sepa,
         )
@@ -258,6 +331,9 @@ class InternationalResourceWithStreamingResponse:
     def __init__(self, international: InternationalResource) -> None:
         self._international = international
 
+        self.get_status = to_streamed_response_wrapper(
+            international.get_status,
+        )
         self.sepa = to_streamed_response_wrapper(
             international.sepa,
         )
@@ -270,6 +346,9 @@ class AsyncInternationalResourceWithStreamingResponse:
     def __init__(self, international: AsyncInternationalResource) -> None:
         self._international = international
 
+        self.get_status = async_to_streamed_response_wrapper(
+            international.get_status,
+        )
         self.sepa = async_to_streamed_response_wrapper(
             international.sepa,
         )

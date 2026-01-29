@@ -7,13 +7,7 @@ from pydantic import Field as FieldInfo
 
 from ..._models import BaseModel
 
-__all__ = ["TransactionListPendingResponse", "Data", "DataMerchantDetails"]
-
-
-class DataMerchantDetails(BaseModel):
-    logo_url: Optional[str] = FieldInfo(alias="logoUrl", default=None)
-
-    name: Optional[str] = None
+__all__ = ["TransactionListPendingResponse", "Data"]
 
 
 class Data(BaseModel):
@@ -27,18 +21,14 @@ class Data(BaseModel):
 
     description: str
 
-    account_id: Optional[str] = FieldInfo(alias="accountId", default=None)
-
-    carbon_footprint: Optional[float] = FieldInfo(alias="carbonFootprint", default=None)
-
     category: Optional[str] = None
 
-    merchant_details: Optional[DataMerchantDetails] = FieldInfo(alias="merchantDetails", default=None)
+    notes: Optional[str] = None
 
 
 class TransactionListPendingResponse(BaseModel):
-    data: Optional[List[Data]] = None
+    data: List[Data]
+
+    total: int
 
     next_offset: Optional[int] = FieldInfo(alias="nextOffset", default=None)
-
-    total: Optional[int] = None

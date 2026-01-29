@@ -8,6 +8,7 @@ from .wallet_create_params import WalletCreateParams as WalletCreateParams
 from .wallet_list_response import WalletListResponse as WalletListResponse
 from .wallet_connect_params import WalletConnectParams as WalletConnectParams
 from .wallet_create_response import WalletCreateResponse as WalletCreateResponse
+from .transaction_initiate_params import TransactionInitiateParams as TransactionInitiateParams
 from .wallet_get_balance_response import WalletGetBalanceResponse as WalletGetBalanceResponse
 from .smart_contract_deploy_params import SmartContractDeployParams as SmartContractDeployParams
 from .transaction_send_crypto_params import TransactionSendCryptoParams as TransactionSendCryptoParams

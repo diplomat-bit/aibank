@@ -24,12 +24,12 @@ class UserRegisterParams(TypedDict, total=False):
 
 
 class Address(TypedDict, total=False):
-    city: str
+    city: Required[str]
 
-    country: str
+    country: Required[str]
+
+    street: Required[str]
 
     state: str
-
-    street: str
 
     zip: str

@@ -11,12 +11,12 @@ __all__ = ["AuditRetrieveReportResponse"]
 
 
 class AuditRetrieveReportResponse(BaseModel):
-    audit_id: str = FieldInfo(alias="auditId")
+    generated_at: datetime = FieldInfo(alias="generatedAt")
 
-    overall_compliance_score: int = FieldInfo(alias="overallComplianceScore")
+    report_id: str = FieldInfo(alias="reportId")
 
-    status: str
+    findings: Optional[List[str]] = None
 
-    audit_date: Optional[datetime] = FieldInfo(alias="auditDate", default=None)
+    score: Optional[int] = None
 
-    findings: Optional[List[object]] = None
+    summary: Optional[str] = None

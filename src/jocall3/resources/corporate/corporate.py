@@ -11,6 +11,14 @@ from ...types import corporate_onboard_entity_params
 from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ..._utils import maybe_transform, async_maybe_transform
 from ..._compat import cached_property
+from .anomalies import (
+    AnomaliesResource,
+    AsyncAnomaliesResource,
+    AnomaliesResourceWithRawResponse,
+    AsyncAnomaliesResourceWithRawResponse,
+    AnomaliesResourceWithStreamingResponse,
+    AsyncAnomaliesResourceWithStreamingResponse,
+)
 from .risk.risk import (
     RiskResource,
     AsyncRiskResource,
@@ -84,6 +92,10 @@ class CorporateResource(SyncAPIResource):
     @cached_property
     def governance(self) -> GovernanceResource:
         return GovernanceResource(self._client)
+
+    @cached_property
+    def anomalies(self) -> AnomaliesResource:
+        return AnomaliesResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> CorporateResourceWithRawResponse:
@@ -174,6 +186,10 @@ class AsyncCorporateResource(AsyncAPIResource):
     @cached_property
     def governance(self) -> AsyncGovernanceResource:
         return AsyncGovernanceResource(self._client)
+
+    @cached_property
+    def anomalies(self) -> AsyncAnomaliesResource:
+        return AsyncAnomaliesResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AsyncCorporateResourceWithRawResponse:
@@ -272,6 +288,10 @@ class CorporateResourceWithRawResponse:
     def governance(self) -> GovernanceResourceWithRawResponse:
         return GovernanceResourceWithRawResponse(self._corporate.governance)
 
+    @cached_property
+    def anomalies(self) -> AnomaliesResourceWithRawResponse:
+        return AnomaliesResourceWithRawResponse(self._corporate.anomalies)
+
 
 class AsyncCorporateResourceWithRawResponse:
     def __init__(self, corporate: AsyncCorporateResource) -> None:
@@ -300,6 +320,10 @@ class AsyncCorporateResourceWithRawResponse:
     @cached_property
     def governance(self) -> AsyncGovernanceResourceWithRawResponse:
         return AsyncGovernanceResourceWithRawResponse(self._corporate.governance)
+
+    @cached_property
+    def anomalies(self) -> AsyncAnomaliesResourceWithRawResponse:
+        return AsyncAnomaliesResourceWithRawResponse(self._corporate.anomalies)
 
 
 class CorporateResourceWithStreamingResponse:
@@ -330,6 +354,10 @@ class CorporateResourceWithStreamingResponse:
     def governance(self) -> GovernanceResourceWithStreamingResponse:
         return GovernanceResourceWithStreamingResponse(self._corporate.governance)
 
+    @cached_property
+    def anomalies(self) -> AnomaliesResourceWithStreamingResponse:
+        return AnomaliesResourceWithStreamingResponse(self._corporate.anomalies)
+
 
 class AsyncCorporateResourceWithStreamingResponse:
     def __init__(self, corporate: AsyncCorporateResource) -> None:
@@ -358,3 +386,7 @@ class AsyncCorporateResourceWithStreamingResponse:
     @cached_property
     def governance(self) -> AsyncGovernanceResourceWithStreamingResponse:
         return AsyncGovernanceResourceWithStreamingResponse(self._corporate.governance)
+
+    @cached_property
+    def anomalies(self) -> AsyncAnomaliesResourceWithStreamingResponse:
+        return AsyncAnomaliesResourceWithStreamingResponse(self._corporate.anomalies)
