@@ -4,6 +4,22 @@ from __future__ import annotations
 
 import httpx
 
+from .impact import (
+    ImpactResource,
+    AsyncImpactResource,
+    ImpactResourceWithRawResponse,
+    AsyncImpactResourceWithRawResponse,
+    ImpactResourceWithStreamingResponse,
+    AsyncImpactResourceWithStreamingResponse,
+)
+from .offsets import (
+    OffsetsResource,
+    AsyncOffsetsResource,
+    OffsetsResourceWithRawResponse,
+    AsyncOffsetsResourceWithRawResponse,
+    OffsetsResourceWithStreamingResponse,
+    AsyncOffsetsResourceWithStreamingResponse,
+)
 from ..._types import Body, Query, Headers, NotGiven, not_given
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
@@ -14,11 +30,20 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ..._base_client import make_request_options
+from ...types.sustainability_retrieve_carbon_footprint_response import SustainabilityRetrieveCarbonFootprintResponse
 
 __all__ = ["SustainabilityResource", "AsyncSustainabilityResource"]
 
 
 class SustainabilityResource(SyncAPIResource):
+    @cached_property
+    def offsets(self) -> OffsetsResource:
+        return OffsetsResource(self._client)
+
+    @cached_property
+    def impact(self) -> ImpactResource:
+        return ImpactResource(self._client)
+
     @cached_property
     def with_raw_response(self) -> SustainabilityResourceWithRawResponse:
         """
@@ -38,7 +63,7 @@ class SustainabilityResource(SyncAPIResource):
         """
         return SustainabilityResourceWithStreamingResponse(self)
 
-    def get_footprint(
+    def retrieve_carbon_footprint(
         self,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -47,22 +72,26 @@ class SustainabilityResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
-        """
-        Generates a detailed report of the user's estimated carbon footprint based on
-        transaction data, lifestyle choices, and AI-driven impact assessments, offering
-        insights and reduction strategies.
-        """
+    ) -> SustainabilityRetrieveCarbonFootprintResponse:
+        """Analysis of ledger data through Gemini to estimate CO2e output."""
         return self._get(
             "/sustainability/carbon-footprint",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            cast_to=SustainabilityRetrieveCarbonFootprintResponse,
         )
 
 
 class AsyncSustainabilityResource(AsyncAPIResource):
+    @cached_property
+    def offsets(self) -> AsyncOffsetsResource:
+        return AsyncOffsetsResource(self._client)
+
+    @cached_property
+    def impact(self) -> AsyncImpactResource:
+        return AsyncImpactResource(self._client)
+
     @cached_property
     def with_raw_response(self) -> AsyncSustainabilityResourceWithRawResponse:
         """
@@ -82,7 +111,7 @@ class AsyncSustainabilityResource(AsyncAPIResource):
         """
         return AsyncSustainabilityResourceWithStreamingResponse(self)
 
-    async def get_footprint(
+    async def retrieve_carbon_footprint(
         self,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -91,18 +120,14 @@ class AsyncSustainabilityResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
-        """
-        Generates a detailed report of the user's estimated carbon footprint based on
-        transaction data, lifestyle choices, and AI-driven impact assessments, offering
-        insights and reduction strategies.
-        """
+    ) -> SustainabilityRetrieveCarbonFootprintResponse:
+        """Analysis of ledger data through Gemini to estimate CO2e output."""
         return await self._get(
             "/sustainability/carbon-footprint",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            cast_to=SustainabilityRetrieveCarbonFootprintResponse,
         )
 
 
@@ -110,33 +135,65 @@ class SustainabilityResourceWithRawResponse:
     def __init__(self, sustainability: SustainabilityResource) -> None:
         self._sustainability = sustainability
 
-        self.get_footprint = to_raw_response_wrapper(
-            sustainability.get_footprint,
+        self.retrieve_carbon_footprint = to_raw_response_wrapper(
+            sustainability.retrieve_carbon_footprint,
         )
+
+    @cached_property
+    def offsets(self) -> OffsetsResourceWithRawResponse:
+        return OffsetsResourceWithRawResponse(self._sustainability.offsets)
+
+    @cached_property
+    def impact(self) -> ImpactResourceWithRawResponse:
+        return ImpactResourceWithRawResponse(self._sustainability.impact)
 
 
 class AsyncSustainabilityResourceWithRawResponse:
     def __init__(self, sustainability: AsyncSustainabilityResource) -> None:
         self._sustainability = sustainability
 
-        self.get_footprint = async_to_raw_response_wrapper(
-            sustainability.get_footprint,
+        self.retrieve_carbon_footprint = async_to_raw_response_wrapper(
+            sustainability.retrieve_carbon_footprint,
         )
+
+    @cached_property
+    def offsets(self) -> AsyncOffsetsResourceWithRawResponse:
+        return AsyncOffsetsResourceWithRawResponse(self._sustainability.offsets)
+
+    @cached_property
+    def impact(self) -> AsyncImpactResourceWithRawResponse:
+        return AsyncImpactResourceWithRawResponse(self._sustainability.impact)
 
 
 class SustainabilityResourceWithStreamingResponse:
     def __init__(self, sustainability: SustainabilityResource) -> None:
         self._sustainability = sustainability
 
-        self.get_footprint = to_streamed_response_wrapper(
-            sustainability.get_footprint,
+        self.retrieve_carbon_footprint = to_streamed_response_wrapper(
+            sustainability.retrieve_carbon_footprint,
         )
+
+    @cached_property
+    def offsets(self) -> OffsetsResourceWithStreamingResponse:
+        return OffsetsResourceWithStreamingResponse(self._sustainability.offsets)
+
+    @cached_property
+    def impact(self) -> ImpactResourceWithStreamingResponse:
+        return ImpactResourceWithStreamingResponse(self._sustainability.impact)
 
 
 class AsyncSustainabilityResourceWithStreamingResponse:
     def __init__(self, sustainability: AsyncSustainabilityResource) -> None:
         self._sustainability = sustainability
 
-        self.get_footprint = async_to_streamed_response_wrapper(
-            sustainability.get_footprint,
+        self.retrieve_carbon_footprint = async_to_streamed_response_wrapper(
+            sustainability.retrieve_carbon_footprint,
         )
+
+    @cached_property
+    def offsets(self) -> AsyncOffsetsResourceWithStreamingResponse:
+        return AsyncOffsetsResourceWithStreamingResponse(self._sustainability.offsets)
+
+    @cached_property
+    def impact(self) -> AsyncImpactResourceWithStreamingResponse:
+        return AsyncImpactResourceWithStreamingResponse(self._sustainability.impact)

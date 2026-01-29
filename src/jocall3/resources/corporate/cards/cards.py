@@ -12,7 +12,7 @@ from .controls import (
     ControlsResourceWithStreamingResponse,
     AsyncControlsResourceWithStreamingResponse,
 )
-from ...._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from ...._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
 from ...._utils import maybe_transform, async_maybe_transform
 from ...._compat import cached_property
 from ...._resource import SyncAPIResource, AsyncAPIResource
@@ -23,9 +23,17 @@ from ...._response import (
     async_to_streamed_response_wrapper,
 )
 from ...._base_client import make_request_options
-from ....types.corporate import card_list_params, card_issue_virtual_params, card_list_transactions_params
-from ....types.corporate.card_freeze_response import CardFreezeResponse
+from ....types.corporate import (
+    card_list_params,
+    card_freeze_params,
+    card_issue_virtual_params,
+    card_issue_physical_params,
+)
+from ....types.shared_params.address import Address
+from ....types.corporate.card_list_response import CardListResponse
 from ....types.corporate.card_issue_virtual_response import CardIssueVirtualResponse
+from ....types.corporate.card_issue_physical_response import CardIssuePhysicalResponse
+from ....types.corporate.card_list_transactions_response import CardListTransactionsResponse
 
 __all__ = ["CardsResource", "AsyncCardsResource"]
 
@@ -65,17 +73,11 @@ class CardsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> CardListResponse:
         """
-        Retrieves a comprehensive list of all physical and virtual corporate cards
-        associated with the user's organization, including their status, assigned
-        holder, and current spending controls.
+        List all corporate cards
 
         Args:
-          limit: Maximum number of items to return in a single page.
-
-          offset: Number of items to skip before starting to collect the result set.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -99,24 +101,23 @@ class CardsResource(SyncAPIResource):
                     card_list_params.CardListParams,
                 ),
             ),
-            cast_to=object,
+            cast_to=CardListResponse,
         )
 
     def freeze(
         self,
         card_id: str,
         *,
+        frozen: bool,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> CardFreezeResponse:
+    ) -> None:
         """
-        Immediately changes the frozen status of a corporate card, preventing or
-        allowing transactions in real-time, critical for security and expense
-        management.
+        Toggle Card Lock
 
         Args:
           extra_headers: Send extra headers
@@ -129,18 +130,62 @@ class CardsResource(SyncAPIResource):
         """
         if not card_id:
             raise ValueError(f"Expected a non-empty value for `card_id` but received {card_id!r}")
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._post(
             f"/corporate/cards/{card_id}/freeze",
+            body=maybe_transform({"frozen": frozen}, card_freeze_params.CardFreezeParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=CardFreezeResponse,
+            cast_to=NoneType,
+        )
+
+    def issue_physical(
+        self,
+        *,
+        holder_name: str,
+        shipping_address: Address,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> CardIssuePhysicalResponse:
+        """
+        Request Physical Corporate Card
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._post(
+            "/corporate/cards/physical",
+            body=maybe_transform(
+                {
+                    "holder_name": holder_name,
+                    "shipping_address": shipping_address,
+                },
+                card_issue_physical_params.CardIssuePhysicalParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=CardIssuePhysicalResponse,
         )
 
     def issue_virtual(
         self,
         *,
-        controls: object,
+        holder_name: str,
+        monthly_limit: float,
+        purpose: str,
+        metadata: object | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -149,13 +194,9 @@ class CardsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> CardIssueVirtualResponse:
         """
-        Creates and issues a new virtual corporate card with specified spending limits,
-        merchant restrictions, and expiration dates, ideal for secure online purchases
-        and temporary projects.
+        Issue Corporate Virtual Card
 
         Args:
-          controls: Granular spending controls for a corporate card.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -166,7 +207,15 @@ class CardsResource(SyncAPIResource):
         """
         return self._post(
             "/corporate/cards/virtual",
-            body=maybe_transform({"controls": controls}, card_issue_virtual_params.CardIssueVirtualParams),
+            body=maybe_transform(
+                {
+                    "holder_name": holder_name,
+                    "monthly_limit": monthly_limit,
+                    "purpose": purpose,
+                    "metadata": metadata,
+                },
+                card_issue_virtual_params.CardIssueVirtualParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -177,30 +226,17 @@ class CardsResource(SyncAPIResource):
         self,
         card_id: str,
         *,
-        end_date: str | Omit = omit,
-        limit: int | Omit = omit,
-        offset: int | Omit = omit,
-        start_date: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> CardListTransactionsResponse:
         """
-        Retrieves a paginated list of transactions made with a specific corporate card,
-        including AI categorization and compliance flags.
+        Get card transactions
 
         Args:
-          end_date: End date for filtering results (inclusive, YYYY-MM-DD).
-
-          limit: Maximum number of items to return in a single page.
-
-          offset: Number of items to skip before starting to collect the result set.
-
-          start_date: Start date for filtering results (inclusive, YYYY-MM-DD).
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -214,21 +250,9 @@ class CardsResource(SyncAPIResource):
         return self._get(
             f"/corporate/cards/{card_id}/transactions",
             options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                query=maybe_transform(
-                    {
-                        "end_date": end_date,
-                        "limit": limit,
-                        "offset": offset,
-                        "start_date": start_date,
-                    },
-                    card_list_transactions_params.CardListTransactionsParams,
-                ),
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            cast_to=CardListTransactionsResponse,
         )
 
 
@@ -267,17 +291,11 @@ class AsyncCardsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> CardListResponse:
         """
-        Retrieves a comprehensive list of all physical and virtual corporate cards
-        associated with the user's organization, including their status, assigned
-        holder, and current spending controls.
+        List all corporate cards
 
         Args:
-          limit: Maximum number of items to return in a single page.
-
-          offset: Number of items to skip before starting to collect the result set.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -301,24 +319,23 @@ class AsyncCardsResource(AsyncAPIResource):
                     card_list_params.CardListParams,
                 ),
             ),
-            cast_to=object,
+            cast_to=CardListResponse,
         )
 
     async def freeze(
         self,
         card_id: str,
         *,
+        frozen: bool,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> CardFreezeResponse:
+    ) -> None:
         """
-        Immediately changes the frozen status of a corporate card, preventing or
-        allowing transactions in real-time, critical for security and expense
-        management.
+        Toggle Card Lock
 
         Args:
           extra_headers: Send extra headers
@@ -331,18 +348,62 @@ class AsyncCardsResource(AsyncAPIResource):
         """
         if not card_id:
             raise ValueError(f"Expected a non-empty value for `card_id` but received {card_id!r}")
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._post(
             f"/corporate/cards/{card_id}/freeze",
+            body=await async_maybe_transform({"frozen": frozen}, card_freeze_params.CardFreezeParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=CardFreezeResponse,
+            cast_to=NoneType,
+        )
+
+    async def issue_physical(
+        self,
+        *,
+        holder_name: str,
+        shipping_address: Address,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> CardIssuePhysicalResponse:
+        """
+        Request Physical Corporate Card
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return await self._post(
+            "/corporate/cards/physical",
+            body=await async_maybe_transform(
+                {
+                    "holder_name": holder_name,
+                    "shipping_address": shipping_address,
+                },
+                card_issue_physical_params.CardIssuePhysicalParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=CardIssuePhysicalResponse,
         )
 
     async def issue_virtual(
         self,
         *,
-        controls: object,
+        holder_name: str,
+        monthly_limit: float,
+        purpose: str,
+        metadata: object | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -351,13 +412,9 @@ class AsyncCardsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> CardIssueVirtualResponse:
         """
-        Creates and issues a new virtual corporate card with specified spending limits,
-        merchant restrictions, and expiration dates, ideal for secure online purchases
-        and temporary projects.
+        Issue Corporate Virtual Card
 
         Args:
-          controls: Granular spending controls for a corporate card.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -368,7 +425,15 @@ class AsyncCardsResource(AsyncAPIResource):
         """
         return await self._post(
             "/corporate/cards/virtual",
-            body=await async_maybe_transform({"controls": controls}, card_issue_virtual_params.CardIssueVirtualParams),
+            body=await async_maybe_transform(
+                {
+                    "holder_name": holder_name,
+                    "monthly_limit": monthly_limit,
+                    "purpose": purpose,
+                    "metadata": metadata,
+                },
+                card_issue_virtual_params.CardIssueVirtualParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -379,30 +444,17 @@ class AsyncCardsResource(AsyncAPIResource):
         self,
         card_id: str,
         *,
-        end_date: str | Omit = omit,
-        limit: int | Omit = omit,
-        offset: int | Omit = omit,
-        start_date: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> CardListTransactionsResponse:
         """
-        Retrieves a paginated list of transactions made with a specific corporate card,
-        including AI categorization and compliance flags.
+        Get card transactions
 
         Args:
-          end_date: End date for filtering results (inclusive, YYYY-MM-DD).
-
-          limit: Maximum number of items to return in a single page.
-
-          offset: Number of items to skip before starting to collect the result set.
-
-          start_date: Start date for filtering results (inclusive, YYYY-MM-DD).
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -416,21 +468,9 @@ class AsyncCardsResource(AsyncAPIResource):
         return await self._get(
             f"/corporate/cards/{card_id}/transactions",
             options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                query=await async_maybe_transform(
-                    {
-                        "end_date": end_date,
-                        "limit": limit,
-                        "offset": offset,
-                        "start_date": start_date,
-                    },
-                    card_list_transactions_params.CardListTransactionsParams,
-                ),
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            cast_to=CardListTransactionsResponse,
         )
 
 
@@ -443,6 +483,9 @@ class CardsResourceWithRawResponse:
         )
         self.freeze = to_raw_response_wrapper(
             cards.freeze,
+        )
+        self.issue_physical = to_raw_response_wrapper(
+            cards.issue_physical,
         )
         self.issue_virtual = to_raw_response_wrapper(
             cards.issue_virtual,
@@ -466,6 +509,9 @@ class AsyncCardsResourceWithRawResponse:
         self.freeze = async_to_raw_response_wrapper(
             cards.freeze,
         )
+        self.issue_physical = async_to_raw_response_wrapper(
+            cards.issue_physical,
+        )
         self.issue_virtual = async_to_raw_response_wrapper(
             cards.issue_virtual,
         )
@@ -488,6 +534,9 @@ class CardsResourceWithStreamingResponse:
         self.freeze = to_streamed_response_wrapper(
             cards.freeze,
         )
+        self.issue_physical = to_streamed_response_wrapper(
+            cards.issue_physical,
+        )
         self.issue_virtual = to_streamed_response_wrapper(
             cards.issue_virtual,
         )
@@ -509,6 +558,9 @@ class AsyncCardsResourceWithStreamingResponse:
         )
         self.freeze = async_to_streamed_response_wrapper(
             cards.freeze,
+        )
+        self.issue_physical = async_to_streamed_response_wrapper(
+            cards.issue_physical,
         )
         self.issue_virtual = async_to_streamed_response_wrapper(
             cards.issue_virtual,

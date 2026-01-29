@@ -9,7 +9,8 @@ import pytest
 
 from jocall3 import Jocall3, AsyncJocall3
 from tests.utils import assert_matches_type
-from jocall3.types.corporate.compliance import AuditRetrieveReportResponse
+from jocall3._utils import parse_date
+from jocall3.types.corporate.compliance import AuditRequestResponse, AuditRetrieveReportResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -19,40 +20,52 @@ class TestAudits:
 
     @parametrize
     def test_method_request(self, client: Jocall3) -> None:
-        audit = client.corporate.compliance.audits.request()
-        assert_matches_type(object, audit, path=["response"])
+        audit = client.corporate.compliance.audits.request(
+            audit_scope="auditScope",
+            end_date=parse_date("2019-12-27"),
+            start_date=parse_date("2019-12-27"),
+        )
+        assert_matches_type(AuditRequestResponse, audit, path=["response"])
 
     @parametrize
     def test_raw_response_request(self, client: Jocall3) -> None:
-        response = client.corporate.compliance.audits.with_raw_response.request()
+        response = client.corporate.compliance.audits.with_raw_response.request(
+            audit_scope="auditScope",
+            end_date=parse_date("2019-12-27"),
+            start_date=parse_date("2019-12-27"),
+        )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         audit = response.parse()
-        assert_matches_type(object, audit, path=["response"])
+        assert_matches_type(AuditRequestResponse, audit, path=["response"])
 
     @parametrize
     def test_streaming_response_request(self, client: Jocall3) -> None:
-        with client.corporate.compliance.audits.with_streaming_response.request() as response:
+        with client.corporate.compliance.audits.with_streaming_response.request(
+            audit_scope="auditScope",
+            end_date=parse_date("2019-12-27"),
+            start_date=parse_date("2019-12-27"),
+        ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             audit = response.parse()
-            assert_matches_type(object, audit, path=["response"])
+            assert_matches_type(AuditRequestResponse, audit, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
     @parametrize
     def test_method_retrieve_report(self, client: Jocall3) -> None:
         audit = client.corporate.compliance.audits.retrieve_report(
-            "audit_corp_xyz789",
+            "auditId",
         )
         assert_matches_type(AuditRetrieveReportResponse, audit, path=["response"])
 
     @parametrize
     def test_raw_response_retrieve_report(self, client: Jocall3) -> None:
         response = client.corporate.compliance.audits.with_raw_response.retrieve_report(
-            "audit_corp_xyz789",
+            "auditId",
         )
 
         assert response.is_closed is True
@@ -63,7 +76,7 @@ class TestAudits:
     @parametrize
     def test_streaming_response_retrieve_report(self, client: Jocall3) -> None:
         with client.corporate.compliance.audits.with_streaming_response.retrieve_report(
-            "audit_corp_xyz789",
+            "auditId",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -88,40 +101,52 @@ class TestAsyncAudits:
 
     @parametrize
     async def test_method_request(self, async_client: AsyncJocall3) -> None:
-        audit = await async_client.corporate.compliance.audits.request()
-        assert_matches_type(object, audit, path=["response"])
+        audit = await async_client.corporate.compliance.audits.request(
+            audit_scope="auditScope",
+            end_date=parse_date("2019-12-27"),
+            start_date=parse_date("2019-12-27"),
+        )
+        assert_matches_type(AuditRequestResponse, audit, path=["response"])
 
     @parametrize
     async def test_raw_response_request(self, async_client: AsyncJocall3) -> None:
-        response = await async_client.corporate.compliance.audits.with_raw_response.request()
+        response = await async_client.corporate.compliance.audits.with_raw_response.request(
+            audit_scope="auditScope",
+            end_date=parse_date("2019-12-27"),
+            start_date=parse_date("2019-12-27"),
+        )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         audit = await response.parse()
-        assert_matches_type(object, audit, path=["response"])
+        assert_matches_type(AuditRequestResponse, audit, path=["response"])
 
     @parametrize
     async def test_streaming_response_request(self, async_client: AsyncJocall3) -> None:
-        async with async_client.corporate.compliance.audits.with_streaming_response.request() as response:
+        async with async_client.corporate.compliance.audits.with_streaming_response.request(
+            audit_scope="auditScope",
+            end_date=parse_date("2019-12-27"),
+            start_date=parse_date("2019-12-27"),
+        ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             audit = await response.parse()
-            assert_matches_type(object, audit, path=["response"])
+            assert_matches_type(AuditRequestResponse, audit, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
     @parametrize
     async def test_method_retrieve_report(self, async_client: AsyncJocall3) -> None:
         audit = await async_client.corporate.compliance.audits.retrieve_report(
-            "audit_corp_xyz789",
+            "auditId",
         )
         assert_matches_type(AuditRetrieveReportResponse, audit, path=["response"])
 
     @parametrize
     async def test_raw_response_retrieve_report(self, async_client: AsyncJocall3) -> None:
         response = await async_client.corporate.compliance.audits.with_raw_response.retrieve_report(
-            "audit_corp_xyz789",
+            "auditId",
         )
 
         assert response.is_closed is True
@@ -132,7 +157,7 @@ class TestAsyncAudits:
     @parametrize
     async def test_streaming_response_retrieve_report(self, async_client: AsyncJocall3) -> None:
         async with async_client.corporate.compliance.audits.with_streaming_response.retrieve_report(
-            "audit_corp_xyz789",
+            "auditId",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"

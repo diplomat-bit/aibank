@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import httpx
+
 from .rules import (
     RulesResource,
     AsyncRulesResource,
@@ -10,8 +12,19 @@ from .rules import (
     RulesResourceWithStreamingResponse,
     AsyncRulesResourceWithStreamingResponse,
 )
+from ....._types import Body, Query, Headers, NotGiven, not_given
+from ....._utils import maybe_transform, async_maybe_transform
 from ....._compat import cached_property
 from ....._resource import SyncAPIResource, AsyncAPIResource
+from ....._response import (
+    to_raw_response_wrapper,
+    to_streamed_response_wrapper,
+    async_to_raw_response_wrapper,
+    async_to_streamed_response_wrapper,
+)
+from ....._base_client import make_request_options
+from .....types.corporate.risk import fraud_analyze_params
+from .....types.corporate.risk.fraud_analyze_response import FraudAnalyzeResponse
 
 __all__ = ["FraudResource", "AsyncFraudResource"]
 
@@ -40,6 +53,38 @@ class FraudResource(SyncAPIResource):
         """
         return FraudResourceWithStreamingResponse(self)
 
+    def analyze(
+        self,
+        *,
+        transaction_id: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> FraudAnalyzeResponse:
+        """
+        Real-time Transaction Fraud Analysis
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._post(
+            "/corporate/risk/fraud/analyze",
+            body=maybe_transform({"transaction_id": transaction_id}, fraud_analyze_params.FraudAnalyzeParams),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=FraudAnalyzeResponse,
+        )
+
 
 class AsyncFraudResource(AsyncAPIResource):
     @cached_property
@@ -65,10 +110,48 @@ class AsyncFraudResource(AsyncAPIResource):
         """
         return AsyncFraudResourceWithStreamingResponse(self)
 
+    async def analyze(
+        self,
+        *,
+        transaction_id: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> FraudAnalyzeResponse:
+        """
+        Real-time Transaction Fraud Analysis
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return await self._post(
+            "/corporate/risk/fraud/analyze",
+            body=await async_maybe_transform(
+                {"transaction_id": transaction_id}, fraud_analyze_params.FraudAnalyzeParams
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=FraudAnalyzeResponse,
+        )
+
 
 class FraudResourceWithRawResponse:
     def __init__(self, fraud: FraudResource) -> None:
         self._fraud = fraud
+
+        self.analyze = to_raw_response_wrapper(
+            fraud.analyze,
+        )
 
     @cached_property
     def rules(self) -> RulesResourceWithRawResponse:
@@ -79,6 +162,10 @@ class AsyncFraudResourceWithRawResponse:
     def __init__(self, fraud: AsyncFraudResource) -> None:
         self._fraud = fraud
 
+        self.analyze = async_to_raw_response_wrapper(
+            fraud.analyze,
+        )
+
     @cached_property
     def rules(self) -> AsyncRulesResourceWithRawResponse:
         return AsyncRulesResourceWithRawResponse(self._fraud.rules)
@@ -88,6 +175,10 @@ class FraudResourceWithStreamingResponse:
     def __init__(self, fraud: FraudResource) -> None:
         self._fraud = fraud
 
+        self.analyze = to_streamed_response_wrapper(
+            fraud.analyze,
+        )
+
     @cached_property
     def rules(self) -> RulesResourceWithStreamingResponse:
         return RulesResourceWithStreamingResponse(self._fraud.rules)
@@ -96,6 +187,10 @@ class FraudResourceWithStreamingResponse:
 class AsyncFraudResourceWithStreamingResponse:
     def __init__(self, fraud: AsyncFraudResource) -> None:
         self._fraud = fraud
+
+        self.analyze = async_to_streamed_response_wrapper(
+            fraud.analyze,
+        )
 
     @cached_property
     def rules(self) -> AsyncRulesResourceWithStreamingResponse:
