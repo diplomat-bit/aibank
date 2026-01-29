@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import httpx
 
-from ..._types import Body, Query, Headers, NotGiven, not_given
+from ..._types import Body, Query, Headers, NoneType, NotGiven, not_given
+from ..._utils import maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -14,6 +15,8 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ..._base_client import make_request_options
+from ...types.payments import international_send_sepa_params, international_send_swift_params
+from ...types.payments.international_retrieve_status_response import InternationalRetrieveStatusResponse
 
 __all__ = ["InternationalResource", "AsyncInternationalResource"]
 
@@ -38,7 +41,7 @@ class InternationalResource(SyncAPIResource):
         """
         return InternationalResourceWithStreamingResponse(self)
 
-    def get_status(
+    def retrieve_status(
         self,
         payment_id: str,
         *,
@@ -48,10 +51,9 @@ class InternationalResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> InternationalRetrieveStatusResponse:
         """
-        Retrieves the current processing status and details of an initiated
-        international payment.
+        Get international payment status
 
         Args:
           extra_headers: Send extra headers
@@ -69,7 +71,91 @@ class InternationalResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            cast_to=InternationalRetrieveStatusResponse,
+        )
+
+    def send_sepa(
+        self,
+        *,
+        amount: float,
+        iban: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> None:
+        """
+        EU SEPA Credit Transfer
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+        return self._post(
+            "/payments/international/sepa",
+            body=maybe_transform(
+                {
+                    "amount": amount,
+                    "iban": iban,
+                },
+                international_send_sepa_params.InternationalSendSepaParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=NoneType,
+        )
+
+    def send_swift(
+        self,
+        *,
+        amount: float,
+        bic: str,
+        currency: str,
+        iban: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> None:
+        """
+        Global SWIFT Transaction
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+        return self._post(
+            "/payments/international/swift",
+            body=maybe_transform(
+                {
+                    "amount": amount,
+                    "bic": bic,
+                    "currency": currency,
+                    "iban": iban,
+                },
+                international_send_swift_params.InternationalSendSwiftParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=NoneType,
         )
 
 
@@ -93,7 +179,7 @@ class AsyncInternationalResource(AsyncAPIResource):
         """
         return AsyncInternationalResourceWithStreamingResponse(self)
 
-    async def get_status(
+    async def retrieve_status(
         self,
         payment_id: str,
         *,
@@ -103,10 +189,9 @@ class AsyncInternationalResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> InternationalRetrieveStatusResponse:
         """
-        Retrieves the current processing status and details of an initiated
-        international payment.
+        Get international payment status
 
         Args:
           extra_headers: Send extra headers
@@ -124,7 +209,91 @@ class AsyncInternationalResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            cast_to=InternationalRetrieveStatusResponse,
+        )
+
+    async def send_sepa(
+        self,
+        *,
+        amount: float,
+        iban: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> None:
+        """
+        EU SEPA Credit Transfer
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+        return await self._post(
+            "/payments/international/sepa",
+            body=await async_maybe_transform(
+                {
+                    "amount": amount,
+                    "iban": iban,
+                },
+                international_send_sepa_params.InternationalSendSepaParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=NoneType,
+        )
+
+    async def send_swift(
+        self,
+        *,
+        amount: float,
+        bic: str,
+        currency: str,
+        iban: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> None:
+        """
+        Global SWIFT Transaction
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+        return await self._post(
+            "/payments/international/swift",
+            body=await async_maybe_transform(
+                {
+                    "amount": amount,
+                    "bic": bic,
+                    "currency": currency,
+                    "iban": iban,
+                },
+                international_send_swift_params.InternationalSendSwiftParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=NoneType,
         )
 
 
@@ -132,8 +301,14 @@ class InternationalResourceWithRawResponse:
     def __init__(self, international: InternationalResource) -> None:
         self._international = international
 
-        self.get_status = to_raw_response_wrapper(
-            international.get_status,
+        self.retrieve_status = to_raw_response_wrapper(
+            international.retrieve_status,
+        )
+        self.send_sepa = to_raw_response_wrapper(
+            international.send_sepa,
+        )
+        self.send_swift = to_raw_response_wrapper(
+            international.send_swift,
         )
 
 
@@ -141,8 +316,14 @@ class AsyncInternationalResourceWithRawResponse:
     def __init__(self, international: AsyncInternationalResource) -> None:
         self._international = international
 
-        self.get_status = async_to_raw_response_wrapper(
-            international.get_status,
+        self.retrieve_status = async_to_raw_response_wrapper(
+            international.retrieve_status,
+        )
+        self.send_sepa = async_to_raw_response_wrapper(
+            international.send_sepa,
+        )
+        self.send_swift = async_to_raw_response_wrapper(
+            international.send_swift,
         )
 
 
@@ -150,8 +331,14 @@ class InternationalResourceWithStreamingResponse:
     def __init__(self, international: InternationalResource) -> None:
         self._international = international
 
-        self.get_status = to_streamed_response_wrapper(
-            international.get_status,
+        self.retrieve_status = to_streamed_response_wrapper(
+            international.retrieve_status,
+        )
+        self.send_sepa = to_streamed_response_wrapper(
+            international.send_sepa,
+        )
+        self.send_swift = to_streamed_response_wrapper(
+            international.send_swift,
         )
 
 
@@ -159,6 +346,12 @@ class AsyncInternationalResourceWithStreamingResponse:
     def __init__(self, international: AsyncInternationalResource) -> None:
         self._international = international
 
-        self.get_status = async_to_streamed_response_wrapper(
-            international.get_status,
+        self.retrieve_status = async_to_streamed_response_wrapper(
+            international.retrieve_status,
+        )
+        self.send_sepa = async_to_streamed_response_wrapper(
+            international.send_sepa,
+        )
+        self.send_swift = async_to_streamed_response_wrapper(
+            international.send_swift,
         )

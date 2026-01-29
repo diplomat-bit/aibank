@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import httpx
+
 from .nfts import (
     NFTsResource,
     AsyncNFTsResource,
@@ -18,8 +20,23 @@ from .wallets import (
     WalletsResourceWithStreamingResponse,
     AsyncWalletsResourceWithStreamingResponse,
 )
+from ..._types import Body, Query, Headers, NotGiven, not_given
 from ..._compat import cached_property
+from .contracts import (
+    ContractsResource,
+    AsyncContractsResource,
+    ContractsResourceWithRawResponse,
+    AsyncContractsResourceWithRawResponse,
+    ContractsResourceWithStreamingResponse,
+    AsyncContractsResourceWithStreamingResponse,
+)
 from ..._resource import SyncAPIResource, AsyncAPIResource
+from ..._response import (
+    to_raw_response_wrapper,
+    to_streamed_response_wrapper,
+    async_to_raw_response_wrapper,
+    async_to_streamed_response_wrapper,
+)
 from .transactions import (
     TransactionsResource,
     AsyncTransactionsResource,
@@ -28,6 +45,8 @@ from .transactions import (
     TransactionsResourceWithStreamingResponse,
     AsyncTransactionsResourceWithStreamingResponse,
 )
+from ..._base_client import make_request_options
+from ...types.web3_retrieve_network_status_response import Web3RetrieveNetworkStatusResponse
 
 __all__ = ["Web3Resource", "AsyncWeb3Resource"]
 
@@ -44,6 +63,10 @@ class Web3Resource(SyncAPIResource):
     @cached_property
     def nfts(self) -> NFTsResource:
         return NFTsResource(self._client)
+
+    @cached_property
+    def contracts(self) -> ContractsResource:
+        return ContractsResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> Web3ResourceWithRawResponse:
@@ -64,6 +87,25 @@ class Web3Resource(SyncAPIResource):
         """
         return Web3ResourceWithStreamingResponse(self)
 
+    def retrieve_network_status(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> Web3RetrieveNetworkStatusResponse:
+        """Get Blockchain Network Health"""
+        return self._get(
+            "/web3/network/status",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=Web3RetrieveNetworkStatusResponse,
+        )
+
 
 class AsyncWeb3Resource(AsyncAPIResource):
     @cached_property
@@ -77,6 +119,10 @@ class AsyncWeb3Resource(AsyncAPIResource):
     @cached_property
     def nfts(self) -> AsyncNFTsResource:
         return AsyncNFTsResource(self._client)
+
+    @cached_property
+    def contracts(self) -> AsyncContractsResource:
+        return AsyncContractsResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AsyncWeb3ResourceWithRawResponse:
@@ -97,10 +143,33 @@ class AsyncWeb3Resource(AsyncAPIResource):
         """
         return AsyncWeb3ResourceWithStreamingResponse(self)
 
+    async def retrieve_network_status(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> Web3RetrieveNetworkStatusResponse:
+        """Get Blockchain Network Health"""
+        return await self._get(
+            "/web3/network/status",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=Web3RetrieveNetworkStatusResponse,
+        )
+
 
 class Web3ResourceWithRawResponse:
     def __init__(self, web3: Web3Resource) -> None:
         self._web3 = web3
+
+        self.retrieve_network_status = to_raw_response_wrapper(
+            web3.retrieve_network_status,
+        )
 
     @cached_property
     def wallets(self) -> WalletsResourceWithRawResponse:
@@ -114,10 +183,18 @@ class Web3ResourceWithRawResponse:
     def nfts(self) -> NFTsResourceWithRawResponse:
         return NFTsResourceWithRawResponse(self._web3.nfts)
 
+    @cached_property
+    def contracts(self) -> ContractsResourceWithRawResponse:
+        return ContractsResourceWithRawResponse(self._web3.contracts)
+
 
 class AsyncWeb3ResourceWithRawResponse:
     def __init__(self, web3: AsyncWeb3Resource) -> None:
         self._web3 = web3
+
+        self.retrieve_network_status = async_to_raw_response_wrapper(
+            web3.retrieve_network_status,
+        )
 
     @cached_property
     def wallets(self) -> AsyncWalletsResourceWithRawResponse:
@@ -131,10 +208,18 @@ class AsyncWeb3ResourceWithRawResponse:
     def nfts(self) -> AsyncNFTsResourceWithRawResponse:
         return AsyncNFTsResourceWithRawResponse(self._web3.nfts)
 
+    @cached_property
+    def contracts(self) -> AsyncContractsResourceWithRawResponse:
+        return AsyncContractsResourceWithRawResponse(self._web3.contracts)
+
 
 class Web3ResourceWithStreamingResponse:
     def __init__(self, web3: Web3Resource) -> None:
         self._web3 = web3
+
+        self.retrieve_network_status = to_streamed_response_wrapper(
+            web3.retrieve_network_status,
+        )
 
     @cached_property
     def wallets(self) -> WalletsResourceWithStreamingResponse:
@@ -148,10 +233,18 @@ class Web3ResourceWithStreamingResponse:
     def nfts(self) -> NFTsResourceWithStreamingResponse:
         return NFTsResourceWithStreamingResponse(self._web3.nfts)
 
+    @cached_property
+    def contracts(self) -> ContractsResourceWithStreamingResponse:
+        return ContractsResourceWithStreamingResponse(self._web3.contracts)
+
 
 class AsyncWeb3ResourceWithStreamingResponse:
     def __init__(self, web3: AsyncWeb3Resource) -> None:
         self._web3 = web3
+
+        self.retrieve_network_status = async_to_streamed_response_wrapper(
+            web3.retrieve_network_status,
+        )
 
     @cached_property
     def wallets(self) -> AsyncWalletsResourceWithStreamingResponse:
@@ -164,3 +257,7 @@ class AsyncWeb3ResourceWithStreamingResponse:
     @cached_property
     def nfts(self) -> AsyncNFTsResourceWithStreamingResponse:
         return AsyncNFTsResourceWithStreamingResponse(self._web3.nfts)
+
+    @cached_property
+    def contracts(self) -> AsyncContractsResourceWithStreamingResponse:
+        return AsyncContractsResourceWithStreamingResponse(self._web3.contracts)

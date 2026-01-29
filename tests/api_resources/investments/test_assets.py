@@ -9,6 +9,7 @@ import pytest
 
 from jocall3 import Jocall3, AsyncJocall3
 from tests.utils import assert_matches_type
+from jocall3.types.investments import AssetSearchResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -18,36 +19,40 @@ class TestAssets:
 
     @parametrize
     def test_method_search(self, client: Jocall3) -> None:
-        asset = client.investments.assets.search()
-        assert_matches_type(object, asset, path=["response"])
+        asset = client.investments.assets.search(
+            query="query",
+        )
+        assert_matches_type(AssetSearchResponse, asset, path=["response"])
 
     @parametrize
     def test_method_search_with_all_params(self, client: Jocall3) -> None:
         asset = client.investments.assets.search(
-            limit=0,
-            min_esg_score=0,
-            offset=0,
             query="query",
+            asset_type="EQUITY",
         )
-        assert_matches_type(object, asset, path=["response"])
+        assert_matches_type(AssetSearchResponse, asset, path=["response"])
 
     @parametrize
     def test_raw_response_search(self, client: Jocall3) -> None:
-        response = client.investments.assets.with_raw_response.search()
+        response = client.investments.assets.with_raw_response.search(
+            query="query",
+        )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         asset = response.parse()
-        assert_matches_type(object, asset, path=["response"])
+        assert_matches_type(AssetSearchResponse, asset, path=["response"])
 
     @parametrize
     def test_streaming_response_search(self, client: Jocall3) -> None:
-        with client.investments.assets.with_streaming_response.search() as response:
+        with client.investments.assets.with_streaming_response.search(
+            query="query",
+        ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             asset = response.parse()
-            assert_matches_type(object, asset, path=["response"])
+            assert_matches_type(AssetSearchResponse, asset, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -59,35 +64,39 @@ class TestAsyncAssets:
 
     @parametrize
     async def test_method_search(self, async_client: AsyncJocall3) -> None:
-        asset = await async_client.investments.assets.search()
-        assert_matches_type(object, asset, path=["response"])
+        asset = await async_client.investments.assets.search(
+            query="query",
+        )
+        assert_matches_type(AssetSearchResponse, asset, path=["response"])
 
     @parametrize
     async def test_method_search_with_all_params(self, async_client: AsyncJocall3) -> None:
         asset = await async_client.investments.assets.search(
-            limit=0,
-            min_esg_score=0,
-            offset=0,
             query="query",
+            asset_type="EQUITY",
         )
-        assert_matches_type(object, asset, path=["response"])
+        assert_matches_type(AssetSearchResponse, asset, path=["response"])
 
     @parametrize
     async def test_raw_response_search(self, async_client: AsyncJocall3) -> None:
-        response = await async_client.investments.assets.with_raw_response.search()
+        response = await async_client.investments.assets.with_raw_response.search(
+            query="query",
+        )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         asset = await response.parse()
-        assert_matches_type(object, asset, path=["response"])
+        assert_matches_type(AssetSearchResponse, asset, path=["response"])
 
     @parametrize
     async def test_streaming_response_search(self, async_client: AsyncJocall3) -> None:
-        async with async_client.investments.assets.with_streaming_response.search() as response:
+        async with async_client.investments.assets.with_streaming_response.search(
+            query="query",
+        ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             asset = await response.parse()
-            assert_matches_type(object, asset, path=["response"])
+            assert_matches_type(AssetSearchResponse, asset, path=["response"])
 
         assert cast(Any, response.is_closed) is True

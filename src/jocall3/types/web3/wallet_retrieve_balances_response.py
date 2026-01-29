@@ -1,0 +1,17 @@
+# File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+from typing import List, Optional
+
+from ..._models import BaseModel
+
+__all__ = ["WalletRetrieveBalancesResponse", "Balance"]
+
+
+class Balance(BaseModel):
+    amount: Optional[str] = None
+
+    symbol: Optional[str] = None
+
+
+class WalletRetrieveBalancesResponse(BaseModel):
+    balances: Optional[List[Balance]] = None

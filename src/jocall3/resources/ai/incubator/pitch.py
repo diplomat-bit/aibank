@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+from typing import Iterable
+
 import httpx
 
-from ...._types import Body, Query, Headers, NotGiven, not_given
+from ...._types import Body, Query, Headers, NoneType, NotGiven, not_given
+from ...._utils import maybe_transform, async_maybe_transform
 from ...._compat import cached_property
 from ...._resource import SyncAPIResource, AsyncAPIResource
 from ...._response import (
@@ -14,6 +17,7 @@ from ...._response import (
     async_to_streamed_response_wrapper,
 )
 from ...._base_client import make_request_options
+from ....types.ai.incubator import pitch_submit_feedback_params
 from ....types.ai.incubator.pitch_retrieve_details_response import PitchRetrieveDetailsResponse
 
 __all__ = ["PitchResource", "AsyncPitchResource"]
@@ -51,9 +55,7 @@ class PitchResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> PitchRetrieveDetailsResponse:
         """
-        Retrieves the granular AI-driven analysis, strategic feedback, market validation
-        results, and any outstanding questions from Quantum Weaver for a specific
-        business pitch.
+        Get Full Pitch AI Deep Dive
 
         Args:
           extra_headers: Send extra headers
@@ -78,17 +80,16 @@ class PitchResource(SyncAPIResource):
         self,
         pitch_id: str,
         *,
+        answers: Iterable[object],
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> None:
         """
-        Allows the entrepreneur to respond to specific questions or provide additional
-        details requested by Quantum Weaver, moving the pitch forward in the incubation
-        process.
+        Submit Answers to AI Follow-up Questions
 
         Args:
           extra_headers: Send extra headers
@@ -101,12 +102,14 @@ class PitchResource(SyncAPIResource):
         """
         if not pitch_id:
             raise ValueError(f"Expected a non-empty value for `pitch_id` but received {pitch_id!r}")
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._put(
             f"/ai/incubator/pitch/{pitch_id}/feedback",
+            body=maybe_transform({"answers": answers}, pitch_submit_feedback_params.PitchSubmitFeedbackParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            cast_to=NoneType,
         )
 
 
@@ -142,9 +145,7 @@ class AsyncPitchResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> PitchRetrieveDetailsResponse:
         """
-        Retrieves the granular AI-driven analysis, strategic feedback, market validation
-        results, and any outstanding questions from Quantum Weaver for a specific
-        business pitch.
+        Get Full Pitch AI Deep Dive
 
         Args:
           extra_headers: Send extra headers
@@ -169,17 +170,16 @@ class AsyncPitchResource(AsyncAPIResource):
         self,
         pitch_id: str,
         *,
+        answers: Iterable[object],
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> None:
         """
-        Allows the entrepreneur to respond to specific questions or provide additional
-        details requested by Quantum Weaver, moving the pitch forward in the incubation
-        process.
+        Submit Answers to AI Follow-up Questions
 
         Args:
           extra_headers: Send extra headers
@@ -192,12 +192,16 @@ class AsyncPitchResource(AsyncAPIResource):
         """
         if not pitch_id:
             raise ValueError(f"Expected a non-empty value for `pitch_id` but received {pitch_id!r}")
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._put(
             f"/ai/incubator/pitch/{pitch_id}/feedback",
+            body=await async_maybe_transform(
+                {"answers": answers}, pitch_submit_feedback_params.PitchSubmitFeedbackParams
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            cast_to=NoneType,
         )
 
 

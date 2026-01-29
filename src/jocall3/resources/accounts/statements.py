@@ -4,18 +4,24 @@ from __future__ import annotations
 
 import httpx
 
-from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from ..._utils import maybe_transform, async_maybe_transform
+from ..._types import Body, Query, Headers, NotGiven, not_given
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
+    BinaryAPIResponse,
+    AsyncBinaryAPIResponse,
+    StreamedBinaryAPIResponse,
+    AsyncStreamedBinaryAPIResponse,
     to_raw_response_wrapper,
     to_streamed_response_wrapper,
     async_to_raw_response_wrapper,
+    to_custom_raw_response_wrapper,
     async_to_streamed_response_wrapper,
+    to_custom_streamed_response_wrapper,
+    async_to_custom_raw_response_wrapper,
+    async_to_custom_streamed_response_wrapper,
 )
 from ..._base_client import make_request_options
-from ...types.accounts import statement_list_params
 from ...types.accounts.statement_list_response import StatementListResponse
 
 __all__ = ["StatementsResource", "AsyncStatementsResource"]
@@ -45,9 +51,6 @@ class StatementsResource(SyncAPIResource):
         self,
         account_id: str,
         *,
-        format: str | Omit = omit,
-        month: int | Omit = omit,
-        year: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -56,17 +59,9 @@ class StatementsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> StatementListResponse:
         """
-        Fetches digital statements for a specific account, allowing filtering by date
-        range and format.
+        List Available Statements
 
         Args:
-          format: Desired format for the statement. Use 'application/json' Accept header for
-              download links.
-
-          month: Month for the statement (1-12).
-
-          year: Year for the statement.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -80,20 +75,46 @@ class StatementsResource(SyncAPIResource):
         return self._get(
             f"/accounts/{account_id}/statements",
             options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                query=maybe_transform(
-                    {
-                        "format": format,
-                        "month": month,
-                        "year": year,
-                    },
-                    statement_list_params.StatementListParams,
-                ),
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=StatementListResponse,
+        )
+
+    def download_pdf(
+        self,
+        statement_id: str,
+        *,
+        account_id: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> BinaryAPIResponse:
+        """
+        Download Statement PDF
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not account_id:
+            raise ValueError(f"Expected a non-empty value for `account_id` but received {account_id!r}")
+        if not statement_id:
+            raise ValueError(f"Expected a non-empty value for `statement_id` but received {statement_id!r}")
+        extra_headers = {"Accept": "application/pdf", **(extra_headers or {})}
+        return self._get(
+            f"/accounts/{account_id}/statements/{statement_id}/pdf",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=BinaryAPIResponse,
         )
 
 
@@ -121,9 +142,6 @@ class AsyncStatementsResource(AsyncAPIResource):
         self,
         account_id: str,
         *,
-        format: str | Omit = omit,
-        month: int | Omit = omit,
-        year: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -132,17 +150,9 @@ class AsyncStatementsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> StatementListResponse:
         """
-        Fetches digital statements for a specific account, allowing filtering by date
-        range and format.
+        List Available Statements
 
         Args:
-          format: Desired format for the statement. Use 'application/json' Accept header for
-              download links.
-
-          month: Month for the statement (1-12).
-
-          year: Year for the statement.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -156,20 +166,46 @@ class AsyncStatementsResource(AsyncAPIResource):
         return await self._get(
             f"/accounts/{account_id}/statements",
             options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                query=await async_maybe_transform(
-                    {
-                        "format": format,
-                        "month": month,
-                        "year": year,
-                    },
-                    statement_list_params.StatementListParams,
-                ),
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=StatementListResponse,
+        )
+
+    async def download_pdf(
+        self,
+        statement_id: str,
+        *,
+        account_id: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> AsyncBinaryAPIResponse:
+        """
+        Download Statement PDF
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not account_id:
+            raise ValueError(f"Expected a non-empty value for `account_id` but received {account_id!r}")
+        if not statement_id:
+            raise ValueError(f"Expected a non-empty value for `statement_id` but received {statement_id!r}")
+        extra_headers = {"Accept": "application/pdf", **(extra_headers or {})}
+        return await self._get(
+            f"/accounts/{account_id}/statements/{statement_id}/pdf",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=AsyncBinaryAPIResponse,
         )
 
 
@@ -180,6 +216,10 @@ class StatementsResourceWithRawResponse:
         self.list = to_raw_response_wrapper(
             statements.list,
         )
+        self.download_pdf = to_custom_raw_response_wrapper(
+            statements.download_pdf,
+            BinaryAPIResponse,
+        )
 
 
 class AsyncStatementsResourceWithRawResponse:
@@ -188,6 +228,10 @@ class AsyncStatementsResourceWithRawResponse:
 
         self.list = async_to_raw_response_wrapper(
             statements.list,
+        )
+        self.download_pdf = async_to_custom_raw_response_wrapper(
+            statements.download_pdf,
+            AsyncBinaryAPIResponse,
         )
 
 
@@ -198,6 +242,10 @@ class StatementsResourceWithStreamingResponse:
         self.list = to_streamed_response_wrapper(
             statements.list,
         )
+        self.download_pdf = to_custom_streamed_response_wrapper(
+            statements.download_pdf,
+            StreamedBinaryAPIResponse,
+        )
 
 
 class AsyncStatementsResourceWithStreamingResponse:
@@ -206,4 +254,8 @@ class AsyncStatementsResourceWithStreamingResponse:
 
         self.list = async_to_streamed_response_wrapper(
             statements.list,
+        )
+        self.download_pdf = async_to_custom_streamed_response_wrapper(
+            statements.download_pdf,
+            AsyncStreamedBinaryAPIResponse,
         )

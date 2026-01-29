@@ -2,16 +2,19 @@
 
 from __future__ import annotations
 
-from typing_extensions import Annotated, TypedDict
+from typing import Iterable
+from typing_extensions import Required, TypedDict
 
-from ...._utils import PropertyInfo
-
-__all__ = ["SimulateRunAdvancedParams"]
+__all__ = ["SimulateRunAdvancedParams", "Scenario"]
 
 
 class SimulateRunAdvancedParams(TypedDict, total=False):
-    global_economic_factors: Annotated[object, PropertyInfo(alias="globalEconomicFactors")]
-    """Optional: Global economic conditions to apply to all scenarios."""
+    prompt: Required[str]
 
-    personal_assumptions: Annotated[object, PropertyInfo(alias="personalAssumptions")]
-    """Optional: Personal financial assumptions to override defaults."""
+    scenarios: Required[Iterable[Scenario]]
+
+
+class Scenario(TypedDict, total=False):
+    name: Required[str]
+
+    description: str

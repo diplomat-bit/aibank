@@ -20,6 +20,14 @@ from .portfolios import (
     AsyncPortfoliosResourceWithStreamingResponse,
 )
 from ..._resource import SyncAPIResource, AsyncAPIResource
+from .performance import (
+    PerformanceResource,
+    AsyncPerformanceResource,
+    PerformanceResourceWithRawResponse,
+    AsyncPerformanceResourceWithRawResponse,
+    PerformanceResourceWithStreamingResponse,
+    AsyncPerformanceResourceWithStreamingResponse,
+)
 
 __all__ = ["InvestmentsResource", "AsyncInvestmentsResource"]
 
@@ -32,6 +40,10 @@ class InvestmentsResource(SyncAPIResource):
     @cached_property
     def assets(self) -> AssetsResource:
         return AssetsResource(self._client)
+
+    @cached_property
+    def performance(self) -> PerformanceResource:
+        return PerformanceResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> InvestmentsResourceWithRawResponse:
@@ -61,6 +73,10 @@ class AsyncInvestmentsResource(AsyncAPIResource):
     @cached_property
     def assets(self) -> AsyncAssetsResource:
         return AsyncAssetsResource(self._client)
+
+    @cached_property
+    def performance(self) -> AsyncPerformanceResource:
+        return AsyncPerformanceResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AsyncInvestmentsResourceWithRawResponse:
@@ -94,6 +110,10 @@ class InvestmentsResourceWithRawResponse:
     def assets(self) -> AssetsResourceWithRawResponse:
         return AssetsResourceWithRawResponse(self._investments.assets)
 
+    @cached_property
+    def performance(self) -> PerformanceResourceWithRawResponse:
+        return PerformanceResourceWithRawResponse(self._investments.performance)
+
 
 class AsyncInvestmentsResourceWithRawResponse:
     def __init__(self, investments: AsyncInvestmentsResource) -> None:
@@ -106,6 +126,10 @@ class AsyncInvestmentsResourceWithRawResponse:
     @cached_property
     def assets(self) -> AsyncAssetsResourceWithRawResponse:
         return AsyncAssetsResourceWithRawResponse(self._investments.assets)
+
+    @cached_property
+    def performance(self) -> AsyncPerformanceResourceWithRawResponse:
+        return AsyncPerformanceResourceWithRawResponse(self._investments.performance)
 
 
 class InvestmentsResourceWithStreamingResponse:
@@ -120,6 +144,10 @@ class InvestmentsResourceWithStreamingResponse:
     def assets(self) -> AssetsResourceWithStreamingResponse:
         return AssetsResourceWithStreamingResponse(self._investments.assets)
 
+    @cached_property
+    def performance(self) -> PerformanceResourceWithStreamingResponse:
+        return PerformanceResourceWithStreamingResponse(self._investments.performance)
+
 
 class AsyncInvestmentsResourceWithStreamingResponse:
     def __init__(self, investments: AsyncInvestmentsResource) -> None:
@@ -132,3 +160,7 @@ class AsyncInvestmentsResourceWithStreamingResponse:
     @cached_property
     def assets(self) -> AsyncAssetsResourceWithStreamingResponse:
         return AsyncAssetsResourceWithStreamingResponse(self._investments.assets)
+
+    @cached_property
+    def performance(self) -> AsyncPerformanceResourceWithStreamingResponse:
+        return AsyncPerformanceResourceWithStreamingResponse(self._investments.performance)

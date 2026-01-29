@@ -9,7 +9,7 @@ import pytest
 
 from jocall3 import Jocall3, AsyncJocall3
 from tests.utils import assert_matches_type
-from jocall3.types.users import MeUpdateResponse, MeRetrieveResponse
+from jocall3.types.users import MeRetrieveResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -45,15 +45,7 @@ class TestMe:
     @parametrize
     def test_method_update(self, client: Jocall3) -> None:
         me = client.users.me.update()
-        assert_matches_type(MeUpdateResponse, me, path=["response"])
-
-    @parametrize
-    def test_method_update_with_all_params(self, client: Jocall3) -> None:
-        me = client.users.me.update(
-            address={},
-            preferences={"notification_channels": {}},
-        )
-        assert_matches_type(MeUpdateResponse, me, path=["response"])
+        assert me is None
 
     @parametrize
     def test_raw_response_update(self, client: Jocall3) -> None:
@@ -62,7 +54,7 @@ class TestMe:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         me = response.parse()
-        assert_matches_type(MeUpdateResponse, me, path=["response"])
+        assert me is None
 
     @parametrize
     def test_streaming_response_update(self, client: Jocall3) -> None:
@@ -71,7 +63,32 @@ class TestMe:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             me = response.parse()
-            assert_matches_type(MeUpdateResponse, me, path=["response"])
+            assert me is None
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    def test_method_delete(self, client: Jocall3) -> None:
+        me = client.users.me.delete()
+        assert me is None
+
+    @parametrize
+    def test_raw_response_delete(self, client: Jocall3) -> None:
+        response = client.users.me.with_raw_response.delete()
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        me = response.parse()
+        assert me is None
+
+    @parametrize
+    def test_streaming_response_delete(self, client: Jocall3) -> None:
+        with client.users.me.with_streaming_response.delete() as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            me = response.parse()
+            assert me is None
 
         assert cast(Any, response.is_closed) is True
 
@@ -109,15 +126,7 @@ class TestAsyncMe:
     @parametrize
     async def test_method_update(self, async_client: AsyncJocall3) -> None:
         me = await async_client.users.me.update()
-        assert_matches_type(MeUpdateResponse, me, path=["response"])
-
-    @parametrize
-    async def test_method_update_with_all_params(self, async_client: AsyncJocall3) -> None:
-        me = await async_client.users.me.update(
-            address={},
-            preferences={"notification_channels": {}},
-        )
-        assert_matches_type(MeUpdateResponse, me, path=["response"])
+        assert me is None
 
     @parametrize
     async def test_raw_response_update(self, async_client: AsyncJocall3) -> None:
@@ -126,7 +135,7 @@ class TestAsyncMe:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         me = await response.parse()
-        assert_matches_type(MeUpdateResponse, me, path=["response"])
+        assert me is None
 
     @parametrize
     async def test_streaming_response_update(self, async_client: AsyncJocall3) -> None:
@@ -135,6 +144,31 @@ class TestAsyncMe:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             me = await response.parse()
-            assert_matches_type(MeUpdateResponse, me, path=["response"])
+            assert me is None
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_method_delete(self, async_client: AsyncJocall3) -> None:
+        me = await async_client.users.me.delete()
+        assert me is None
+
+    @parametrize
+    async def test_raw_response_delete(self, async_client: AsyncJocall3) -> None:
+        response = await async_client.users.me.with_raw_response.delete()
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        me = await response.parse()
+        assert me is None
+
+    @parametrize
+    async def test_streaming_response_delete(self, async_client: AsyncJocall3) -> None:
+        async with async_client.users.me.with_streaming_response.delete() as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            me = await response.parse()
+            assert me is None
 
         assert cast(Any, response.is_closed) is True
