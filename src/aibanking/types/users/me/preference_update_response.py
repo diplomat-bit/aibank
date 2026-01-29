@@ -10,6 +10,7 @@ __all__ = ["PreferenceUpdateResponse"]
 
 
 class PreferenceUpdateResponse(BaseModel):
-    ai_interaction_mode: Optional[str] = FieldInfo(alias="aiInteractionMode", default=None)
+    """User's personalized preferences for the platform."""
 
-    theme: Optional[str] = None
+    notification_channels: Optional[object] = FieldInfo(alias="notificationChannels", default=None)
+    """Preferred channels for receiving notifications."""

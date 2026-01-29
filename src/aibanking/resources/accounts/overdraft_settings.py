@@ -4,8 +4,7 @@ from __future__ import annotations
 
 import httpx
 
-from ..._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
-from ..._utils import maybe_transform, async_maybe_transform
+from ..._types import Body, Query, Headers, NotGiven, not_given
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -15,10 +14,6 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ..._base_client import make_request_options
-from ...types.accounts import overdraft_setting_update_overdraft_settings_params
-from ...types.accounts.overdraft_setting_retrieve_overdraft_settings_response import (
-    OverdraftSettingRetrieveOverdraftSettingsResponse,
-)
 
 __all__ = ["OverdraftSettingsResource", "AsyncOverdraftSettingsResource"]
 
@@ -53,9 +48,9 @@ class OverdraftSettingsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> OverdraftSettingRetrieveOverdraftSettingsResponse:
+    ) -> object:
         """
-        Get Overdraft Settings
+        Retrieves the current overdraft protection settings for a specific account.
 
         Args:
           extra_headers: Send extra headers
@@ -73,24 +68,23 @@ class OverdraftSettingsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=OverdraftSettingRetrieveOverdraftSettingsResponse,
+            cast_to=object,
         )
 
     def update_overdraft_settings(
         self,
         account_id: str,
         *,
-        enabled: bool | Omit = omit,
-        limit: float | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
+    ) -> object:
         """
-        Update Overdraft Settings
+        Updates the overdraft protection settings for a specific account, enabling or
+        disabling protection and configuring preferences.
 
         Args:
           extra_headers: Send extra headers
@@ -103,20 +97,12 @@ class OverdraftSettingsResource(SyncAPIResource):
         """
         if not account_id:
             raise ValueError(f"Expected a non-empty value for `account_id` but received {account_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._put(
             f"/accounts/{account_id}/overdraft-settings",
-            body=maybe_transform(
-                {
-                    "enabled": enabled,
-                    "limit": limit,
-                },
-                overdraft_setting_update_overdraft_settings_params.OverdraftSettingUpdateOverdraftSettingsParams,
-            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=object,
         )
 
 
@@ -150,9 +136,9 @@ class AsyncOverdraftSettingsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> OverdraftSettingRetrieveOverdraftSettingsResponse:
+    ) -> object:
         """
-        Get Overdraft Settings
+        Retrieves the current overdraft protection settings for a specific account.
 
         Args:
           extra_headers: Send extra headers
@@ -170,24 +156,23 @@ class AsyncOverdraftSettingsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=OverdraftSettingRetrieveOverdraftSettingsResponse,
+            cast_to=object,
         )
 
     async def update_overdraft_settings(
         self,
         account_id: str,
         *,
-        enabled: bool | Omit = omit,
-        limit: float | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
+    ) -> object:
         """
-        Update Overdraft Settings
+        Updates the overdraft protection settings for a specific account, enabling or
+        disabling protection and configuring preferences.
 
         Args:
           extra_headers: Send extra headers
@@ -200,20 +185,12 @@ class AsyncOverdraftSettingsResource(AsyncAPIResource):
         """
         if not account_id:
             raise ValueError(f"Expected a non-empty value for `account_id` but received {account_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._put(
             f"/accounts/{account_id}/overdraft-settings",
-            body=await async_maybe_transform(
-                {
-                    "enabled": enabled,
-                    "limit": limit,
-                },
-                overdraft_setting_update_overdraft_settings_params.OverdraftSettingUpdateOverdraftSettingsParams,
-            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=object,
         )
 
 
