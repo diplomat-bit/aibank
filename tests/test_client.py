@@ -19,12 +19,12 @@ import pytest
 from respx import MockRouter
 from pydantic import ValidationError
 
-from jocall3 import Jocall3, AsyncJocall3, APIResponseValidationError
-from jocall3._types import Omit
-from jocall3._utils import asyncify
-from jocall3._models import BaseModel, FinalRequestOptions
-from jocall3._exceptions import APIStatusError, APITimeoutError, APIResponseValidationError
-from jocall3._base_client import (
+from aibanking import Jocall3, AsyncJocall3, APIResponseValidationError
+from aibanking._types import Omit
+from aibanking._utils import asyncify
+from aibanking._models import BaseModel, FinalRequestOptions
+from aibanking._exceptions import APIStatusError, APITimeoutError, APIResponseValidationError
+from aibanking._base_client import (
     DEFAULT_TIMEOUT,
     HTTPX_DEFAULT_TIMEOUT,
     BaseClient,
@@ -286,10 +286,10 @@ class TestJocall3:
                         # to_raw_response_wrapper leaks through the @functools.wraps() decorator.
                         #
                         # removing the decorator fixes the leak for reasons we don't understand.
-                        "jocall3/_legacy_response.py",
-                        "jocall3/_response.py",
+                        "aibanking/_legacy_response.py",
+                        "aibanking/_response.py",
                         # pydantic.BaseModel.model_dump || pydantic.BaseModel.dict leak memory for some reason.
-                        "jocall3/_compat.py",
+                        "aibanking/_compat.py",
                         # Standard library leaks we don't care about.
                         "/logging/__init__.py",
                     ]
@@ -407,7 +407,7 @@ class TestJocall3:
 
         with pytest.raises(
             TypeError,
-            match="Could not resolve authentication method. Expected either api_key or gemini_api_key to be set. Or for one of the `Authorization` or `x-goog-api-key` headers to be explicitly omitted",
+            match="Could not resolve authentication method. Expected the api_key to be set. Or for the `Authorization` headers to be explicitly omitted",
         ):
             client2._build_request(FinalRequestOptions(method="get", url="/foo"))
 
@@ -698,16 +698,6 @@ class TestJocall3:
             client = Jocall3(api_key=api_key, _strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
 
-        # explicit environment arg requires explicitness
-        with update_env(JOCALL3_BASE_URL="http://localhost:5000/from/env"):
-            with pytest.raises(ValueError, match=r"you must pass base_url=None"):
-                Jocall3(api_key=api_key, _strict_response_validation=True, environment="production")
-
-            client = Jocall3(base_url=None, api_key=api_key, _strict_response_validation=True, environment="production")
-            assert str(client.base_url).startswith("https://75975599-8fdc-4274-8701-05fc0b8089cc.mock.pstmn.io")
-
-            client.close()
-
     @pytest.mark.parametrize(
         "client",
         [
@@ -865,31 +855,27 @@ class TestJocall3:
         calculated = client._calculate_retry_timeout(remaining_retries, options, headers)
         assert calculated == pytest.approx(timeout, 0.5 * 0.875)  # pyright: ignore[reportUnknownMemberType]
 
-    @mock.patch("jocall3._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("aibanking._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter, client: Jocall3) -> None:
-        respx_mock.post("/users/register").mock(side_effect=httpx.TimeoutException("Test timeout error"))
+        respx_mock.post("/users/password-reset/initiate").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
-            client.users.with_streaming_response.register(
-                email="alice.w@example.com", name="Alice Wonderland", password="SecureP@ssw0rd2024!"
-            ).__enter__()
+            client.users.password_reset.with_streaming_response.initiate(identifier="string").__enter__()
 
         assert _get_open_connections(client) == 0
 
-    @mock.patch("jocall3._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("aibanking._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter, client: Jocall3) -> None:
-        respx_mock.post("/users/register").mock(return_value=httpx.Response(500))
+        respx_mock.post("/users/password-reset/initiate").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
-            client.users.with_streaming_response.register(
-                email="alice.w@example.com", name="Alice Wonderland", password="SecureP@ssw0rd2024!"
-            ).__enter__()
+            client.users.password_reset.with_streaming_response.initiate(identifier="string").__enter__()
         assert _get_open_connections(client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("jocall3._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("aibanking._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.parametrize("failure_mode", ["status", "exception"])
     def test_retries_taken(
@@ -912,17 +898,15 @@ class TestJocall3:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/users/register").mock(side_effect=retry_handler)
+        respx_mock.post("/users/password-reset/initiate").mock(side_effect=retry_handler)
 
-        response = client.users.with_raw_response.register(
-            email="alice.w@example.com", name="Alice Wonderland", password="SecureP@ssw0rd2024!"
-        )
+        response = client.users.password_reset.with_raw_response.initiate(identifier="string")
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("jocall3._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("aibanking._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_omit_retry_count_header(
         self, client: Jocall3, failures_before_success: int, respx_mock: MockRouter
@@ -938,19 +922,16 @@ class TestJocall3:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/users/register").mock(side_effect=retry_handler)
+        respx_mock.post("/users/password-reset/initiate").mock(side_effect=retry_handler)
 
-        response = client.users.with_raw_response.register(
-            email="alice.w@example.com",
-            name="Alice Wonderland",
-            password="SecureP@ssw0rd2024!",
-            extra_headers={"x-stainless-retry-count": Omit()},
+        response = client.users.password_reset.with_raw_response.initiate(
+            identifier="string", extra_headers={"x-stainless-retry-count": Omit()}
         )
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("jocall3._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("aibanking._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_overwrite_retry_count_header(
         self, client: Jocall3, failures_before_success: int, respx_mock: MockRouter
@@ -966,13 +947,10 @@ class TestJocall3:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/users/register").mock(side_effect=retry_handler)
+        respx_mock.post("/users/password-reset/initiate").mock(side_effect=retry_handler)
 
-        response = client.users.with_raw_response.register(
-            email="alice.w@example.com",
-            name="Alice Wonderland",
-            password="SecureP@ssw0rd2024!",
-            extra_headers={"x-stainless-retry-count": "42"},
+        response = client.users.password_reset.with_raw_response.initiate(
+            identifier="string", extra_headers={"x-stainless-retry-count": "42"}
         )
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
@@ -1200,10 +1178,10 @@ class TestAsyncJocall3:
                         # to_raw_response_wrapper leaks through the @functools.wraps() decorator.
                         #
                         # removing the decorator fixes the leak for reasons we don't understand.
-                        "jocall3/_legacy_response.py",
-                        "jocall3/_response.py",
+                        "aibanking/_legacy_response.py",
+                        "aibanking/_response.py",
                         # pydantic.BaseModel.model_dump || pydantic.BaseModel.dict leak memory for some reason.
-                        "jocall3/_compat.py",
+                        "aibanking/_compat.py",
                         # Standard library leaks we don't care about.
                         "/logging/__init__.py",
                     ]
@@ -1325,7 +1303,7 @@ class TestAsyncJocall3:
 
         with pytest.raises(
             TypeError,
-            match="Could not resolve authentication method. Expected either api_key or gemini_api_key to be set. Or for one of the `Authorization` or `x-goog-api-key` headers to be explicitly omitted",
+            match="Could not resolve authentication method. Expected the api_key to be set. Or for the `Authorization` headers to be explicitly omitted",
         ):
             client2._build_request(FinalRequestOptions(method="get", url="/foo"))
 
@@ -1622,18 +1600,6 @@ class TestAsyncJocall3:
             client = AsyncJocall3(api_key=api_key, _strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
 
-        # explicit environment arg requires explicitness
-        with update_env(JOCALL3_BASE_URL="http://localhost:5000/from/env"):
-            with pytest.raises(ValueError, match=r"you must pass base_url=None"):
-                AsyncJocall3(api_key=api_key, _strict_response_validation=True, environment="production")
-
-            client = AsyncJocall3(
-                base_url=None, api_key=api_key, _strict_response_validation=True, environment="production"
-            )
-            assert str(client.base_url).startswith("https://75975599-8fdc-4274-8701-05fc0b8089cc.mock.pstmn.io")
-
-            await client.close()
-
     @pytest.mark.parametrize(
         "client",
         [
@@ -1800,33 +1766,29 @@ class TestAsyncJocall3:
         calculated = async_client._calculate_retry_timeout(remaining_retries, options, headers)
         assert calculated == pytest.approx(timeout, 0.5 * 0.875)  # pyright: ignore[reportUnknownMemberType]
 
-    @mock.patch("jocall3._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("aibanking._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     async def test_retrying_timeout_errors_doesnt_leak(
         self, respx_mock: MockRouter, async_client: AsyncJocall3
     ) -> None:
-        respx_mock.post("/users/register").mock(side_effect=httpx.TimeoutException("Test timeout error"))
+        respx_mock.post("/users/password-reset/initiate").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
-            await async_client.users.with_streaming_response.register(
-                email="alice.w@example.com", name="Alice Wonderland", password="SecureP@ssw0rd2024!"
-            ).__aenter__()
+            await async_client.users.password_reset.with_streaming_response.initiate(identifier="string").__aenter__()
 
         assert _get_open_connections(async_client) == 0
 
-    @mock.patch("jocall3._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("aibanking._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     async def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter, async_client: AsyncJocall3) -> None:
-        respx_mock.post("/users/register").mock(return_value=httpx.Response(500))
+        respx_mock.post("/users/password-reset/initiate").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
-            await async_client.users.with_streaming_response.register(
-                email="alice.w@example.com", name="Alice Wonderland", password="SecureP@ssw0rd2024!"
-            ).__aenter__()
+            await async_client.users.password_reset.with_streaming_response.initiate(identifier="string").__aenter__()
         assert _get_open_connections(async_client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("jocall3._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("aibanking._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.parametrize("failure_mode", ["status", "exception"])
     async def test_retries_taken(
@@ -1849,17 +1811,15 @@ class TestAsyncJocall3:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/users/register").mock(side_effect=retry_handler)
+        respx_mock.post("/users/password-reset/initiate").mock(side_effect=retry_handler)
 
-        response = await client.users.with_raw_response.register(
-            email="alice.w@example.com", name="Alice Wonderland", password="SecureP@ssw0rd2024!"
-        )
+        response = await client.users.password_reset.with_raw_response.initiate(identifier="string")
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("jocall3._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("aibanking._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     async def test_omit_retry_count_header(
         self, async_client: AsyncJocall3, failures_before_success: int, respx_mock: MockRouter
@@ -1875,19 +1835,16 @@ class TestAsyncJocall3:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/users/register").mock(side_effect=retry_handler)
+        respx_mock.post("/users/password-reset/initiate").mock(side_effect=retry_handler)
 
-        response = await client.users.with_raw_response.register(
-            email="alice.w@example.com",
-            name="Alice Wonderland",
-            password="SecureP@ssw0rd2024!",
-            extra_headers={"x-stainless-retry-count": Omit()},
+        response = await client.users.password_reset.with_raw_response.initiate(
+            identifier="string", extra_headers={"x-stainless-retry-count": Omit()}
         )
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("jocall3._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("aibanking._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     async def test_overwrite_retry_count_header(
         self, async_client: AsyncJocall3, failures_before_success: int, respx_mock: MockRouter
@@ -1903,13 +1860,10 @@ class TestAsyncJocall3:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.post("/users/register").mock(side_effect=retry_handler)
+        respx_mock.post("/users/password-reset/initiate").mock(side_effect=retry_handler)
 
-        response = await client.users.with_raw_response.register(
-            email="alice.w@example.com",
-            name="Alice Wonderland",
-            password="SecureP@ssw0rd2024!",
-            extra_headers={"x-stainless-retry-count": "42"},
+        response = await client.users.password_reset.with_raw_response.initiate(
+            identifier="string", extra_headers={"x-stainless-retry-count": "42"}
         )
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"

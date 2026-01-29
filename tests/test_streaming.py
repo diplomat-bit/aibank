@@ -5,8 +5,8 @@ from typing import Iterator, AsyncIterator
 import httpx
 import pytest
 
-from jocall3 import Jocall3, AsyncJocall3
-from jocall3._streaming import Stream, AsyncStream, ServerSentEvent
+from aibanking import Jocall3, AsyncJocall3
+from aibanking._streaming import Stream, AsyncStream, ServerSentEvent
 
 
 @pytest.mark.asyncio

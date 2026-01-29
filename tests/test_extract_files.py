@@ -4,8 +4,8 @@ from typing import Sequence
 
 import pytest
 
-from jocall3._types import FileTypes
-from jocall3._utils import extract_files
+from aibanking._types import FileTypes
+from aibanking._utils import extract_files
 
 
 def test_removes_files_from_input() -> None:

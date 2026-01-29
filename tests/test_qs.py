@@ -4,7 +4,7 @@ from urllib.parse import unquote
 
 import pytest
 
-from jocall3._qs import Querystring, stringify
+from aibanking._qs import Querystring, stringify
 
 
 def test_empty() -> None:
