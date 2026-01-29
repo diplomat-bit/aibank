@@ -2,11 +2,9 @@
 
 from __future__ import annotations
 
-from typing import Iterable
-
 import httpx
 
-from ...._types import Body, Query, Headers, NoneType, NotGiven, not_given
+from ...._types import Body, Query, Headers, NotGiven, not_given
 from ...._utils import maybe_transform, async_maybe_transform
 from ...._compat import cached_property
 from ...._resource import SyncAPIResource, AsyncAPIResource
@@ -17,8 +15,7 @@ from ...._response import (
     async_to_streamed_response_wrapper,
 )
 from ...._base_client import make_request_options
-from ....types.ai.incubator import pitch_create_params, pitch_update_feedback_params
-from ....types.ai.incubator.pitch_create_response import PitchCreateResponse
+from ....types.ai.incubator import pitch_create_params
 from ....types.ai.incubator.pitch_retrieve_details_response import PitchRetrieveDetailsResponse
 
 __all__ = ["PitchResource", "AsyncPitchResource"]
@@ -47,22 +44,22 @@ class PitchResource(SyncAPIResource):
     def create(
         self,
         *,
-        business_plan: str,
         financial_projections: object,
-        founding_team: Iterable[object],
-        market_opportunity: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> PitchCreateResponse:
+    ) -> object:
         """
-        Submit a High-Potential Business Plan
+        Submits a detailed business plan to the Quantum Weaver AI for rigorous analysis,
+        market validation, and seed funding consideration. This initiates the AI-driven
+        incubation journey, aiming to transform innovative ideas into commercially
+        successful ventures.
 
         Args:
-          business_plan: Full text of the concept
+          financial_projections: Key financial metrics and projections for the next 3-5 years.
 
           extra_headers: Send extra headers
 
@@ -75,18 +72,12 @@ class PitchResource(SyncAPIResource):
         return self._post(
             "/ai/incubator/pitch",
             body=maybe_transform(
-                {
-                    "business_plan": business_plan,
-                    "financial_projections": financial_projections,
-                    "founding_team": founding_team,
-                    "market_opportunity": market_opportunity,
-                },
-                pitch_create_params.PitchCreateParams,
+                {"financial_projections": financial_projections}, pitch_create_params.PitchCreateParams
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=PitchCreateResponse,
+            cast_to=object,
         )
 
     def retrieve_details(
@@ -101,7 +92,9 @@ class PitchResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> PitchRetrieveDetailsResponse:
         """
-        Get Full Pitch AI Deep Dive
+        Retrieves the granular AI-driven analysis, strategic feedback, market validation
+        results, and any outstanding questions from Quantum Weaver for a specific
+        business pitch.
 
         Args:
           extra_headers: Send extra headers
@@ -126,16 +119,17 @@ class PitchResource(SyncAPIResource):
         self,
         pitch_id: str,
         *,
-        answers: Iterable[object],
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
+    ) -> object:
         """
-        Submit Answers to AI Follow-up Questions
+        Allows the entrepreneur to respond to specific questions or provide additional
+        details requested by Quantum Weaver, moving the pitch forward in the incubation
+        process.
 
         Args:
           extra_headers: Send extra headers
@@ -148,14 +142,12 @@ class PitchResource(SyncAPIResource):
         """
         if not pitch_id:
             raise ValueError(f"Expected a non-empty value for `pitch_id` but received {pitch_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._put(
             f"/ai/incubator/pitch/{pitch_id}/feedback",
-            body=maybe_transform({"answers": answers}, pitch_update_feedback_params.PitchUpdateFeedbackParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=object,
         )
 
 
@@ -182,22 +174,22 @@ class AsyncPitchResource(AsyncAPIResource):
     async def create(
         self,
         *,
-        business_plan: str,
         financial_projections: object,
-        founding_team: Iterable[object],
-        market_opportunity: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> PitchCreateResponse:
+    ) -> object:
         """
-        Submit a High-Potential Business Plan
+        Submits a detailed business plan to the Quantum Weaver AI for rigorous analysis,
+        market validation, and seed funding consideration. This initiates the AI-driven
+        incubation journey, aiming to transform innovative ideas into commercially
+        successful ventures.
 
         Args:
-          business_plan: Full text of the concept
+          financial_projections: Key financial metrics and projections for the next 3-5 years.
 
           extra_headers: Send extra headers
 
@@ -210,18 +202,12 @@ class AsyncPitchResource(AsyncAPIResource):
         return await self._post(
             "/ai/incubator/pitch",
             body=await async_maybe_transform(
-                {
-                    "business_plan": business_plan,
-                    "financial_projections": financial_projections,
-                    "founding_team": founding_team,
-                    "market_opportunity": market_opportunity,
-                },
-                pitch_create_params.PitchCreateParams,
+                {"financial_projections": financial_projections}, pitch_create_params.PitchCreateParams
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=PitchCreateResponse,
+            cast_to=object,
         )
 
     async def retrieve_details(
@@ -236,7 +222,9 @@ class AsyncPitchResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> PitchRetrieveDetailsResponse:
         """
-        Get Full Pitch AI Deep Dive
+        Retrieves the granular AI-driven analysis, strategic feedback, market validation
+        results, and any outstanding questions from Quantum Weaver for a specific
+        business pitch.
 
         Args:
           extra_headers: Send extra headers
@@ -261,16 +249,17 @@ class AsyncPitchResource(AsyncAPIResource):
         self,
         pitch_id: str,
         *,
-        answers: Iterable[object],
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
+    ) -> object:
         """
-        Submit Answers to AI Follow-up Questions
+        Allows the entrepreneur to respond to specific questions or provide additional
+        details requested by Quantum Weaver, moving the pitch forward in the incubation
+        process.
 
         Args:
           extra_headers: Send extra headers
@@ -283,16 +272,12 @@ class AsyncPitchResource(AsyncAPIResource):
         """
         if not pitch_id:
             raise ValueError(f"Expected a non-empty value for `pitch_id` but received {pitch_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._put(
             f"/ai/incubator/pitch/{pitch_id}/feedback",
-            body=await async_maybe_transform(
-                {"answers": answers}, pitch_update_feedback_params.PitchUpdateFeedbackParams
-            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=object,
         )
 
 
