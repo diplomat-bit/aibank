@@ -16,6 +16,14 @@ from .ads import (
     AdsResourceWithStreamingResponse,
     AsyncAdsResourceWithStreamingResponse,
 )
+from .agent import (
+    AgentResource,
+    AsyncAgentResource,
+    AgentResourceWithRawResponse,
+    AsyncAgentResourceWithRawResponse,
+    AgentResourceWithStreamingResponse,
+    AsyncAgentResourceWithStreamingResponse,
+)
 from .oracle import (
     OracleResource,
     AsyncOracleResource,
@@ -66,6 +74,12 @@ __all__ = [
     "AsyncAdsResourceWithRawResponse",
     "AdsResourceWithStreamingResponse",
     "AsyncAdsResourceWithStreamingResponse",
+    "AgentResource",
+    "AsyncAgentResource",
+    "AgentResourceWithRawResponse",
+    "AsyncAgentResourceWithRawResponse",
+    "AgentResourceWithStreamingResponse",
+    "AsyncAgentResourceWithStreamingResponse",
     "AIResource",
     "AsyncAIResource",
     "AIResourceWithRawResponse",

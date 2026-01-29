@@ -24,14 +24,6 @@ from .treasury import (
     TreasuryResourceWithStreamingResponse,
     AsyncTreasuryResourceWithStreamingResponse,
 )
-from .anomalies import (
-    AnomaliesResource,
-    AsyncAnomaliesResource,
-    AnomaliesResourceWithRawResponse,
-    AsyncAnomaliesResourceWithRawResponse,
-    AnomaliesResourceWithStreamingResponse,
-    AsyncAnomaliesResourceWithStreamingResponse,
-)
 from .corporate import (
     CorporateResource,
     AsyncCorporateResource,
@@ -48,22 +40,16 @@ from .compliance import (
     ComplianceResourceWithStreamingResponse,
     AsyncComplianceResourceWithStreamingResponse,
 )
-from .sanction_screening import (
-    SanctionScreeningResource,
-    AsyncSanctionScreeningResource,
-    SanctionScreeningResourceWithRawResponse,
-    AsyncSanctionScreeningResourceWithRawResponse,
-    SanctionScreeningResourceWithStreamingResponse,
-    AsyncSanctionScreeningResourceWithStreamingResponse,
+from .governance import (
+    GovernanceResource,
+    AsyncGovernanceResource,
+    GovernanceResourceWithRawResponse,
+    AsyncGovernanceResourceWithRawResponse,
+    GovernanceResourceWithStreamingResponse,
+    AsyncGovernanceResourceWithStreamingResponse,
 )
 
 __all__ = [
-    "SanctionScreeningResource",
-    "AsyncSanctionScreeningResource",
-    "SanctionScreeningResourceWithRawResponse",
-    "AsyncSanctionScreeningResourceWithRawResponse",
-    "SanctionScreeningResourceWithStreamingResponse",
-    "AsyncSanctionScreeningResourceWithStreamingResponse",
     "ComplianceResource",
     "AsyncComplianceResource",
     "ComplianceResourceWithRawResponse",
@@ -88,12 +74,12 @@ __all__ = [
     "AsyncRiskResourceWithRawResponse",
     "RiskResourceWithStreamingResponse",
     "AsyncRiskResourceWithStreamingResponse",
-    "AnomaliesResource",
-    "AsyncAnomaliesResource",
-    "AnomaliesResourceWithRawResponse",
-    "AsyncAnomaliesResourceWithRawResponse",
-    "AnomaliesResourceWithStreamingResponse",
-    "AsyncAnomaliesResourceWithStreamingResponse",
+    "GovernanceResource",
+    "AsyncGovernanceResource",
+    "GovernanceResourceWithRawResponse",
+    "AsyncGovernanceResourceWithRawResponse",
+    "GovernanceResourceWithStreamingResponse",
+    "AsyncGovernanceResourceWithStreamingResponse",
     "CorporateResource",
     "AsyncCorporateResource",
     "CorporateResourceWithRawResponse",

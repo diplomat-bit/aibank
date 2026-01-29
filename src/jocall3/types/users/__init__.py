@@ -5,3 +5,7 @@ from __future__ import annotations
 from .me_update_params import MeUpdateParams as MeUpdateParams
 from .me_update_response import MeUpdateResponse as MeUpdateResponse
 from .me_retrieve_response import MeRetrieveResponse as MeRetrieveResponse
+from .password_reset_confirm_params import PasswordResetConfirmParams as PasswordResetConfirmParams
+from .password_reset_initiate_params import PasswordResetInitiateParams as PasswordResetInitiateParams
+from .password_reset_confirm_response import PasswordResetConfirmResponse as PasswordResetConfirmResponse
+from .password_reset_initiate_response import PasswordResetInitiateResponse as PasswordResetInitiateResponse

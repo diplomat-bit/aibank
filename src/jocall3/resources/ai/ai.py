@@ -10,6 +10,14 @@ from .ads import (
     AdsResourceWithStreamingResponse,
     AsyncAdsResourceWithStreamingResponse,
 )
+from .agent import (
+    AgentResource,
+    AsyncAgentResource,
+    AgentResourceWithRawResponse,
+    AsyncAgentResourceWithRawResponse,
+    AgentResourceWithStreamingResponse,
+    AsyncAgentResourceWithStreamingResponse,
+)
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from .oracle.oracle import (
@@ -58,6 +66,10 @@ class AIResource(SyncAPIResource):
         return AdsResource(self._client)
 
     @cached_property
+    def agent(self) -> AgentResource:
+        return AgentResource(self._client)
+
+    @cached_property
     def with_raw_response(self) -> AIResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
@@ -93,6 +105,10 @@ class AsyncAIResource(AsyncAPIResource):
     @cached_property
     def ads(self) -> AsyncAdsResource:
         return AsyncAdsResource(self._client)
+
+    @cached_property
+    def agent(self) -> AsyncAgentResource:
+        return AsyncAgentResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AsyncAIResourceWithRawResponse:
@@ -134,6 +150,10 @@ class AIResourceWithRawResponse:
     def ads(self) -> AdsResourceWithRawResponse:
         return AdsResourceWithRawResponse(self._ai.ads)
 
+    @cached_property
+    def agent(self) -> AgentResourceWithRawResponse:
+        return AgentResourceWithRawResponse(self._ai.agent)
+
 
 class AsyncAIResourceWithRawResponse:
     def __init__(self, ai: AsyncAIResource) -> None:
@@ -154,6 +174,10 @@ class AsyncAIResourceWithRawResponse:
     @cached_property
     def ads(self) -> AsyncAdsResourceWithRawResponse:
         return AsyncAdsResourceWithRawResponse(self._ai.ads)
+
+    @cached_property
+    def agent(self) -> AsyncAgentResourceWithRawResponse:
+        return AsyncAgentResourceWithRawResponse(self._ai.agent)
 
 
 class AIResourceWithStreamingResponse:
@@ -176,6 +200,10 @@ class AIResourceWithStreamingResponse:
     def ads(self) -> AdsResourceWithStreamingResponse:
         return AdsResourceWithStreamingResponse(self._ai.ads)
 
+    @cached_property
+    def agent(self) -> AgentResourceWithStreamingResponse:
+        return AgentResourceWithStreamingResponse(self._ai.agent)
+
 
 class AsyncAIResourceWithStreamingResponse:
     def __init__(self, ai: AsyncAIResource) -> None:
@@ -196,3 +224,7 @@ class AsyncAIResourceWithStreamingResponse:
     @cached_property
     def ads(self) -> AsyncAdsResourceWithStreamingResponse:
         return AsyncAdsResourceWithStreamingResponse(self._ai.ads)
+
+    @cached_property
+    def agent(self) -> AsyncAgentResourceWithStreamingResponse:
+        return AsyncAgentResourceWithStreamingResponse(self._ai.agent)

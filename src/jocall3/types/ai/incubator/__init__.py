@@ -2,4 +2,9 @@
 
 from __future__ import annotations
 
+from .analysis_swot_params import AnalysisSwotParams as AnalysisSwotParams
+from .analysis_swot_response import AnalysisSwotResponse as AnalysisSwotResponse
+from .pitch_submit_feedback_params import PitchSubmitFeedbackParams as PitchSubmitFeedbackParams
+from .analysis_competitor_scan_params import AnalysisCompetitorScanParams as AnalysisCompetitorScanParams
 from .pitch_retrieve_details_response import PitchRetrieveDetailsResponse as PitchRetrieveDetailsResponse
+from .analysis_competitor_scan_response import AnalysisCompetitorScanResponse as AnalysisCompetitorScanResponse
