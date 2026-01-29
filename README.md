@@ -32,10 +32,12 @@ client = Jocall3(
     api_key=os.environ.get("X_API_KEY"),  # This is the default and can be omitted
 )
 
-response = client.users.password_reset.initiate(
-    identifier="REPLACE_ME",
+response = client.accounts.open(
+    currency="USD",
+    initial_deposit=8885.832056335083,
+    product_type="high_yield_vault",
 )
-print(response.message)
+print(response.id)
 ```
 
 While you can provide an `api_key` keyword argument,
@@ -58,10 +60,12 @@ client = AsyncJocall3(
 
 
 async def main() -> None:
-    response = await client.users.password_reset.initiate(
-        identifier="REPLACE_ME",
+    response = await client.accounts.open(
+        currency="USD",
+        initial_deposit=8885.832056335083,
+        product_type="high_yield_vault",
     )
-    print(response.message)
+    print(response.id)
 
 
 asyncio.run(main())
@@ -94,10 +98,12 @@ async def main() -> None:
         api_key=os.environ.get("X_API_KEY"),  # This is the default and can be omitted
         http_client=DefaultAioHttpClient(),
     ) as client:
-        response = await client.users.password_reset.initiate(
-            identifier="REPLACE_ME",
+        response = await client.accounts.open(
+            currency="USD",
+            initial_deposit=8885.832056335083,
+            product_type="high_yield_vault",
         )
-        print(response.message)
+        print(response.id)
 
 
 asyncio.run(main())
@@ -150,8 +156,10 @@ from aibanking import Jocall3
 client = Jocall3()
 
 try:
-    client.users.password_reset.initiate(
-        identifier="REPLACE_ME",
+    client.accounts.open(
+        currency="USD",
+        initial_deposit=8885.832056335083,
+        product_type="high_yield_vault",
     )
 except aibanking.APIConnectionError as e:
     print("The server could not be reached")
@@ -195,8 +203,10 @@ client = Jocall3(
 )
 
 # Or, configure per-request:
-client.with_options(max_retries=5).users.password_reset.initiate(
-    identifier="REPLACE_ME",
+client.with_options(max_retries=5).accounts.open(
+    currency="USD",
+    initial_deposit=8885.832056335083,
+    product_type="high_yield_vault",
 )
 ```
 
@@ -220,8 +230,10 @@ client = Jocall3(
 )
 
 # Override per-request:
-client.with_options(timeout=5.0).users.password_reset.initiate(
-    identifier="REPLACE_ME",
+client.with_options(timeout=5.0).accounts.open(
+    currency="USD",
+    initial_deposit=8885.832056335083,
+    product_type="high_yield_vault",
 )
 ```
 
@@ -263,13 +275,15 @@ The "raw" Response object can be accessed by prefixing `.with_raw_response.` to 
 from aibanking import Jocall3
 
 client = Jocall3()
-response = client.users.password_reset.with_raw_response.initiate(
-    identifier="REPLACE_ME",
+response = client.accounts.with_raw_response.open(
+    currency="USD",
+    initial_deposit=8885.832056335083,
+    product_type="high_yield_vault",
 )
 print(response.headers.get('X-My-Header'))
 
-password_reset = response.parse()  # get the object that `users.password_reset.initiate()` would have returned
-print(password_reset.message)
+account = response.parse()  # get the object that `accounts.open()` would have returned
+print(account.id)
 ```
 
 These methods return an [`APIResponse`](https://github.com/diplomat-bit/aibank/tree/main/src/aibanking/_response.py) object.
@@ -283,8 +297,10 @@ The above interface eagerly reads the full response body when you make the reque
 To stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.
 
 ```python
-with client.users.password_reset.with_streaming_response.initiate(
-    identifier="REPLACE_ME",
+with client.accounts.with_streaming_response.open(
+    currency="USD",
+    initial_deposit=8885.832056335083,
+    product_type="high_yield_vault",
 ) as response:
     print(response.headers.get("X-My-Header"))
 
