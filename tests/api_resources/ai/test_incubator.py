@@ -9,11 +9,6 @@ import pytest
 
 from jocall3 import Jocall3, AsyncJocall3
 from tests.utils import assert_matches_type
-from jocall3.types.ai import (
-    IncubatorListPitchesResponse,
-    IncubatorSubmitPitchResponse,
-    IncubatorValidateIdeaResponse,
-)
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -24,7 +19,16 @@ class TestIncubator:
     @parametrize
     def test_method_list_pitches(self, client: Jocall3) -> None:
         incubator = client.ai.incubator.list_pitches()
-        assert_matches_type(IncubatorListPitchesResponse, incubator, path=["response"])
+        assert_matches_type(object, incubator, path=["response"])
+
+    @parametrize
+    def test_method_list_pitches_with_all_params(self, client: Jocall3) -> None:
+        incubator = client.ai.incubator.list_pitches(
+            limit=0,
+            offset=0,
+            status="status",
+        )
+        assert_matches_type(object, incubator, path=["response"])
 
     @parametrize
     def test_raw_response_list_pitches(self, client: Jocall3) -> None:
@@ -33,7 +37,7 @@ class TestIncubator:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         incubator = response.parse()
-        assert_matches_type(IncubatorListPitchesResponse, incubator, path=["response"])
+        assert_matches_type(object, incubator, path=["response"])
 
     @parametrize
     def test_streaming_response_list_pitches(self, client: Jocall3) -> None:
@@ -42,78 +46,56 @@ class TestIncubator:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             incubator = response.parse()
-            assert_matches_type(IncubatorListPitchesResponse, incubator, path=["response"])
+            assert_matches_type(object, incubator, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
     @parametrize
     def test_method_submit_pitch(self, client: Jocall3) -> None:
         incubator = client.ai.incubator.submit_pitch(
-            business_plan="businessPlan",
-            financial_projections={},
-            founding_team=[{}],
-            market_opportunity="marketOpportunity",
+            financial_projections={
+                "seedRoundAmount": 2500000,
+                "valuationPreMoney": 10000000,
+                "projectionYears": 3,
+                "revenueForecast": [500000, 2000000, 6000000],
+                "profitabilityEstimate": "Achieve profitability within 18 months.",
+            },
         )
-        assert_matches_type(IncubatorSubmitPitchResponse, incubator, path=["response"])
+        assert_matches_type(object, incubator, path=["response"])
 
     @parametrize
     def test_raw_response_submit_pitch(self, client: Jocall3) -> None:
         response = client.ai.incubator.with_raw_response.submit_pitch(
-            business_plan="businessPlan",
-            financial_projections={},
-            founding_team=[{}],
-            market_opportunity="marketOpportunity",
+            financial_projections={
+                "seedRoundAmount": 2500000,
+                "valuationPreMoney": 10000000,
+                "projectionYears": 3,
+                "revenueForecast": [500000, 2000000, 6000000],
+                "profitabilityEstimate": "Achieve profitability within 18 months.",
+            },
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         incubator = response.parse()
-        assert_matches_type(IncubatorSubmitPitchResponse, incubator, path=["response"])
+        assert_matches_type(object, incubator, path=["response"])
 
     @parametrize
     def test_streaming_response_submit_pitch(self, client: Jocall3) -> None:
         with client.ai.incubator.with_streaming_response.submit_pitch(
-            business_plan="businessPlan",
-            financial_projections={},
-            founding_team=[{}],
-            market_opportunity="marketOpportunity",
+            financial_projections={
+                "seedRoundAmount": 2500000,
+                "valuationPreMoney": 10000000,
+                "projectionYears": 3,
+                "revenueForecast": [500000, 2000000, 6000000],
+                "profitabilityEstimate": "Achieve profitability within 18 months.",
+            },
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             incubator = response.parse()
-            assert_matches_type(IncubatorSubmitPitchResponse, incubator, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @parametrize
-    def test_method_validate_idea(self, client: Jocall3) -> None:
-        incubator = client.ai.incubator.validate_idea(
-            concept="concept",
-        )
-        assert_matches_type(IncubatorValidateIdeaResponse, incubator, path=["response"])
-
-    @parametrize
-    def test_raw_response_validate_idea(self, client: Jocall3) -> None:
-        response = client.ai.incubator.with_raw_response.validate_idea(
-            concept="concept",
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        incubator = response.parse()
-        assert_matches_type(IncubatorValidateIdeaResponse, incubator, path=["response"])
-
-    @parametrize
-    def test_streaming_response_validate_idea(self, client: Jocall3) -> None:
-        with client.ai.incubator.with_streaming_response.validate_idea(
-            concept="concept",
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            incubator = response.parse()
-            assert_matches_type(IncubatorValidateIdeaResponse, incubator, path=["response"])
+            assert_matches_type(object, incubator, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -126,7 +108,16 @@ class TestAsyncIncubator:
     @parametrize
     async def test_method_list_pitches(self, async_client: AsyncJocall3) -> None:
         incubator = await async_client.ai.incubator.list_pitches()
-        assert_matches_type(IncubatorListPitchesResponse, incubator, path=["response"])
+        assert_matches_type(object, incubator, path=["response"])
+
+    @parametrize
+    async def test_method_list_pitches_with_all_params(self, async_client: AsyncJocall3) -> None:
+        incubator = await async_client.ai.incubator.list_pitches(
+            limit=0,
+            offset=0,
+            status="status",
+        )
+        assert_matches_type(object, incubator, path=["response"])
 
     @parametrize
     async def test_raw_response_list_pitches(self, async_client: AsyncJocall3) -> None:
@@ -135,7 +126,7 @@ class TestAsyncIncubator:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         incubator = await response.parse()
-        assert_matches_type(IncubatorListPitchesResponse, incubator, path=["response"])
+        assert_matches_type(object, incubator, path=["response"])
 
     @parametrize
     async def test_streaming_response_list_pitches(self, async_client: AsyncJocall3) -> None:
@@ -144,77 +135,55 @@ class TestAsyncIncubator:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             incubator = await response.parse()
-            assert_matches_type(IncubatorListPitchesResponse, incubator, path=["response"])
+            assert_matches_type(object, incubator, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
     @parametrize
     async def test_method_submit_pitch(self, async_client: AsyncJocall3) -> None:
         incubator = await async_client.ai.incubator.submit_pitch(
-            business_plan="businessPlan",
-            financial_projections={},
-            founding_team=[{}],
-            market_opportunity="marketOpportunity",
+            financial_projections={
+                "seedRoundAmount": 2500000,
+                "valuationPreMoney": 10000000,
+                "projectionYears": 3,
+                "revenueForecast": [500000, 2000000, 6000000],
+                "profitabilityEstimate": "Achieve profitability within 18 months.",
+            },
         )
-        assert_matches_type(IncubatorSubmitPitchResponse, incubator, path=["response"])
+        assert_matches_type(object, incubator, path=["response"])
 
     @parametrize
     async def test_raw_response_submit_pitch(self, async_client: AsyncJocall3) -> None:
         response = await async_client.ai.incubator.with_raw_response.submit_pitch(
-            business_plan="businessPlan",
-            financial_projections={},
-            founding_team=[{}],
-            market_opportunity="marketOpportunity",
+            financial_projections={
+                "seedRoundAmount": 2500000,
+                "valuationPreMoney": 10000000,
+                "projectionYears": 3,
+                "revenueForecast": [500000, 2000000, 6000000],
+                "profitabilityEstimate": "Achieve profitability within 18 months.",
+            },
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         incubator = await response.parse()
-        assert_matches_type(IncubatorSubmitPitchResponse, incubator, path=["response"])
+        assert_matches_type(object, incubator, path=["response"])
 
     @parametrize
     async def test_streaming_response_submit_pitch(self, async_client: AsyncJocall3) -> None:
         async with async_client.ai.incubator.with_streaming_response.submit_pitch(
-            business_plan="businessPlan",
-            financial_projections={},
-            founding_team=[{}],
-            market_opportunity="marketOpportunity",
+            financial_projections={
+                "seedRoundAmount": 2500000,
+                "valuationPreMoney": 10000000,
+                "projectionYears": 3,
+                "revenueForecast": [500000, 2000000, 6000000],
+                "profitabilityEstimate": "Achieve profitability within 18 months.",
+            },
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             incubator = await response.parse()
-            assert_matches_type(IncubatorSubmitPitchResponse, incubator, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @parametrize
-    async def test_method_validate_idea(self, async_client: AsyncJocall3) -> None:
-        incubator = await async_client.ai.incubator.validate_idea(
-            concept="concept",
-        )
-        assert_matches_type(IncubatorValidateIdeaResponse, incubator, path=["response"])
-
-    @parametrize
-    async def test_raw_response_validate_idea(self, async_client: AsyncJocall3) -> None:
-        response = await async_client.ai.incubator.with_raw_response.validate_idea(
-            concept="concept",
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        incubator = await response.parse()
-        assert_matches_type(IncubatorValidateIdeaResponse, incubator, path=["response"])
-
-    @parametrize
-    async def test_streaming_response_validate_idea(self, async_client: AsyncJocall3) -> None:
-        async with async_client.ai.incubator.with_streaming_response.validate_idea(
-            concept="concept",
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            incubator = await response.parse()
-            assert_matches_type(IncubatorValidateIdeaResponse, incubator, path=["response"])
+            assert_matches_type(object, incubator, path=["response"])
 
         assert cast(Any, response.is_closed) is True

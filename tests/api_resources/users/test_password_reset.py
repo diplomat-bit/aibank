@@ -23,18 +23,18 @@ class TestPasswordReset:
     @parametrize
     def test_method_confirm(self, client: Jocall3) -> None:
         password_reset = client.users.password_reset.confirm(
-            identifier="identifier",
-            new_password="newPassword",
-            verification_code="verificationCode",
+            identifier="reset.user@example.com",
+            new_password="MyNewStrongPassword@789",
+            verification_code="654321",
         )
         assert_matches_type(PasswordResetConfirmResponse, password_reset, path=["response"])
 
     @parametrize
     def test_raw_response_confirm(self, client: Jocall3) -> None:
         response = client.users.password_reset.with_raw_response.confirm(
-            identifier="identifier",
-            new_password="newPassword",
-            verification_code="verificationCode",
+            identifier="reset.user@example.com",
+            new_password="MyNewStrongPassword@789",
+            verification_code="654321",
         )
 
         assert response.is_closed is True
@@ -45,9 +45,9 @@ class TestPasswordReset:
     @parametrize
     def test_streaming_response_confirm(self, client: Jocall3) -> None:
         with client.users.password_reset.with_streaming_response.confirm(
-            identifier="identifier",
-            new_password="newPassword",
-            verification_code="verificationCode",
+            identifier="reset.user@example.com",
+            new_password="MyNewStrongPassword@789",
+            verification_code="654321",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -60,14 +60,14 @@ class TestPasswordReset:
     @parametrize
     def test_method_initiate(self, client: Jocall3) -> None:
         password_reset = client.users.password_reset.initiate(
-            identifier="identifier",
+            identifier="reset.user@example.com",
         )
         assert_matches_type(PasswordResetInitiateResponse, password_reset, path=["response"])
 
     @parametrize
     def test_raw_response_initiate(self, client: Jocall3) -> None:
         response = client.users.password_reset.with_raw_response.initiate(
-            identifier="identifier",
+            identifier="reset.user@example.com",
         )
 
         assert response.is_closed is True
@@ -78,7 +78,7 @@ class TestPasswordReset:
     @parametrize
     def test_streaming_response_initiate(self, client: Jocall3) -> None:
         with client.users.password_reset.with_streaming_response.initiate(
-            identifier="identifier",
+            identifier="reset.user@example.com",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -97,18 +97,18 @@ class TestAsyncPasswordReset:
     @parametrize
     async def test_method_confirm(self, async_client: AsyncJocall3) -> None:
         password_reset = await async_client.users.password_reset.confirm(
-            identifier="identifier",
-            new_password="newPassword",
-            verification_code="verificationCode",
+            identifier="reset.user@example.com",
+            new_password="MyNewStrongPassword@789",
+            verification_code="654321",
         )
         assert_matches_type(PasswordResetConfirmResponse, password_reset, path=["response"])
 
     @parametrize
     async def test_raw_response_confirm(self, async_client: AsyncJocall3) -> None:
         response = await async_client.users.password_reset.with_raw_response.confirm(
-            identifier="identifier",
-            new_password="newPassword",
-            verification_code="verificationCode",
+            identifier="reset.user@example.com",
+            new_password="MyNewStrongPassword@789",
+            verification_code="654321",
         )
 
         assert response.is_closed is True
@@ -119,9 +119,9 @@ class TestAsyncPasswordReset:
     @parametrize
     async def test_streaming_response_confirm(self, async_client: AsyncJocall3) -> None:
         async with async_client.users.password_reset.with_streaming_response.confirm(
-            identifier="identifier",
-            new_password="newPassword",
-            verification_code="verificationCode",
+            identifier="reset.user@example.com",
+            new_password="MyNewStrongPassword@789",
+            verification_code="654321",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -134,14 +134,14 @@ class TestAsyncPasswordReset:
     @parametrize
     async def test_method_initiate(self, async_client: AsyncJocall3) -> None:
         password_reset = await async_client.users.password_reset.initiate(
-            identifier="identifier",
+            identifier="reset.user@example.com",
         )
         assert_matches_type(PasswordResetInitiateResponse, password_reset, path=["response"])
 
     @parametrize
     async def test_raw_response_initiate(self, async_client: AsyncJocall3) -> None:
         response = await async_client.users.password_reset.with_raw_response.initiate(
-            identifier="identifier",
+            identifier="reset.user@example.com",
         )
 
         assert response.is_closed is True
@@ -152,7 +152,7 @@ class TestAsyncPasswordReset:
     @parametrize
     async def test_streaming_response_initiate(self, async_client: AsyncJocall3) -> None:
         async with async_client.users.password_reset.with_streaming_response.initiate(
-            identifier="identifier",
+            identifier="reset.user@example.com",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"

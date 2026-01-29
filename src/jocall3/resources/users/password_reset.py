@@ -56,11 +56,10 @@ class PasswordResetResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> PasswordResetConfirmResponse:
         """
-        Confirm Password Reset with Code
+        Confirms the password reset using the received verification code and sets a new
+        password.
 
         Args:
-          verification_code: The 6-digit code sent to user
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -97,7 +96,8 @@ class PasswordResetResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> PasswordResetInitiateResponse:
         """
-        Initiate Password Reset Flow
+        Starts the password reset flow by sending a verification code or link to the
+        user's registered email or phone.
 
         Args:
           identifier: Email or phone number
@@ -156,11 +156,10 @@ class AsyncPasswordResetResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> PasswordResetConfirmResponse:
         """
-        Confirm Password Reset with Code
+        Confirms the password reset using the received verification code and sets a new
+        password.
 
         Args:
-          verification_code: The 6-digit code sent to user
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -197,7 +196,8 @@ class AsyncPasswordResetResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> PasswordResetInitiateResponse:
         """
-        Initiate Password Reset Flow
+        Starts the password reset flow by sending a verification code or link to the
+        user's registered email or phone.
 
         Args:
           identifier: Email or phone number

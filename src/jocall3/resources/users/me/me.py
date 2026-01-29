@@ -12,15 +12,8 @@ from .devices import (
     DevicesResourceWithStreamingResponse,
     AsyncDevicesResourceWithStreamingResponse,
 )
-from .security import (
-    SecurityResource,
-    AsyncSecurityResource,
-    SecurityResourceWithRawResponse,
-    AsyncSecurityResourceWithRawResponse,
-    SecurityResourceWithStreamingResponse,
-    AsyncSecurityResourceWithStreamingResponse,
-)
-from ...._types import Body, Query, Headers, NoneType, NotGiven, not_given
+from ...._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from ...._utils import maybe_transform, async_maybe_transform
 from ...._compat import cached_property
 from .biometrics import (
     BiometricsResource,
@@ -45,7 +38,9 @@ from ...._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
+from ....types.users import me_update_params
 from ...._base_client import make_request_options
+from ....types.users.me_update_response import MeUpdateResponse
 from ....types.users.me_retrieve_response import MeRetrieveResponse
 
 __all__ = ["MeResource", "AsyncMeResource"]
@@ -55,10 +50,6 @@ class MeResource(SyncAPIResource):
     @cached_property
     def preferences(self) -> PreferencesResource:
         return PreferencesResource(self._client)
-
-    @cached_property
-    def security(self) -> SecurityResource:
-        return SecurityResource(self._client)
 
     @cached_property
     def devices(self) -> DevicesResource:
@@ -97,6 +88,11 @@ class MeResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> MeRetrieveResponse:
+        """
+        Fetches the complete and dynamically updated profile information for the
+        currently authenticated user, encompassing personal details, security status,
+        gamification level, loyalty points, and linked identity attributes.
+        """
         return self._get(
             "/users/me",
             options=make_request_options(
@@ -108,39 +104,47 @@ class MeResource(SyncAPIResource):
     def update(
         self,
         *,
+        address: me_update_params.Address | Omit = omit,
+        name: str | Omit = omit,
+        phone: str | Omit = omit,
+        preferences: me_update_params.Preferences | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+    ) -> MeUpdateResponse:
+        """
+        Updates selected fields of the currently authenticated user's profile
+        information.
+
+        Args:
+          preferences: User's personalized preferences for the platform.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
         return self._put(
             "/users/me",
+            body=maybe_transform(
+                {
+                    "address": address,
+                    "name": name,
+                    "phone": phone,
+                    "preferences": preferences,
+                },
+                me_update_params.MeUpdateParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
-        )
-
-    def delete(
-        self,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return self._delete(
-            "/users/me",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
+            cast_to=MeUpdateResponse,
         )
 
 
@@ -148,10 +152,6 @@ class AsyncMeResource(AsyncAPIResource):
     @cached_property
     def preferences(self) -> AsyncPreferencesResource:
         return AsyncPreferencesResource(self._client)
-
-    @cached_property
-    def security(self) -> AsyncSecurityResource:
-        return AsyncSecurityResource(self._client)
 
     @cached_property
     def devices(self) -> AsyncDevicesResource:
@@ -190,6 +190,11 @@ class AsyncMeResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> MeRetrieveResponse:
+        """
+        Fetches the complete and dynamically updated profile information for the
+        currently authenticated user, encompassing personal details, security status,
+        gamification level, loyalty points, and linked identity attributes.
+        """
         return await self._get(
             "/users/me",
             options=make_request_options(
@@ -201,39 +206,47 @@ class AsyncMeResource(AsyncAPIResource):
     async def update(
         self,
         *,
+        address: me_update_params.Address | Omit = omit,
+        name: str | Omit = omit,
+        phone: str | Omit = omit,
+        preferences: me_update_params.Preferences | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+    ) -> MeUpdateResponse:
+        """
+        Updates selected fields of the currently authenticated user's profile
+        information.
+
+        Args:
+          preferences: User's personalized preferences for the platform.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
         return await self._put(
             "/users/me",
+            body=await async_maybe_transform(
+                {
+                    "address": address,
+                    "name": name,
+                    "phone": phone,
+                    "preferences": preferences,
+                },
+                me_update_params.MeUpdateParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
-        )
-
-    async def delete(
-        self,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return await self._delete(
-            "/users/me",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
+            cast_to=MeUpdateResponse,
         )
 
 
@@ -247,17 +260,10 @@ class MeResourceWithRawResponse:
         self.update = to_raw_response_wrapper(
             me.update,
         )
-        self.delete = to_raw_response_wrapper(
-            me.delete,
-        )
 
     @cached_property
     def preferences(self) -> PreferencesResourceWithRawResponse:
         return PreferencesResourceWithRawResponse(self._me.preferences)
-
-    @cached_property
-    def security(self) -> SecurityResourceWithRawResponse:
-        return SecurityResourceWithRawResponse(self._me.security)
 
     @cached_property
     def devices(self) -> DevicesResourceWithRawResponse:
@@ -278,17 +284,10 @@ class AsyncMeResourceWithRawResponse:
         self.update = async_to_raw_response_wrapper(
             me.update,
         )
-        self.delete = async_to_raw_response_wrapper(
-            me.delete,
-        )
 
     @cached_property
     def preferences(self) -> AsyncPreferencesResourceWithRawResponse:
         return AsyncPreferencesResourceWithRawResponse(self._me.preferences)
-
-    @cached_property
-    def security(self) -> AsyncSecurityResourceWithRawResponse:
-        return AsyncSecurityResourceWithRawResponse(self._me.security)
 
     @cached_property
     def devices(self) -> AsyncDevicesResourceWithRawResponse:
@@ -309,17 +308,10 @@ class MeResourceWithStreamingResponse:
         self.update = to_streamed_response_wrapper(
             me.update,
         )
-        self.delete = to_streamed_response_wrapper(
-            me.delete,
-        )
 
     @cached_property
     def preferences(self) -> PreferencesResourceWithStreamingResponse:
         return PreferencesResourceWithStreamingResponse(self._me.preferences)
-
-    @cached_property
-    def security(self) -> SecurityResourceWithStreamingResponse:
-        return SecurityResourceWithStreamingResponse(self._me.security)
 
     @cached_property
     def devices(self) -> DevicesResourceWithStreamingResponse:
@@ -340,17 +332,10 @@ class AsyncMeResourceWithStreamingResponse:
         self.update = async_to_streamed_response_wrapper(
             me.update,
         )
-        self.delete = async_to_streamed_response_wrapper(
-            me.delete,
-        )
 
     @cached_property
     def preferences(self) -> AsyncPreferencesResourceWithStreamingResponse:
         return AsyncPreferencesResourceWithStreamingResponse(self._me.preferences)
-
-    @cached_property
-    def security(self) -> AsyncSecurityResourceWithStreamingResponse:
-        return AsyncSecurityResourceWithStreamingResponse(self._me.security)
 
     @cached_property
     def devices(self) -> AsyncDevicesResourceWithStreamingResponse:

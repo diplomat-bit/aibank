@@ -11,8 +11,10 @@ from jocall3 import Jocall3, AsyncJocall3
 from tests.utils import assert_matches_type
 from jocall3.types import (
     TransactionListResponse,
+    TransactionAddNotesResponse,
+    TransactionRetrieveResponse,
+    TransactionCategorizeResponse,
 )
-from jocall3.types.shared import Transaction
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -23,31 +25,31 @@ class TestTransactions:
     @parametrize
     def test_method_retrieve(self, client: Jocall3) -> None:
         transaction = client.transactions.retrieve(
-            "transactionId",
+            "txn_quantum-2024-07-21-A7B8C9",
         )
-        assert_matches_type(Transaction, transaction, path=["response"])
+        assert_matches_type(TransactionRetrieveResponse, transaction, path=["response"])
 
     @parametrize
     def test_raw_response_retrieve(self, client: Jocall3) -> None:
         response = client.transactions.with_raw_response.retrieve(
-            "transactionId",
+            "txn_quantum-2024-07-21-A7B8C9",
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         transaction = response.parse()
-        assert_matches_type(Transaction, transaction, path=["response"])
+        assert_matches_type(TransactionRetrieveResponse, transaction, path=["response"])
 
     @parametrize
     def test_streaming_response_retrieve(self, client: Jocall3) -> None:
         with client.transactions.with_streaming_response.retrieve(
-            "transactionId",
+            "txn_quantum-2024-07-21-A7B8C9",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             transaction = response.parse()
-            assert_matches_type(Transaction, transaction, path=["response"])
+            assert_matches_type(TransactionRetrieveResponse, transaction, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -66,10 +68,14 @@ class TestTransactions:
     @parametrize
     def test_method_list_with_all_params(self, client: Jocall3) -> None:
         transaction = client.transactions.list(
+            category="category",
+            end_date="endDate",
             limit=0,
             max_amount=0,
             min_amount=0,
             offset=0,
+            search_query="searchQuery",
+            start_date="startDate",
             type="type",
         )
         assert_matches_type(TransactionListResponse, transaction, path=["response"])
@@ -97,34 +103,34 @@ class TestTransactions:
     @parametrize
     def test_method_add_notes(self, client: Jocall3) -> None:
         transaction = client.transactions.add_notes(
-            transaction_id="transactionId",
-            notes="notes",
+            transaction_id="txn_quantum-2024-07-21-A7B8C9",
+            notes="This was a special coffee for a client meeting.",
         )
-        assert transaction is None
+        assert_matches_type(TransactionAddNotesResponse, transaction, path=["response"])
 
     @parametrize
     def test_raw_response_add_notes(self, client: Jocall3) -> None:
         response = client.transactions.with_raw_response.add_notes(
-            transaction_id="transactionId",
-            notes="notes",
+            transaction_id="txn_quantum-2024-07-21-A7B8C9",
+            notes="This was a special coffee for a client meeting.",
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         transaction = response.parse()
-        assert transaction is None
+        assert_matches_type(TransactionAddNotesResponse, transaction, path=["response"])
 
     @parametrize
     def test_streaming_response_add_notes(self, client: Jocall3) -> None:
         with client.transactions.with_streaming_response.add_notes(
-            transaction_id="transactionId",
-            notes="notes",
+            transaction_id="txn_quantum-2024-07-21-A7B8C9",
+            notes="This was a special coffee for a client meeting.",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             transaction = response.parse()
-            assert transaction is None
+            assert_matches_type(TransactionAddNotesResponse, transaction, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -133,49 +139,50 @@ class TestTransactions:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `transaction_id` but received ''"):
             client.transactions.with_raw_response.add_notes(
                 transaction_id="",
-                notes="notes",
+                notes="This was a special coffee for a client meeting.",
             )
 
     @parametrize
     def test_method_categorize(self, client: Jocall3) -> None:
         transaction = client.transactions.categorize(
-            transaction_id="transactionId",
-            category="category",
+            transaction_id="txn_quantum-2024-07-21-A7B8C9",
+            category="Home > Groceries",
         )
-        assert_matches_type(Transaction, transaction, path=["response"])
+        assert_matches_type(TransactionCategorizeResponse, transaction, path=["response"])
 
     @parametrize
     def test_method_categorize_with_all_params(self, client: Jocall3) -> None:
         transaction = client.transactions.categorize(
-            transaction_id="transactionId",
-            category="category",
+            transaction_id="txn_quantum-2024-07-21-A7B8C9",
+            category="Home > Groceries",
             apply_to_future=True,
+            notes="Bulk purchase for party",
         )
-        assert_matches_type(Transaction, transaction, path=["response"])
+        assert_matches_type(TransactionCategorizeResponse, transaction, path=["response"])
 
     @parametrize
     def test_raw_response_categorize(self, client: Jocall3) -> None:
         response = client.transactions.with_raw_response.categorize(
-            transaction_id="transactionId",
-            category="category",
+            transaction_id="txn_quantum-2024-07-21-A7B8C9",
+            category="Home > Groceries",
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         transaction = response.parse()
-        assert_matches_type(Transaction, transaction, path=["response"])
+        assert_matches_type(TransactionCategorizeResponse, transaction, path=["response"])
 
     @parametrize
     def test_streaming_response_categorize(self, client: Jocall3) -> None:
         with client.transactions.with_streaming_response.categorize(
-            transaction_id="transactionId",
-            category="category",
+            transaction_id="txn_quantum-2024-07-21-A7B8C9",
+            category="Home > Groceries",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             transaction = response.parse()
-            assert_matches_type(Transaction, transaction, path=["response"])
+            assert_matches_type(TransactionCategorizeResponse, transaction, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -184,100 +191,7 @@ class TestTransactions:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `transaction_id` but received ''"):
             client.transactions.with_raw_response.categorize(
                 transaction_id="",
-                category="category",
-            )
-
-    @parametrize
-    def test_method_dispute(self, client: Jocall3) -> None:
-        transaction = client.transactions.dispute(
-            transaction_id="transactionId",
-            reason="fraudulent",
-        )
-        assert transaction is None
-
-    @parametrize
-    def test_method_dispute_with_all_params(self, client: Jocall3) -> None:
-        transaction = client.transactions.dispute(
-            transaction_id="transactionId",
-            reason="fraudulent",
-            evidence_files=["string"],
-        )
-        assert transaction is None
-
-    @parametrize
-    def test_raw_response_dispute(self, client: Jocall3) -> None:
-        response = client.transactions.with_raw_response.dispute(
-            transaction_id="transactionId",
-            reason="fraudulent",
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        transaction = response.parse()
-        assert transaction is None
-
-    @parametrize
-    def test_streaming_response_dispute(self, client: Jocall3) -> None:
-        with client.transactions.with_streaming_response.dispute(
-            transaction_id="transactionId",
-            reason="fraudulent",
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            transaction = response.parse()
-            assert transaction is None
-
-        assert cast(Any, response.is_closed) is True
-
-    @parametrize
-    def test_path_params_dispute(self, client: Jocall3) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `transaction_id` but received ''"):
-            client.transactions.with_raw_response.dispute(
-                transaction_id="",
-                reason="fraudulent",
-            )
-
-    @parametrize
-    def test_method_split(self, client: Jocall3) -> None:
-        transaction = client.transactions.split(
-            transaction_id="transactionId",
-            splits=[{}],
-        )
-        assert transaction is None
-
-    @parametrize
-    def test_raw_response_split(self, client: Jocall3) -> None:
-        response = client.transactions.with_raw_response.split(
-            transaction_id="transactionId",
-            splits=[{}],
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        transaction = response.parse()
-        assert transaction is None
-
-    @parametrize
-    def test_streaming_response_split(self, client: Jocall3) -> None:
-        with client.transactions.with_streaming_response.split(
-            transaction_id="transactionId",
-            splits=[{}],
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            transaction = response.parse()
-            assert transaction is None
-
-        assert cast(Any, response.is_closed) is True
-
-    @parametrize
-    def test_path_params_split(self, client: Jocall3) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `transaction_id` but received ''"):
-            client.transactions.with_raw_response.split(
-                transaction_id="",
-                splits=[{}],
+                category="Home > Groceries",
             )
 
 
@@ -289,31 +203,31 @@ class TestAsyncTransactions:
     @parametrize
     async def test_method_retrieve(self, async_client: AsyncJocall3) -> None:
         transaction = await async_client.transactions.retrieve(
-            "transactionId",
+            "txn_quantum-2024-07-21-A7B8C9",
         )
-        assert_matches_type(Transaction, transaction, path=["response"])
+        assert_matches_type(TransactionRetrieveResponse, transaction, path=["response"])
 
     @parametrize
     async def test_raw_response_retrieve(self, async_client: AsyncJocall3) -> None:
         response = await async_client.transactions.with_raw_response.retrieve(
-            "transactionId",
+            "txn_quantum-2024-07-21-A7B8C9",
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         transaction = await response.parse()
-        assert_matches_type(Transaction, transaction, path=["response"])
+        assert_matches_type(TransactionRetrieveResponse, transaction, path=["response"])
 
     @parametrize
     async def test_streaming_response_retrieve(self, async_client: AsyncJocall3) -> None:
         async with async_client.transactions.with_streaming_response.retrieve(
-            "transactionId",
+            "txn_quantum-2024-07-21-A7B8C9",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             transaction = await response.parse()
-            assert_matches_type(Transaction, transaction, path=["response"])
+            assert_matches_type(TransactionRetrieveResponse, transaction, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -332,10 +246,14 @@ class TestAsyncTransactions:
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncJocall3) -> None:
         transaction = await async_client.transactions.list(
+            category="category",
+            end_date="endDate",
             limit=0,
             max_amount=0,
             min_amount=0,
             offset=0,
+            search_query="searchQuery",
+            start_date="startDate",
             type="type",
         )
         assert_matches_type(TransactionListResponse, transaction, path=["response"])
@@ -363,34 +281,34 @@ class TestAsyncTransactions:
     @parametrize
     async def test_method_add_notes(self, async_client: AsyncJocall3) -> None:
         transaction = await async_client.transactions.add_notes(
-            transaction_id="transactionId",
-            notes="notes",
+            transaction_id="txn_quantum-2024-07-21-A7B8C9",
+            notes="This was a special coffee for a client meeting.",
         )
-        assert transaction is None
+        assert_matches_type(TransactionAddNotesResponse, transaction, path=["response"])
 
     @parametrize
     async def test_raw_response_add_notes(self, async_client: AsyncJocall3) -> None:
         response = await async_client.transactions.with_raw_response.add_notes(
-            transaction_id="transactionId",
-            notes="notes",
+            transaction_id="txn_quantum-2024-07-21-A7B8C9",
+            notes="This was a special coffee for a client meeting.",
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         transaction = await response.parse()
-        assert transaction is None
+        assert_matches_type(TransactionAddNotesResponse, transaction, path=["response"])
 
     @parametrize
     async def test_streaming_response_add_notes(self, async_client: AsyncJocall3) -> None:
         async with async_client.transactions.with_streaming_response.add_notes(
-            transaction_id="transactionId",
-            notes="notes",
+            transaction_id="txn_quantum-2024-07-21-A7B8C9",
+            notes="This was a special coffee for a client meeting.",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             transaction = await response.parse()
-            assert transaction is None
+            assert_matches_type(TransactionAddNotesResponse, transaction, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -399,49 +317,50 @@ class TestAsyncTransactions:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `transaction_id` but received ''"):
             await async_client.transactions.with_raw_response.add_notes(
                 transaction_id="",
-                notes="notes",
+                notes="This was a special coffee for a client meeting.",
             )
 
     @parametrize
     async def test_method_categorize(self, async_client: AsyncJocall3) -> None:
         transaction = await async_client.transactions.categorize(
-            transaction_id="transactionId",
-            category="category",
+            transaction_id="txn_quantum-2024-07-21-A7B8C9",
+            category="Home > Groceries",
         )
-        assert_matches_type(Transaction, transaction, path=["response"])
+        assert_matches_type(TransactionCategorizeResponse, transaction, path=["response"])
 
     @parametrize
     async def test_method_categorize_with_all_params(self, async_client: AsyncJocall3) -> None:
         transaction = await async_client.transactions.categorize(
-            transaction_id="transactionId",
-            category="category",
+            transaction_id="txn_quantum-2024-07-21-A7B8C9",
+            category="Home > Groceries",
             apply_to_future=True,
+            notes="Bulk purchase for party",
         )
-        assert_matches_type(Transaction, transaction, path=["response"])
+        assert_matches_type(TransactionCategorizeResponse, transaction, path=["response"])
 
     @parametrize
     async def test_raw_response_categorize(self, async_client: AsyncJocall3) -> None:
         response = await async_client.transactions.with_raw_response.categorize(
-            transaction_id="transactionId",
-            category="category",
+            transaction_id="txn_quantum-2024-07-21-A7B8C9",
+            category="Home > Groceries",
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         transaction = await response.parse()
-        assert_matches_type(Transaction, transaction, path=["response"])
+        assert_matches_type(TransactionCategorizeResponse, transaction, path=["response"])
 
     @parametrize
     async def test_streaming_response_categorize(self, async_client: AsyncJocall3) -> None:
         async with async_client.transactions.with_streaming_response.categorize(
-            transaction_id="transactionId",
-            category="category",
+            transaction_id="txn_quantum-2024-07-21-A7B8C9",
+            category="Home > Groceries",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             transaction = await response.parse()
-            assert_matches_type(Transaction, transaction, path=["response"])
+            assert_matches_type(TransactionCategorizeResponse, transaction, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -450,98 +369,5 @@ class TestAsyncTransactions:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `transaction_id` but received ''"):
             await async_client.transactions.with_raw_response.categorize(
                 transaction_id="",
-                category="category",
-            )
-
-    @parametrize
-    async def test_method_dispute(self, async_client: AsyncJocall3) -> None:
-        transaction = await async_client.transactions.dispute(
-            transaction_id="transactionId",
-            reason="fraudulent",
-        )
-        assert transaction is None
-
-    @parametrize
-    async def test_method_dispute_with_all_params(self, async_client: AsyncJocall3) -> None:
-        transaction = await async_client.transactions.dispute(
-            transaction_id="transactionId",
-            reason="fraudulent",
-            evidence_files=["string"],
-        )
-        assert transaction is None
-
-    @parametrize
-    async def test_raw_response_dispute(self, async_client: AsyncJocall3) -> None:
-        response = await async_client.transactions.with_raw_response.dispute(
-            transaction_id="transactionId",
-            reason="fraudulent",
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        transaction = await response.parse()
-        assert transaction is None
-
-    @parametrize
-    async def test_streaming_response_dispute(self, async_client: AsyncJocall3) -> None:
-        async with async_client.transactions.with_streaming_response.dispute(
-            transaction_id="transactionId",
-            reason="fraudulent",
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            transaction = await response.parse()
-            assert transaction is None
-
-        assert cast(Any, response.is_closed) is True
-
-    @parametrize
-    async def test_path_params_dispute(self, async_client: AsyncJocall3) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `transaction_id` but received ''"):
-            await async_client.transactions.with_raw_response.dispute(
-                transaction_id="",
-                reason="fraudulent",
-            )
-
-    @parametrize
-    async def test_method_split(self, async_client: AsyncJocall3) -> None:
-        transaction = await async_client.transactions.split(
-            transaction_id="transactionId",
-            splits=[{}],
-        )
-        assert transaction is None
-
-    @parametrize
-    async def test_raw_response_split(self, async_client: AsyncJocall3) -> None:
-        response = await async_client.transactions.with_raw_response.split(
-            transaction_id="transactionId",
-            splits=[{}],
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        transaction = await response.parse()
-        assert transaction is None
-
-    @parametrize
-    async def test_streaming_response_split(self, async_client: AsyncJocall3) -> None:
-        async with async_client.transactions.with_streaming_response.split(
-            transaction_id="transactionId",
-            splits=[{}],
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            transaction = await response.parse()
-            assert transaction is None
-
-        assert cast(Any, response.is_closed) is True
-
-    @parametrize
-    async def test_path_params_split(self, async_client: AsyncJocall3) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `transaction_id` but received ''"):
-            await async_client.transactions.with_raw_response.split(
-                transaction_id="",
-                splits=[{}],
+                category="Home > Groceries",
             )

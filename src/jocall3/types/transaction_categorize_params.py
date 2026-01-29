@@ -13,3 +13,5 @@ class TransactionCategorizeParams(TypedDict, total=False):
     category: Required[str]
 
     apply_to_future: Annotated[bool, PropertyInfo(alias="applyToFuture")]
+
+    notes: str

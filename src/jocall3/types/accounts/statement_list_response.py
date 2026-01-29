@@ -1,22 +1,25 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import List, Optional
-from datetime import date
+from typing import Optional
 
 from pydantic import Field as FieldInfo
 
 from ..._models import BaseModel
 
-__all__ = ["StatementListResponse", "Data"]
+__all__ = ["StatementListResponse", "DownloadURLs"]
 
 
-class Data(BaseModel):
-    id: Optional[str] = None
+class DownloadURLs(BaseModel):
+    csv: Optional[str] = None
 
-    issue_date: Optional[date] = FieldInfo(alias="issueDate", default=None)
-
-    period: Optional[str] = None
+    pdf: Optional[str] = None
 
 
 class StatementListResponse(BaseModel):
-    data: Optional[List[Data]] = None
+    account_id: str = FieldInfo(alias="accountId")
+
+    download_urls: DownloadURLs = FieldInfo(alias="downloadUrls")
+
+    period: str
+
+    statement_id: str = FieldInfo(alias="statementId")

@@ -10,4 +10,6 @@ __all__ = ["BiometricVerifyResponse"]
 
 
 class BiometricVerifyResponse(BaseModel):
+    message: Optional[str] = None
+
     verification_status: Optional[str] = FieldInfo(alias="verificationStatus", default=None)

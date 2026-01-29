@@ -1,6 +1,7 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 from typing import List, Optional
+from datetime import datetime
 
 from pydantic import Field as FieldInfo
 
@@ -10,21 +11,35 @@ __all__ = ["AccountListResponse", "Data"]
 
 
 class Data(BaseModel):
-    id: str
+    id: Optional[str] = None
 
-    currency: str
+    available_balance: Optional[float] = FieldInfo(alias="availableBalance", default=None)
 
-    current_balance: float = FieldInfo(alias="currentBalance")
+    currency: Optional[str] = None
 
-    institution_name: str = FieldInfo(alias="institutionName")
+    current_balance: Optional[float] = FieldInfo(alias="currentBalance", default=None)
 
-    type: str
+    external_id: Optional[str] = FieldInfo(alias="externalId", default=None)
+
+    institution_name: Optional[str] = FieldInfo(alias="institutionName", default=None)
+
+    last_updated: Optional[datetime] = FieldInfo(alias="lastUpdated", default=None)
+
+    mask: Optional[str] = None
 
     name: Optional[str] = None
+
+    subtype: Optional[str] = None
+
+    type: Optional[str] = None
 
 
 class AccountListResponse(BaseModel):
     data: List[Data]
+
+    limit: int
+
+    offset: int
 
     total: int
 

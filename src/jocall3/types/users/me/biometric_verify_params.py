@@ -11,3 +11,7 @@ __all__ = ["BiometricVerifyParams"]
 
 class BiometricVerifyParams(TypedDict, total=False):
     biometric_signature: Required[Annotated[str, PropertyInfo(alias="biometricSignature")]]
+
+    biometric_type: Required[Annotated[str, PropertyInfo(alias="biometricType")]]
+
+    device_id: Required[Annotated[str, PropertyInfo(alias="deviceId")]]

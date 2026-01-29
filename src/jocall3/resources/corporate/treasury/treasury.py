@@ -2,27 +2,9 @@
 
 from __future__ import annotations
 
-from typing import Iterable
-
 import httpx
 
-from .pooling import (
-    PoolingResource,
-    AsyncPoolingResource,
-    PoolingResourceWithRawResponse,
-    AsyncPoolingResourceWithRawResponse,
-    PoolingResourceWithStreamingResponse,
-    AsyncPoolingResourceWithStreamingResponse,
-)
-from .sweeping import (
-    SweepingResource,
-    AsyncSweepingResource,
-    SweepingResourceWithRawResponse,
-    AsyncSweepingResourceWithRawResponse,
-    SweepingResourceWithStreamingResponse,
-    AsyncSweepingResourceWithStreamingResponse,
-)
-from ...._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
+from ...._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ...._utils import maybe_transform, async_maybe_transform
 from ...._compat import cached_property
 from ...._resource import SyncAPIResource, AsyncAPIResource
@@ -33,12 +15,7 @@ from ...._response import (
     async_to_streamed_response_wrapper,
 )
 from ...._base_client import make_request_options
-from ....types.corporate import (
-    treasury_optimize_liquidity_params,
-    treasury_execute_bulk_payouts_params,
-    treasury_retrieve_cash_flow_forecast_params,
-)
-from ....types.corporate.treasury_optimize_liquidity_response import TreasuryOptimizeLiquidityResponse
+from ....types.corporate import treasury_retrieve_cash_flow_forecast_params
 from ....types.corporate.treasury_retrieve_cash_flow_forecast_response import TreasuryRetrieveCashFlowForecastResponse
 from ....types.corporate.treasury_retrieve_liquidity_positions_response import (
     TreasuryRetrieveLiquidityPositionsResponse,
@@ -48,14 +25,6 @@ __all__ = ["TreasuryResource", "AsyncTreasuryResource"]
 
 
 class TreasuryResource(SyncAPIResource):
-    @cached_property
-    def sweeping(self) -> SweepingResource:
-        return SweepingResource(self._client)
-
-    @cached_property
-    def pooling(self) -> PoolingResource:
-        return PoolingResource(self._client)
-
     @cached_property
     def with_raw_response(self) -> TreasuryResourceWithRawResponse:
         """
@@ -75,84 +44,11 @@ class TreasuryResource(SyncAPIResource):
         """
         return TreasuryResourceWithStreamingResponse(self)
 
-    def execute_bulk_payouts(
-        self,
-        *,
-        payouts: Iterable[treasury_execute_bulk_payouts_params.Payout],
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
-        """
-        Execute bulk payouts
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return self._post(
-            "/corporate/treasury/bulk-payouts",
-            body=maybe_transform(
-                {"payouts": payouts}, treasury_execute_bulk_payouts_params.TreasuryExecuteBulkPayoutsParams
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
-        )
-
-    def optimize_liquidity(
-        self,
-        *,
-        sweep_excess: bool | Omit = omit,
-        target_reserve: float | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> TreasuryOptimizeLiquidityResponse:
-        """
-        AI Liquidity Optimization Engine
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        return self._post(
-            "/corporate/treasury/liquidity/optimize",
-            body=maybe_transform(
-                {
-                    "sweep_excess": sweep_excess,
-                    "target_reserve": target_reserve,
-                },
-                treasury_optimize_liquidity_params.TreasuryOptimizeLiquidityParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=TreasuryOptimizeLiquidityResponse,
-        )
-
     def retrieve_cash_flow_forecast(
         self,
         *,
-        horizon_days: int | Omit = omit,
+        forecast_horizon_days: int | Omit = omit,
+        include_scenario_analysis: bool | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -161,9 +57,17 @@ class TreasuryResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> TreasuryRetrieveCashFlowForecastResponse:
         """
-        Corporate Cash Flow Projection
+        Retrieves an advanced AI-driven cash flow forecast for the organization,
+        projecting liquidity, identifying potential surpluses or deficits, and providing
+        recommendations for optimal treasury management.
 
         Args:
+          forecast_horizon_days: The number of days into the future for which to generate the cash flow forecast
+              (e.g., 30, 90, 180).
+
+          include_scenario_analysis: If true, the forecast will include best-case and worst-case scenario analysis
+              alongside the most likely projection.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -180,7 +84,10 @@ class TreasuryResource(SyncAPIResource):
                 extra_body=extra_body,
                 timeout=timeout,
                 query=maybe_transform(
-                    {"horizon_days": horizon_days},
+                    {
+                        "forecast_horizon_days": forecast_horizon_days,
+                        "include_scenario_analysis": include_scenario_analysis,
+                    },
                     treasury_retrieve_cash_flow_forecast_params.TreasuryRetrieveCashFlowForecastParams,
                 ),
             ),
@@ -197,7 +104,10 @@ class TreasuryResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> TreasuryRetrieveLiquidityPositionsResponse:
-        """Get current liquidity positions"""
+        """
+        Provides a real-time overview of the organization's liquidity across all
+        accounts, currencies, and short-term investments.
+        """
         return self._get(
             "/corporate/treasury/liquidity-positions",
             options=make_request_options(
@@ -208,14 +118,6 @@ class TreasuryResource(SyncAPIResource):
 
 
 class AsyncTreasuryResource(AsyncAPIResource):
-    @cached_property
-    def sweeping(self) -> AsyncSweepingResource:
-        return AsyncSweepingResource(self._client)
-
-    @cached_property
-    def pooling(self) -> AsyncPoolingResource:
-        return AsyncPoolingResource(self._client)
-
     @cached_property
     def with_raw_response(self) -> AsyncTreasuryResourceWithRawResponse:
         """
@@ -235,84 +137,11 @@ class AsyncTreasuryResource(AsyncAPIResource):
         """
         return AsyncTreasuryResourceWithStreamingResponse(self)
 
-    async def execute_bulk_payouts(
-        self,
-        *,
-        payouts: Iterable[treasury_execute_bulk_payouts_params.Payout],
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
-        """
-        Execute bulk payouts
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return await self._post(
-            "/corporate/treasury/bulk-payouts",
-            body=await async_maybe_transform(
-                {"payouts": payouts}, treasury_execute_bulk_payouts_params.TreasuryExecuteBulkPayoutsParams
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
-        )
-
-    async def optimize_liquidity(
-        self,
-        *,
-        sweep_excess: bool | Omit = omit,
-        target_reserve: float | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> TreasuryOptimizeLiquidityResponse:
-        """
-        AI Liquidity Optimization Engine
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        return await self._post(
-            "/corporate/treasury/liquidity/optimize",
-            body=await async_maybe_transform(
-                {
-                    "sweep_excess": sweep_excess,
-                    "target_reserve": target_reserve,
-                },
-                treasury_optimize_liquidity_params.TreasuryOptimizeLiquidityParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=TreasuryOptimizeLiquidityResponse,
-        )
-
     async def retrieve_cash_flow_forecast(
         self,
         *,
-        horizon_days: int | Omit = omit,
+        forecast_horizon_days: int | Omit = omit,
+        include_scenario_analysis: bool | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -321,9 +150,17 @@ class AsyncTreasuryResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> TreasuryRetrieveCashFlowForecastResponse:
         """
-        Corporate Cash Flow Projection
+        Retrieves an advanced AI-driven cash flow forecast for the organization,
+        projecting liquidity, identifying potential surpluses or deficits, and providing
+        recommendations for optimal treasury management.
 
         Args:
+          forecast_horizon_days: The number of days into the future for which to generate the cash flow forecast
+              (e.g., 30, 90, 180).
+
+          include_scenario_analysis: If true, the forecast will include best-case and worst-case scenario analysis
+              alongside the most likely projection.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -340,7 +177,10 @@ class AsyncTreasuryResource(AsyncAPIResource):
                 extra_body=extra_body,
                 timeout=timeout,
                 query=await async_maybe_transform(
-                    {"horizon_days": horizon_days},
+                    {
+                        "forecast_horizon_days": forecast_horizon_days,
+                        "include_scenario_analysis": include_scenario_analysis,
+                    },
                     treasury_retrieve_cash_flow_forecast_params.TreasuryRetrieveCashFlowForecastParams,
                 ),
             ),
@@ -357,7 +197,10 @@ class AsyncTreasuryResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> TreasuryRetrieveLiquidityPositionsResponse:
-        """Get current liquidity positions"""
+        """
+        Provides a real-time overview of the organization's liquidity across all
+        accounts, currencies, and short-term investments.
+        """
         return await self._get(
             "/corporate/treasury/liquidity-positions",
             options=make_request_options(
@@ -371,12 +214,6 @@ class TreasuryResourceWithRawResponse:
     def __init__(self, treasury: TreasuryResource) -> None:
         self._treasury = treasury
 
-        self.execute_bulk_payouts = to_raw_response_wrapper(
-            treasury.execute_bulk_payouts,
-        )
-        self.optimize_liquidity = to_raw_response_wrapper(
-            treasury.optimize_liquidity,
-        )
         self.retrieve_cash_flow_forecast = to_raw_response_wrapper(
             treasury.retrieve_cash_flow_forecast,
         )
@@ -384,25 +221,11 @@ class TreasuryResourceWithRawResponse:
             treasury.retrieve_liquidity_positions,
         )
 
-    @cached_property
-    def sweeping(self) -> SweepingResourceWithRawResponse:
-        return SweepingResourceWithRawResponse(self._treasury.sweeping)
-
-    @cached_property
-    def pooling(self) -> PoolingResourceWithRawResponse:
-        return PoolingResourceWithRawResponse(self._treasury.pooling)
-
 
 class AsyncTreasuryResourceWithRawResponse:
     def __init__(self, treasury: AsyncTreasuryResource) -> None:
         self._treasury = treasury
 
-        self.execute_bulk_payouts = async_to_raw_response_wrapper(
-            treasury.execute_bulk_payouts,
-        )
-        self.optimize_liquidity = async_to_raw_response_wrapper(
-            treasury.optimize_liquidity,
-        )
         self.retrieve_cash_flow_forecast = async_to_raw_response_wrapper(
             treasury.retrieve_cash_flow_forecast,
         )
@@ -410,25 +233,11 @@ class AsyncTreasuryResourceWithRawResponse:
             treasury.retrieve_liquidity_positions,
         )
 
-    @cached_property
-    def sweeping(self) -> AsyncSweepingResourceWithRawResponse:
-        return AsyncSweepingResourceWithRawResponse(self._treasury.sweeping)
-
-    @cached_property
-    def pooling(self) -> AsyncPoolingResourceWithRawResponse:
-        return AsyncPoolingResourceWithRawResponse(self._treasury.pooling)
-
 
 class TreasuryResourceWithStreamingResponse:
     def __init__(self, treasury: TreasuryResource) -> None:
         self._treasury = treasury
 
-        self.execute_bulk_payouts = to_streamed_response_wrapper(
-            treasury.execute_bulk_payouts,
-        )
-        self.optimize_liquidity = to_streamed_response_wrapper(
-            treasury.optimize_liquidity,
-        )
         self.retrieve_cash_flow_forecast = to_streamed_response_wrapper(
             treasury.retrieve_cash_flow_forecast,
         )
@@ -436,36 +245,14 @@ class TreasuryResourceWithStreamingResponse:
             treasury.retrieve_liquidity_positions,
         )
 
-    @cached_property
-    def sweeping(self) -> SweepingResourceWithStreamingResponse:
-        return SweepingResourceWithStreamingResponse(self._treasury.sweeping)
-
-    @cached_property
-    def pooling(self) -> PoolingResourceWithStreamingResponse:
-        return PoolingResourceWithStreamingResponse(self._treasury.pooling)
-
 
 class AsyncTreasuryResourceWithStreamingResponse:
     def __init__(self, treasury: AsyncTreasuryResource) -> None:
         self._treasury = treasury
 
-        self.execute_bulk_payouts = async_to_streamed_response_wrapper(
-            treasury.execute_bulk_payouts,
-        )
-        self.optimize_liquidity = async_to_streamed_response_wrapper(
-            treasury.optimize_liquidity,
-        )
         self.retrieve_cash_flow_forecast = async_to_streamed_response_wrapper(
             treasury.retrieve_cash_flow_forecast,
         )
         self.retrieve_liquidity_positions = async_to_streamed_response_wrapper(
             treasury.retrieve_liquidity_positions,
         )
-
-    @cached_property
-    def sweeping(self) -> AsyncSweepingResourceWithStreamingResponse:
-        return AsyncSweepingResourceWithStreamingResponse(self._treasury.sweeping)
-
-    @cached_property
-    def pooling(self) -> AsyncPoolingResourceWithStreamingResponse:
-        return AsyncPoolingResourceWithStreamingResponse(self._treasury.pooling)

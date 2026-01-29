@@ -10,6 +10,6 @@ __all__ = ["AccountLinkParams"]
 
 
 class AccountLinkParams(TypedDict, total=False):
-    institution_id: Required[Annotated[str, PropertyInfo(alias="institutionId")]]
+    country_code: Required[Annotated[str, PropertyInfo(alias="countryCode")]]
 
-    public_token: Required[Annotated[str, PropertyInfo(alias="publicToken")]]
+    institution_name: Required[Annotated[str, PropertyInfo(alias="institutionName")]]
