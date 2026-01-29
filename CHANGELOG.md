@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.12.0 (2026-01-29)
+
+Full Changelog: [v0.11.0...v0.12.0](https://github.com/diplomat-bit/aibank/compare/v0.11.0...v0.12.0)
+
+### Features
+
+* **api:** manual updates ([7ce507d](https://github.com/diplomat-bit/aibank/commit/7ce507d0b5a5efb3082d9a6a3623f1ca2fc7fe78))
+
 ## 0.11.0 (2026-01-29)
 
 Full Changelog: [v0.10.0...v0.11.0](https://github.com/diplomat-bit/aibank/compare/v0.10.0...v0.11.0)
