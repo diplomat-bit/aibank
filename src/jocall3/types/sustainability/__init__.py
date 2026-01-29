@@ -2,4 +2,8 @@
 
 from __future__ import annotations
 
-from .investment_analyze_impact_response import InvestmentAnalyzeImpactResponse as InvestmentAnalyzeImpactResponse
+from .offset_retire_params import OffsetRetireParams as OffsetRetireParams
+from .offset_purchase_params import OffsetPurchaseParams as OffsetPurchaseParams
+from .impact_project_search_params import ImpactProjectSearchParams as ImpactProjectSearchParams
+from .impact_project_search_response import ImpactProjectSearchResponse as ImpactProjectSearchResponse
+from .impact_portfolio_analysis_response import ImpactPortfolioAnalysisResponse as ImpactPortfolioAnalysisResponse

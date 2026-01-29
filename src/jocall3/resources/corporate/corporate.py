@@ -2,23 +2,15 @@
 
 from __future__ import annotations
 
-from .treasury import (
-    TreasuryResource,
-    AsyncTreasuryResource,
-    TreasuryResourceWithRawResponse,
-    AsyncTreasuryResourceWithRawResponse,
-    TreasuryResourceWithStreamingResponse,
-    AsyncTreasuryResourceWithStreamingResponse,
-)
+from typing import Iterable
+from typing_extensions import Literal
+
+import httpx
+
+from ...types import corporate_onboard_entity_params
+from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from ..._utils import maybe_transform, async_maybe_transform
 from ..._compat import cached_property
-from .anomalies import (
-    AnomaliesResource,
-    AsyncAnomaliesResource,
-    AnomaliesResourceWithRawResponse,
-    AsyncAnomaliesResourceWithRawResponse,
-    AnomaliesResourceWithStreamingResponse,
-    AsyncAnomaliesResourceWithStreamingResponse,
-)
 from .risk.risk import (
     RiskResource,
     AsyncRiskResource,
@@ -28,6 +20,12 @@ from .risk.risk import (
     AsyncRiskResourceWithStreamingResponse,
 )
 from ..._resource import SyncAPIResource, AsyncAPIResource
+from ..._response import (
+    to_raw_response_wrapper,
+    to_streamed_response_wrapper,
+    async_to_raw_response_wrapper,
+    async_to_streamed_response_wrapper,
+)
 from .cards.cards import (
     CardsResource,
     AsyncCardsResource,
@@ -36,13 +34,14 @@ from .cards.cards import (
     CardsResourceWithStreamingResponse,
     AsyncCardsResourceWithStreamingResponse,
 )
-from .sanction_screening import (
-    SanctionScreeningResource,
-    AsyncSanctionScreeningResource,
-    SanctionScreeningResourceWithRawResponse,
-    AsyncSanctionScreeningResourceWithRawResponse,
-    SanctionScreeningResourceWithStreamingResponse,
-    AsyncSanctionScreeningResourceWithStreamingResponse,
+from ..._base_client import make_request_options
+from .treasury.treasury import (
+    TreasuryResource,
+    AsyncTreasuryResource,
+    TreasuryResourceWithRawResponse,
+    AsyncTreasuryResourceWithRawResponse,
+    TreasuryResourceWithStreamingResponse,
+    AsyncTreasuryResourceWithStreamingResponse,
 )
 from .compliance.compliance import (
     ComplianceResource,
@@ -52,15 +51,20 @@ from .compliance.compliance import (
     ComplianceResourceWithStreamingResponse,
     AsyncComplianceResourceWithStreamingResponse,
 )
+from .governance.governance import (
+    GovernanceResource,
+    AsyncGovernanceResource,
+    GovernanceResourceWithRawResponse,
+    AsyncGovernanceResourceWithRawResponse,
+    GovernanceResourceWithStreamingResponse,
+    AsyncGovernanceResourceWithStreamingResponse,
+)
+from ...types.corporate_onboard_entity_response import CorporateOnboardEntityResponse
 
 __all__ = ["CorporateResource", "AsyncCorporateResource"]
 
 
 class CorporateResource(SyncAPIResource):
-    @cached_property
-    def sanction_screening(self) -> SanctionScreeningResource:
-        return SanctionScreeningResource(self._client)
-
     @cached_property
     def compliance(self) -> ComplianceResource:
         return ComplianceResource(self._client)
@@ -78,8 +82,8 @@ class CorporateResource(SyncAPIResource):
         return RiskResource(self._client)
 
     @cached_property
-    def anomalies(self) -> AnomaliesResource:
-        return AnomaliesResource(self._client)
+    def governance(self) -> GovernanceResource:
+        return GovernanceResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> CorporateResourceWithRawResponse:
@@ -100,12 +104,57 @@ class CorporateResource(SyncAPIResource):
         """
         return CorporateResourceWithStreamingResponse(self)
 
+    def onboard_entity(
+        self,
+        *,
+        entity_type: Literal["LLC", "CORP", "NGO", "PARTNERSHIP"],
+        jurisdiction: str,
+        legal_name: str,
+        tax_id: str,
+        beneficial_owners: Iterable[corporate_onboard_entity_params.BeneficialOwner] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> CorporateOnboardEntityResponse:
+        """
+        Onboard a New Corporate Entity
+
+        Args:
+          legal_name: Registered business name
+
+          tax_id: EIN, VAT, or local tax ID
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._post(
+            "/corporate/onboard",
+            body=maybe_transform(
+                {
+                    "entity_type": entity_type,
+                    "jurisdiction": jurisdiction,
+                    "legal_name": legal_name,
+                    "tax_id": tax_id,
+                    "beneficial_owners": beneficial_owners,
+                },
+                corporate_onboard_entity_params.CorporateOnboardEntityParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=CorporateOnboardEntityResponse,
+        )
+
 
 class AsyncCorporateResource(AsyncAPIResource):
-    @cached_property
-    def sanction_screening(self) -> AsyncSanctionScreeningResource:
-        return AsyncSanctionScreeningResource(self._client)
-
     @cached_property
     def compliance(self) -> AsyncComplianceResource:
         return AsyncComplianceResource(self._client)
@@ -123,8 +172,8 @@ class AsyncCorporateResource(AsyncAPIResource):
         return AsyncRiskResource(self._client)
 
     @cached_property
-    def anomalies(self) -> AsyncAnomaliesResource:
-        return AsyncAnomaliesResource(self._client)
+    def governance(self) -> AsyncGovernanceResource:
+        return AsyncGovernanceResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AsyncCorporateResourceWithRawResponse:
@@ -145,14 +194,63 @@ class AsyncCorporateResource(AsyncAPIResource):
         """
         return AsyncCorporateResourceWithStreamingResponse(self)
 
+    async def onboard_entity(
+        self,
+        *,
+        entity_type: Literal["LLC", "CORP", "NGO", "PARTNERSHIP"],
+        jurisdiction: str,
+        legal_name: str,
+        tax_id: str,
+        beneficial_owners: Iterable[corporate_onboard_entity_params.BeneficialOwner] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> CorporateOnboardEntityResponse:
+        """
+        Onboard a New Corporate Entity
+
+        Args:
+          legal_name: Registered business name
+
+          tax_id: EIN, VAT, or local tax ID
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return await self._post(
+            "/corporate/onboard",
+            body=await async_maybe_transform(
+                {
+                    "entity_type": entity_type,
+                    "jurisdiction": jurisdiction,
+                    "legal_name": legal_name,
+                    "tax_id": tax_id,
+                    "beneficial_owners": beneficial_owners,
+                },
+                corporate_onboard_entity_params.CorporateOnboardEntityParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=CorporateOnboardEntityResponse,
+        )
+
 
 class CorporateResourceWithRawResponse:
     def __init__(self, corporate: CorporateResource) -> None:
         self._corporate = corporate
 
-    @cached_property
-    def sanction_screening(self) -> SanctionScreeningResourceWithRawResponse:
-        return SanctionScreeningResourceWithRawResponse(self._corporate.sanction_screening)
+        self.onboard_entity = to_raw_response_wrapper(
+            corporate.onboard_entity,
+        )
 
     @cached_property
     def compliance(self) -> ComplianceResourceWithRawResponse:
@@ -171,17 +269,17 @@ class CorporateResourceWithRawResponse:
         return RiskResourceWithRawResponse(self._corporate.risk)
 
     @cached_property
-    def anomalies(self) -> AnomaliesResourceWithRawResponse:
-        return AnomaliesResourceWithRawResponse(self._corporate.anomalies)
+    def governance(self) -> GovernanceResourceWithRawResponse:
+        return GovernanceResourceWithRawResponse(self._corporate.governance)
 
 
 class AsyncCorporateResourceWithRawResponse:
     def __init__(self, corporate: AsyncCorporateResource) -> None:
         self._corporate = corporate
 
-    @cached_property
-    def sanction_screening(self) -> AsyncSanctionScreeningResourceWithRawResponse:
-        return AsyncSanctionScreeningResourceWithRawResponse(self._corporate.sanction_screening)
+        self.onboard_entity = async_to_raw_response_wrapper(
+            corporate.onboard_entity,
+        )
 
     @cached_property
     def compliance(self) -> AsyncComplianceResourceWithRawResponse:
@@ -200,17 +298,17 @@ class AsyncCorporateResourceWithRawResponse:
         return AsyncRiskResourceWithRawResponse(self._corporate.risk)
 
     @cached_property
-    def anomalies(self) -> AsyncAnomaliesResourceWithRawResponse:
-        return AsyncAnomaliesResourceWithRawResponse(self._corporate.anomalies)
+    def governance(self) -> AsyncGovernanceResourceWithRawResponse:
+        return AsyncGovernanceResourceWithRawResponse(self._corporate.governance)
 
 
 class CorporateResourceWithStreamingResponse:
     def __init__(self, corporate: CorporateResource) -> None:
         self._corporate = corporate
 
-    @cached_property
-    def sanction_screening(self) -> SanctionScreeningResourceWithStreamingResponse:
-        return SanctionScreeningResourceWithStreamingResponse(self._corporate.sanction_screening)
+        self.onboard_entity = to_streamed_response_wrapper(
+            corporate.onboard_entity,
+        )
 
     @cached_property
     def compliance(self) -> ComplianceResourceWithStreamingResponse:
@@ -229,17 +327,17 @@ class CorporateResourceWithStreamingResponse:
         return RiskResourceWithStreamingResponse(self._corporate.risk)
 
     @cached_property
-    def anomalies(self) -> AnomaliesResourceWithStreamingResponse:
-        return AnomaliesResourceWithStreamingResponse(self._corporate.anomalies)
+    def governance(self) -> GovernanceResourceWithStreamingResponse:
+        return GovernanceResourceWithStreamingResponse(self._corporate.governance)
 
 
 class AsyncCorporateResourceWithStreamingResponse:
     def __init__(self, corporate: AsyncCorporateResource) -> None:
         self._corporate = corporate
 
-    @cached_property
-    def sanction_screening(self) -> AsyncSanctionScreeningResourceWithStreamingResponse:
-        return AsyncSanctionScreeningResourceWithStreamingResponse(self._corporate.sanction_screening)
+        self.onboard_entity = async_to_streamed_response_wrapper(
+            corporate.onboard_entity,
+        )
 
     @cached_property
     def compliance(self) -> AsyncComplianceResourceWithStreamingResponse:
@@ -258,5 +356,5 @@ class AsyncCorporateResourceWithStreamingResponse:
         return AsyncRiskResourceWithStreamingResponse(self._corporate.risk)
 
     @cached_property
-    def anomalies(self) -> AsyncAnomaliesResourceWithStreamingResponse:
-        return AsyncAnomaliesResourceWithStreamingResponse(self._corporate.anomalies)
+    def governance(self) -> AsyncGovernanceResourceWithStreamingResponse:
+        return AsyncGovernanceResourceWithStreamingResponse(self._corporate.governance)

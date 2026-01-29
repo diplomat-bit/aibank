@@ -2,4 +2,4 @@
 
 from __future__ import annotations
 
-from .tool_list_params import ToolListParams as ToolListParams
+from .tool_list_response import ToolListResponse as ToolListResponse

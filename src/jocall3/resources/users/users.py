@@ -12,8 +12,8 @@ from .me.me import (
     MeResourceWithStreamingResponse,
     AsyncMeResourceWithStreamingResponse,
 )
-from ...types import user_register_params
-from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from ...types import user_login_params, user_register_params
+from ..._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
 from ..._utils import maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
@@ -24,12 +24,25 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ..._base_client import make_request_options
+from .password_reset import (
+    PasswordResetResource,
+    AsyncPasswordResetResource,
+    PasswordResetResourceWithRawResponse,
+    AsyncPasswordResetResourceWithRawResponse,
+    PasswordResetResourceWithStreamingResponse,
+    AsyncPasswordResetResourceWithStreamingResponse,
+)
+from ...types.user_login_response import UserLoginResponse
 from ...types.user_register_response import UserRegisterResponse
 
 __all__ = ["UsersResource", "AsyncUsersResource"]
 
 
 class UsersResource(SyncAPIResource):
+    @cached_property
+    def password_reset(self) -> PasswordResetResource:
+        return PasswordResetResource(self._client)
+
     @cached_property
     def me(self) -> MeResource:
         return MeResource(self._client)
@@ -56,41 +69,17 @@ class UsersResource(SyncAPIResource):
     def login(
         self,
         *,
+        email: str,
+        password: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
-        """Authenticates a user and creates a secure session, returning access tokens.
-
-        May
-        require MFA depending on user settings.
+    ) -> UserLoginResponse:
         """
-        return self._post(
-            "/users/login",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=object,
-        )
-
-    def register(
-        self,
-        *,
-        address: object | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> UserRegisterResponse:
-        """Registers a new user account with , initiating the onboarding process.
-
-        Requires
-        basic user details.
+        User Login and Session Creation
 
         Args:
           extra_headers: Send extra headers
@@ -102,8 +91,88 @@ class UsersResource(SyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._post(
+            "/users/login",
+            body=maybe_transform(
+                {
+                    "email": email,
+                    "password": password,
+                },
+                user_login_params.UserLoginParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=UserLoginResponse,
+        )
+
+    def logout(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> None:
+        """Terminate User Session"""
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+        return self._post(
+            "/users/logout",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=NoneType,
+        )
+
+    def register(
+        self,
+        *,
+        email: str,
+        name: str,
+        password: str,
+        address: user_register_params.Address | Omit = omit,
+        phone: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> UserRegisterResponse:
+        """Initiates the onboarding process.
+
+        Requires unique email and name.
+
+        Args:
+          email: Primary login email
+
+          name: Full legal name
+
+          password: Secure hashable string
+
+          phone: International format phone number
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._post(
             "/users/register",
-            body=maybe_transform({"address": address}, user_register_params.UserRegisterParams),
+            body=maybe_transform(
+                {
+                    "email": email,
+                    "name": name,
+                    "password": password,
+                    "address": address,
+                    "phone": phone,
+                },
+                user_register_params.UserRegisterParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -112,6 +181,10 @@ class UsersResource(SyncAPIResource):
 
 
 class AsyncUsersResource(AsyncAPIResource):
+    @cached_property
+    def password_reset(self) -> AsyncPasswordResetResource:
+        return AsyncPasswordResetResource(self._client)
+
     @cached_property
     def me(self) -> AsyncMeResource:
         return AsyncMeResource(self._client)
@@ -138,41 +211,17 @@ class AsyncUsersResource(AsyncAPIResource):
     async def login(
         self,
         *,
+        email: str,
+        password: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
-        """Authenticates a user and creates a secure session, returning access tokens.
-
-        May
-        require MFA depending on user settings.
+    ) -> UserLoginResponse:
         """
-        return await self._post(
-            "/users/login",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=object,
-        )
-
-    async def register(
-        self,
-        *,
-        address: object | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> UserRegisterResponse:
-        """Registers a new user account with , initiating the onboarding process.
-
-        Requires
-        basic user details.
+        User Login and Session Creation
 
         Args:
           extra_headers: Send extra headers
@@ -184,8 +233,88 @@ class AsyncUsersResource(AsyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return await self._post(
+            "/users/login",
+            body=await async_maybe_transform(
+                {
+                    "email": email,
+                    "password": password,
+                },
+                user_login_params.UserLoginParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=UserLoginResponse,
+        )
+
+    async def logout(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> None:
+        """Terminate User Session"""
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+        return await self._post(
+            "/users/logout",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=NoneType,
+        )
+
+    async def register(
+        self,
+        *,
+        email: str,
+        name: str,
+        password: str,
+        address: user_register_params.Address | Omit = omit,
+        phone: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> UserRegisterResponse:
+        """Initiates the onboarding process.
+
+        Requires unique email and name.
+
+        Args:
+          email: Primary login email
+
+          name: Full legal name
+
+          password: Secure hashable string
+
+          phone: International format phone number
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return await self._post(
             "/users/register",
-            body=await async_maybe_transform({"address": address}, user_register_params.UserRegisterParams),
+            body=await async_maybe_transform(
+                {
+                    "email": email,
+                    "name": name,
+                    "password": password,
+                    "address": address,
+                    "phone": phone,
+                },
+                user_register_params.UserRegisterParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -200,9 +329,16 @@ class UsersResourceWithRawResponse:
         self.login = to_raw_response_wrapper(
             users.login,
         )
+        self.logout = to_raw_response_wrapper(
+            users.logout,
+        )
         self.register = to_raw_response_wrapper(
             users.register,
         )
+
+    @cached_property
+    def password_reset(self) -> PasswordResetResourceWithRawResponse:
+        return PasswordResetResourceWithRawResponse(self._users.password_reset)
 
     @cached_property
     def me(self) -> MeResourceWithRawResponse:
@@ -216,9 +352,16 @@ class AsyncUsersResourceWithRawResponse:
         self.login = async_to_raw_response_wrapper(
             users.login,
         )
+        self.logout = async_to_raw_response_wrapper(
+            users.logout,
+        )
         self.register = async_to_raw_response_wrapper(
             users.register,
         )
+
+    @cached_property
+    def password_reset(self) -> AsyncPasswordResetResourceWithRawResponse:
+        return AsyncPasswordResetResourceWithRawResponse(self._users.password_reset)
 
     @cached_property
     def me(self) -> AsyncMeResourceWithRawResponse:
@@ -232,9 +375,16 @@ class UsersResourceWithStreamingResponse:
         self.login = to_streamed_response_wrapper(
             users.login,
         )
+        self.logout = to_streamed_response_wrapper(
+            users.logout,
+        )
         self.register = to_streamed_response_wrapper(
             users.register,
         )
+
+    @cached_property
+    def password_reset(self) -> PasswordResetResourceWithStreamingResponse:
+        return PasswordResetResourceWithStreamingResponse(self._users.password_reset)
 
     @cached_property
     def me(self) -> MeResourceWithStreamingResponse:
@@ -248,9 +398,16 @@ class AsyncUsersResourceWithStreamingResponse:
         self.login = async_to_streamed_response_wrapper(
             users.login,
         )
+        self.logout = async_to_streamed_response_wrapper(
+            users.logout,
+        )
         self.register = async_to_streamed_response_wrapper(
             users.register,
         )
+
+    @cached_property
+    def password_reset(self) -> AsyncPasswordResetResourceWithStreamingResponse:
+        return AsyncPasswordResetResourceWithStreamingResponse(self._users.password_reset)
 
     @cached_property
     def me(self) -> AsyncMeResourceWithStreamingResponse:

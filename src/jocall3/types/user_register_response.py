@@ -1,26 +1,52 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 from typing import Optional
+from datetime import datetime
 
 from pydantic import Field as FieldInfo
 
 from .._models import BaseModel
 
-__all__ = ["UserRegisterResponse", "Preferences"]
+__all__ = ["UserRegisterResponse", "Address", "Preferences", "SecurityStatus"]
+
+
+class Address(BaseModel):
+    city: Optional[str] = None
+
+    country: Optional[str] = None
+
+    state: Optional[str] = None
+
+    street: Optional[str] = None
+
+    zip: Optional[str] = None
 
 
 class Preferences(BaseModel):
-    """User's personalized preferences for the platform."""
-
     notification_channels: Optional[object] = FieldInfo(alias="notificationChannels", default=None)
-    """Preferred channels for receiving notifications."""
+
+    theme: Optional[str] = None
+
+
+class SecurityStatus(BaseModel):
+    last_login: Optional[datetime] = FieldInfo(alias="lastLogin", default=None)
+
+    two_factor_enabled: Optional[bool] = FieldInfo(alias="twoFactorEnabled", default=None)
 
 
 class UserRegisterResponse(BaseModel):
-    address: Optional[object] = None
+    id: str
+
+    email: str
+
+    identity_verified: bool = FieldInfo(alias="identityVerified")
+
+    name: str
+
+    address: Optional[Address] = None
+
+    phone: Optional[str] = None
 
     preferences: Optional[Preferences] = None
-    """User's personalized preferences for the platform."""
 
-    security_status: Optional[object] = FieldInfo(alias="securityStatus", default=None)
-    """Security-related status for the user account."""
+    security_status: Optional[SecurityStatus] = FieldInfo(alias="securityStatus", default=None)

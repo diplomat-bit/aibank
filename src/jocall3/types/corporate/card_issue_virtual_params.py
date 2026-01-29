@@ -2,11 +2,18 @@
 
 from __future__ import annotations
 
-from typing_extensions import Required, TypedDict
+from typing_extensions import Required, Annotated, TypedDict
+
+from ..._utils import PropertyInfo
 
 __all__ = ["CardIssueVirtualParams"]
 
 
 class CardIssueVirtualParams(TypedDict, total=False):
-    controls: Required[object]
-    """Granular spending controls for a corporate card."""
+    holder_name: Required[Annotated[str, PropertyInfo(alias="holderName")]]
+
+    monthly_limit: Required[Annotated[float, PropertyInfo(alias="monthlyLimit")]]
+
+    purpose: Required[str]
+
+    metadata: object
