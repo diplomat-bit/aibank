@@ -2,8 +2,24 @@
 
 from __future__ import annotations
 
+from .ads import (
+    AdsResource,
+    AsyncAdsResource,
+    AdsResourceWithRawResponse,
+    AsyncAdsResourceWithRawResponse,
+    AdsResourceWithStreamingResponse,
+    AsyncAdsResourceWithStreamingResponse,
+)
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
+from .oracle.oracle import (
+    OracleResource,
+    AsyncOracleResource,
+    OracleResourceWithRawResponse,
+    AsyncOracleResourceWithRawResponse,
+    OracleResourceWithStreamingResponse,
+    AsyncOracleResourceWithStreamingResponse,
+)
 from .advisor.advisor import (
     AdvisorResource,
     AsyncAdvisorResource,
@@ -11,6 +27,14 @@ from .advisor.advisor import (
     AsyncAdvisorResourceWithRawResponse,
     AdvisorResourceWithStreamingResponse,
     AsyncAdvisorResourceWithStreamingResponse,
+)
+from .incubator.incubator import (
+    IncubatorResource,
+    AsyncIncubatorResource,
+    IncubatorResourceWithRawResponse,
+    AsyncIncubatorResourceWithRawResponse,
+    IncubatorResourceWithStreamingResponse,
+    AsyncIncubatorResourceWithStreamingResponse,
 )
 
 __all__ = ["AIResource", "AsyncAIResource"]
@@ -20,6 +44,18 @@ class AIResource(SyncAPIResource):
     @cached_property
     def advisor(self) -> AdvisorResource:
         return AdvisorResource(self._client)
+
+    @cached_property
+    def oracle(self) -> OracleResource:
+        return OracleResource(self._client)
+
+    @cached_property
+    def incubator(self) -> IncubatorResource:
+        return IncubatorResource(self._client)
+
+    @cached_property
+    def ads(self) -> AdsResource:
+        return AdsResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AIResourceWithRawResponse:
@@ -45,6 +81,18 @@ class AsyncAIResource(AsyncAPIResource):
     @cached_property
     def advisor(self) -> AsyncAdvisorResource:
         return AsyncAdvisorResource(self._client)
+
+    @cached_property
+    def oracle(self) -> AsyncOracleResource:
+        return AsyncOracleResource(self._client)
+
+    @cached_property
+    def incubator(self) -> AsyncIncubatorResource:
+        return AsyncIncubatorResource(self._client)
+
+    @cached_property
+    def ads(self) -> AsyncAdsResource:
+        return AsyncAdsResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AsyncAIResourceWithRawResponse:
@@ -74,6 +122,18 @@ class AIResourceWithRawResponse:
     def advisor(self) -> AdvisorResourceWithRawResponse:
         return AdvisorResourceWithRawResponse(self._ai.advisor)
 
+    @cached_property
+    def oracle(self) -> OracleResourceWithRawResponse:
+        return OracleResourceWithRawResponse(self._ai.oracle)
+
+    @cached_property
+    def incubator(self) -> IncubatorResourceWithRawResponse:
+        return IncubatorResourceWithRawResponse(self._ai.incubator)
+
+    @cached_property
+    def ads(self) -> AdsResourceWithRawResponse:
+        return AdsResourceWithRawResponse(self._ai.ads)
+
 
 class AsyncAIResourceWithRawResponse:
     def __init__(self, ai: AsyncAIResource) -> None:
@@ -82,6 +142,18 @@ class AsyncAIResourceWithRawResponse:
     @cached_property
     def advisor(self) -> AsyncAdvisorResourceWithRawResponse:
         return AsyncAdvisorResourceWithRawResponse(self._ai.advisor)
+
+    @cached_property
+    def oracle(self) -> AsyncOracleResourceWithRawResponse:
+        return AsyncOracleResourceWithRawResponse(self._ai.oracle)
+
+    @cached_property
+    def incubator(self) -> AsyncIncubatorResourceWithRawResponse:
+        return AsyncIncubatorResourceWithRawResponse(self._ai.incubator)
+
+    @cached_property
+    def ads(self) -> AsyncAdsResourceWithRawResponse:
+        return AsyncAdsResourceWithRawResponse(self._ai.ads)
 
 
 class AIResourceWithStreamingResponse:
@@ -92,6 +164,18 @@ class AIResourceWithStreamingResponse:
     def advisor(self) -> AdvisorResourceWithStreamingResponse:
         return AdvisorResourceWithStreamingResponse(self._ai.advisor)
 
+    @cached_property
+    def oracle(self) -> OracleResourceWithStreamingResponse:
+        return OracleResourceWithStreamingResponse(self._ai.oracle)
+
+    @cached_property
+    def incubator(self) -> IncubatorResourceWithStreamingResponse:
+        return IncubatorResourceWithStreamingResponse(self._ai.incubator)
+
+    @cached_property
+    def ads(self) -> AdsResourceWithStreamingResponse:
+        return AdsResourceWithStreamingResponse(self._ai.ads)
+
 
 class AsyncAIResourceWithStreamingResponse:
     def __init__(self, ai: AsyncAIResource) -> None:
@@ -100,3 +184,15 @@ class AsyncAIResourceWithStreamingResponse:
     @cached_property
     def advisor(self) -> AsyncAdvisorResourceWithStreamingResponse:
         return AsyncAdvisorResourceWithStreamingResponse(self._ai.advisor)
+
+    @cached_property
+    def oracle(self) -> AsyncOracleResourceWithStreamingResponse:
+        return AsyncOracleResourceWithStreamingResponse(self._ai.oracle)
+
+    @cached_property
+    def incubator(self) -> AsyncIncubatorResourceWithStreamingResponse:
+        return AsyncIncubatorResourceWithStreamingResponse(self._ai.incubator)
+
+    @cached_property
+    def ads(self) -> AsyncAdsResourceWithStreamingResponse:
+        return AsyncAdsResourceWithStreamingResponse(self._ai.ads)

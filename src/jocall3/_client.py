@@ -31,13 +31,28 @@ from ._base_client import (
 )
 
 if TYPE_CHECKING:
-    from .resources import ai, users, budgets, accounts, investments, transactions
+    from .resources import (
+        ai,
+        web3,
+        users,
+        budgets,
+        accounts,
+        payments,
+        corporate,
+        investments,
+        transactions,
+        sustainability,
+    )
     from .resources.ai.ai import AIResource, AsyncAIResource
     from .resources.budgets import BudgetsResource, AsyncBudgetsResource
+    from .resources.web3.web3 import Web3Resource, AsyncWeb3Resource
     from .resources.users.users import UsersResource, AsyncUsersResource
     from .resources.accounts.accounts import AccountsResource, AsyncAccountsResource
+    from .resources.payments.payments import PaymentsResource, AsyncPaymentsResource
+    from .resources.corporate.corporate import CorporateResource, AsyncCorporateResource
     from .resources.investments.investments import InvestmentsResource, AsyncInvestmentsResource
     from .resources.transactions.transactions import TransactionsResource, AsyncTransactionsResource
+    from .resources.sustainability.sustainability import SustainabilityResource, AsyncSustainabilityResource
 
 __all__ = [
     "ENVIRONMENTS",
@@ -176,6 +191,30 @@ class Jocall3(SyncAPIClient):
         from .resources.ai import AIResource
 
         return AIResource(self)
+
+    @cached_property
+    def corporate(self) -> CorporateResource:
+        from .resources.corporate import CorporateResource
+
+        return CorporateResource(self)
+
+    @cached_property
+    def web3(self) -> Web3Resource:
+        from .resources.web3 import Web3Resource
+
+        return Web3Resource(self)
+
+    @cached_property
+    def payments(self) -> PaymentsResource:
+        from .resources.payments import PaymentsResource
+
+        return PaymentsResource(self)
+
+    @cached_property
+    def sustainability(self) -> SustainabilityResource:
+        from .resources.sustainability import SustainabilityResource
+
+        return SustainabilityResource(self)
 
     @cached_property
     def with_raw_response(self) -> Jocall3WithRawResponse:
@@ -408,6 +447,30 @@ class AsyncJocall3(AsyncAPIClient):
         return AsyncAIResource(self)
 
     @cached_property
+    def corporate(self) -> AsyncCorporateResource:
+        from .resources.corporate import AsyncCorporateResource
+
+        return AsyncCorporateResource(self)
+
+    @cached_property
+    def web3(self) -> AsyncWeb3Resource:
+        from .resources.web3 import AsyncWeb3Resource
+
+        return AsyncWeb3Resource(self)
+
+    @cached_property
+    def payments(self) -> AsyncPaymentsResource:
+        from .resources.payments import AsyncPaymentsResource
+
+        return AsyncPaymentsResource(self)
+
+    @cached_property
+    def sustainability(self) -> AsyncSustainabilityResource:
+        from .resources.sustainability import AsyncSustainabilityResource
+
+        return AsyncSustainabilityResource(self)
+
+    @cached_property
     def with_raw_response(self) -> AsyncJocall3WithRawResponse:
         return AsyncJocall3WithRawResponse(self)
 
@@ -560,6 +623,30 @@ class Jocall3WithRawResponse:
 
         return AIResourceWithRawResponse(self._client.ai)
 
+    @cached_property
+    def corporate(self) -> corporate.CorporateResourceWithRawResponse:
+        from .resources.corporate import CorporateResourceWithRawResponse
+
+        return CorporateResourceWithRawResponse(self._client.corporate)
+
+    @cached_property
+    def web3(self) -> web3.Web3ResourceWithRawResponse:
+        from .resources.web3 import Web3ResourceWithRawResponse
+
+        return Web3ResourceWithRawResponse(self._client.web3)
+
+    @cached_property
+    def payments(self) -> payments.PaymentsResourceWithRawResponse:
+        from .resources.payments import PaymentsResourceWithRawResponse
+
+        return PaymentsResourceWithRawResponse(self._client.payments)
+
+    @cached_property
+    def sustainability(self) -> sustainability.SustainabilityResourceWithRawResponse:
+        from .resources.sustainability import SustainabilityResourceWithRawResponse
+
+        return SustainabilityResourceWithRawResponse(self._client.sustainability)
+
 
 class AsyncJocall3WithRawResponse:
     _client: AsyncJocall3
@@ -602,6 +689,30 @@ class AsyncJocall3WithRawResponse:
         from .resources.ai import AsyncAIResourceWithRawResponse
 
         return AsyncAIResourceWithRawResponse(self._client.ai)
+
+    @cached_property
+    def corporate(self) -> corporate.AsyncCorporateResourceWithRawResponse:
+        from .resources.corporate import AsyncCorporateResourceWithRawResponse
+
+        return AsyncCorporateResourceWithRawResponse(self._client.corporate)
+
+    @cached_property
+    def web3(self) -> web3.AsyncWeb3ResourceWithRawResponse:
+        from .resources.web3 import AsyncWeb3ResourceWithRawResponse
+
+        return AsyncWeb3ResourceWithRawResponse(self._client.web3)
+
+    @cached_property
+    def payments(self) -> payments.AsyncPaymentsResourceWithRawResponse:
+        from .resources.payments import AsyncPaymentsResourceWithRawResponse
+
+        return AsyncPaymentsResourceWithRawResponse(self._client.payments)
+
+    @cached_property
+    def sustainability(self) -> sustainability.AsyncSustainabilityResourceWithRawResponse:
+        from .resources.sustainability import AsyncSustainabilityResourceWithRawResponse
+
+        return AsyncSustainabilityResourceWithRawResponse(self._client.sustainability)
 
 
 class Jocall3WithStreamedResponse:
@@ -646,6 +757,30 @@ class Jocall3WithStreamedResponse:
 
         return AIResourceWithStreamingResponse(self._client.ai)
 
+    @cached_property
+    def corporate(self) -> corporate.CorporateResourceWithStreamingResponse:
+        from .resources.corporate import CorporateResourceWithStreamingResponse
+
+        return CorporateResourceWithStreamingResponse(self._client.corporate)
+
+    @cached_property
+    def web3(self) -> web3.Web3ResourceWithStreamingResponse:
+        from .resources.web3 import Web3ResourceWithStreamingResponse
+
+        return Web3ResourceWithStreamingResponse(self._client.web3)
+
+    @cached_property
+    def payments(self) -> payments.PaymentsResourceWithStreamingResponse:
+        from .resources.payments import PaymentsResourceWithStreamingResponse
+
+        return PaymentsResourceWithStreamingResponse(self._client.payments)
+
+    @cached_property
+    def sustainability(self) -> sustainability.SustainabilityResourceWithStreamingResponse:
+        from .resources.sustainability import SustainabilityResourceWithStreamingResponse
+
+        return SustainabilityResourceWithStreamingResponse(self._client.sustainability)
+
 
 class AsyncJocall3WithStreamedResponse:
     _client: AsyncJocall3
@@ -688,6 +823,30 @@ class AsyncJocall3WithStreamedResponse:
         from .resources.ai import AsyncAIResourceWithStreamingResponse
 
         return AsyncAIResourceWithStreamingResponse(self._client.ai)
+
+    @cached_property
+    def corporate(self) -> corporate.AsyncCorporateResourceWithStreamingResponse:
+        from .resources.corporate import AsyncCorporateResourceWithStreamingResponse
+
+        return AsyncCorporateResourceWithStreamingResponse(self._client.corporate)
+
+    @cached_property
+    def web3(self) -> web3.AsyncWeb3ResourceWithStreamingResponse:
+        from .resources.web3 import AsyncWeb3ResourceWithStreamingResponse
+
+        return AsyncWeb3ResourceWithStreamingResponse(self._client.web3)
+
+    @cached_property
+    def payments(self) -> payments.AsyncPaymentsResourceWithStreamingResponse:
+        from .resources.payments import AsyncPaymentsResourceWithStreamingResponse
+
+        return AsyncPaymentsResourceWithStreamingResponse(self._client.payments)
+
+    @cached_property
+    def sustainability(self) -> sustainability.AsyncSustainabilityResourceWithStreamingResponse:
+        from .resources.sustainability import AsyncSustainabilityResourceWithStreamingResponse
+
+        return AsyncSustainabilityResourceWithStreamingResponse(self._client.sustainability)
 
 
 Client = Jocall3
