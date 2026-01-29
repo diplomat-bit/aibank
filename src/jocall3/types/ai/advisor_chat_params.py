@@ -2,19 +2,16 @@
 
 from __future__ import annotations
 
-from typing_extensions import Required, Annotated, TypedDict
+from typing_extensions import Annotated, TypedDict
 
-from ..._types import SequenceNotStr
 from ..._utils import PropertyInfo
 
 __all__ = ["AdvisorChatParams"]
 
 
 class AdvisorChatParams(TypedDict, total=False):
-    message: Required[str]
-
-    context_account_ids: Annotated[SequenceNotStr[str], PropertyInfo(alias="contextAccountIds")]
-
-    mode: str
-
-    stream: bool
+    function_response: Annotated[object, PropertyInfo(alias="functionResponse")]
+    """
+    Optional: The output from a tool function that the AI previously requested to be
+    executed.
+    """

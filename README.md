@@ -35,10 +35,12 @@ client = Jocall3(
 )
 
 response = client.ai.oracle.simulate.run_advanced(
-    prompt="Analyze the systemic risk of a 20% drop in BTC prices on my cross-chain collateralized debt positions, factoring in a simultaneous 50bps hike by the Fed and a liquidity squeeze on Aave.",
-    scenarios=[{"name": "Crypto Black Swan + Macro Contagion"}],
+    global_economic_factors={
+        "volatility_index": "VIX_HIGHER_30",
+        "geopolitical_tension": "high",
+    },
+    personal_assumptions={"stop_loss_triggered": True},
 )
-print(response.simulation_id)
 ```
 
 While you can provide an `api_key` keyword argument,
@@ -64,10 +66,12 @@ client = AsyncJocall3(
 
 async def main() -> None:
     response = await client.ai.oracle.simulate.run_advanced(
-        prompt="Analyze the systemic risk of a 20% drop in BTC prices on my cross-chain collateralized debt positions, factoring in a simultaneous 50bps hike by the Fed and a liquidity squeeze on Aave.",
-        scenarios=[{"name": "Crypto Black Swan + Macro Contagion"}],
+        global_economic_factors={
+            "volatility_index": "VIX_HIGHER_30",
+            "geopolitical_tension": "high",
+        },
+        personal_assumptions={"stop_loss_triggered": True},
     )
-    print(response.simulation_id)
 
 
 asyncio.run(main())
@@ -101,10 +105,12 @@ async def main() -> None:
         http_client=DefaultAioHttpClient(),
     ) as client:
         response = await client.ai.oracle.simulate.run_advanced(
-            prompt="Analyze the systemic risk of a 20% drop in BTC prices on my cross-chain collateralized debt positions, factoring in a simultaneous 50bps hike by the Fed and a liquidity squeeze on Aave.",
-            scenarios=[{"name": "Crypto Black Swan + Macro Contagion"}],
+            global_economic_factors={
+                "volatility_index": "VIX_HIGHER_30",
+                "geopolitical_tension": "high",
+            },
+            personal_assumptions={"stop_loss_triggered": True},
         )
-        print(response.simulation_id)
 
 
 asyncio.run(main())
@@ -128,33 +134,11 @@ from jocall3 import Jocall3
 
 client = Jocall3()
 
-response = client.corporate.cards.issue_physical(
-    holder_name="holderName",
-    shipping_address={
-        "city": "city",
-        "country": "country",
-        "street": "street",
-    },
+me = client.users.me.update(
+    preferences={},
 )
-print(response.shipping_address)
+print(me.preferences)
 ```
-
-## File uploads
-
-Request parameters that correspond to file uploads can be passed as `bytes`, or a [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike) instance or a tuple of `(filename, contents, media type)`.
-
-```python
-from pathlib import Path
-from jocall3 import Jocall3
-
-client = Jocall3()
-
-client.system.verification.document(
-    file=Path("/path/to/file"),
-)
-```
-
-The async client uses the exact same interface. If you pass a [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike) instance, the file contents will be read asynchronously automatically.
 
 ## Handling errors
 
@@ -172,11 +156,7 @@ from jocall3 import Jocall3
 client = Jocall3()
 
 try:
-    client.users.register(
-        email="user@quantum-ledger.com",
-        name="Standard User",
-        password="DefaultPassword123!",
-    )
+    client.users.register()
 except jocall3.APIConnectionError as e:
     print("The server could not be reached")
     print(e.__cause__)  # an underlying Exception, likely raised within httpx.
@@ -219,11 +199,7 @@ client = Jocall3(
 )
 
 # Or, configure per-request:
-client.with_options(max_retries=5).users.register(
-    email="user@quantum-ledger.com",
-    name="Standard User",
-    password="DefaultPassword123!",
-)
+client.with_options(max_retries=5).users.register()
 ```
 
 ### Timeouts
@@ -246,11 +222,7 @@ client = Jocall3(
 )
 
 # Override per-request:
-client.with_options(timeout=5.0).users.register(
-    email="user@quantum-ledger.com",
-    name="Standard User",
-    password="DefaultPassword123!",
-)
+client.with_options(timeout=5.0).users.register()
 ```
 
 On timeout, an `APITimeoutError` is thrown.
@@ -291,15 +263,11 @@ The "raw" Response object can be accessed by prefixing `.with_raw_response.` to 
 from jocall3 import Jocall3
 
 client = Jocall3()
-response = client.users.with_raw_response.register(
-    email="user@quantum-ledger.com",
-    name="Standard User",
-    password="DefaultPassword123!",
-)
+response = client.users.with_raw_response.register()
 print(response.headers.get('X-My-Header'))
 
 user = response.parse()  # get the object that `users.register()` would have returned
-print(user.id)
+print(user.address)
 ```
 
 These methods return an [`APIResponse`](https://github.com/diplomat-bit/aibank/tree/main/src/jocall3/_response.py) object.
@@ -313,11 +281,7 @@ The above interface eagerly reads the full response body when you make the reque
 To stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.
 
 ```python
-with client.users.with_streaming_response.register(
-    email="user@quantum-ledger.com",
-    name="Standard User",
-    password="DefaultPassword123!",
-) as response:
+with client.users.with_streaming_response.register() as response:
     print(response.headers.get("X-My-Header"))
 
     for line in response.iter_lines():

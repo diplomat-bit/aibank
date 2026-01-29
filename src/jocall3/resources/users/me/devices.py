@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import httpx
 
-from ...._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
+from ...._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ...._utils import maybe_transform, async_maybe_transform
 from ...._compat import cached_property
 from ...._resource import SyncAPIResource, AsyncAPIResource
@@ -15,8 +15,7 @@ from ...._response import (
     async_to_streamed_response_wrapper,
 )
 from ...._base_client import make_request_options
-from ....types.users.me import device_register_params
-from ....types.users.me.device_list_response import DeviceListResponse
+from ....types.users.me import device_list_params
 
 __all__ = ["DevicesResource", "AsyncDevicesResource"]
 
@@ -44,96 +43,49 @@ class DevicesResource(SyncAPIResource):
     def list(
         self,
         *,
+        limit: int | Omit = omit,
+        offset: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> DeviceListResponse:
-        """List Connected Devices"""
+    ) -> object:
+        """
+        Retrieves a list of all devices linked to the user's account, including mobile
+        phones, tablets, and desktops, indicating their last active status and security
+        posture.
+
+        Args:
+          limit: Maximum number of items to return in a single page.
+
+          offset: Number of items to skip before starting to collect the result set.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
         return self._get(
             "/users/me/devices",
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "limit": limit,
+                        "offset": offset,
+                    },
+                    device_list_params.DeviceListParams,
+                ),
             ),
-            cast_to=DeviceListResponse,
-        )
-
-    def deregister(
-        self,
-        device_id: str,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
-        """
-        De-register a Device
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not device_id:
-            raise ValueError(f"Expected a non-empty value for `device_id` but received {device_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return self._delete(
-            f"/users/me/devices/{device_id}",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
-        )
-
-    def register(
-        self,
-        *,
-        device_id: str,
-        type: str,
-        push_token: str | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
-        """
-        Register New Trusted Device
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return self._post(
-            "/users/me/devices",
-            body=maybe_transform(
-                {
-                    "device_id": device_id,
-                    "type": type,
-                    "push_token": push_token,
-                },
-                device_register_params.DeviceRegisterParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
+            cast_to=object,
         )
 
 
@@ -160,96 +112,49 @@ class AsyncDevicesResource(AsyncAPIResource):
     async def list(
         self,
         *,
+        limit: int | Omit = omit,
+        offset: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> DeviceListResponse:
-        """List Connected Devices"""
+    ) -> object:
+        """
+        Retrieves a list of all devices linked to the user's account, including mobile
+        phones, tablets, and desktops, indicating their last active status and security
+        posture.
+
+        Args:
+          limit: Maximum number of items to return in a single page.
+
+          offset: Number of items to skip before starting to collect the result set.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
         return await self._get(
             "/users/me/devices",
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=await async_maybe_transform(
+                    {
+                        "limit": limit,
+                        "offset": offset,
+                    },
+                    device_list_params.DeviceListParams,
+                ),
             ),
-            cast_to=DeviceListResponse,
-        )
-
-    async def deregister(
-        self,
-        device_id: str,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
-        """
-        De-register a Device
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not device_id:
-            raise ValueError(f"Expected a non-empty value for `device_id` but received {device_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return await self._delete(
-            f"/users/me/devices/{device_id}",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
-        )
-
-    async def register(
-        self,
-        *,
-        device_id: str,
-        type: str,
-        push_token: str | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
-        """
-        Register New Trusted Device
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return await self._post(
-            "/users/me/devices",
-            body=await async_maybe_transform(
-                {
-                    "device_id": device_id,
-                    "type": type,
-                    "push_token": push_token,
-                },
-                device_register_params.DeviceRegisterParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
+            cast_to=object,
         )
 
 
@@ -260,12 +165,6 @@ class DevicesResourceWithRawResponse:
         self.list = to_raw_response_wrapper(
             devices.list,
         )
-        self.deregister = to_raw_response_wrapper(
-            devices.deregister,
-        )
-        self.register = to_raw_response_wrapper(
-            devices.register,
-        )
 
 
 class AsyncDevicesResourceWithRawResponse:
@@ -274,12 +173,6 @@ class AsyncDevicesResourceWithRawResponse:
 
         self.list = async_to_raw_response_wrapper(
             devices.list,
-        )
-        self.deregister = async_to_raw_response_wrapper(
-            devices.deregister,
-        )
-        self.register = async_to_raw_response_wrapper(
-            devices.register,
         )
 
 
@@ -290,12 +183,6 @@ class DevicesResourceWithStreamingResponse:
         self.list = to_streamed_response_wrapper(
             devices.list,
         )
-        self.deregister = to_streamed_response_wrapper(
-            devices.deregister,
-        )
-        self.register = to_streamed_response_wrapper(
-            devices.register,
-        )
 
 
 class AsyncDevicesResourceWithStreamingResponse:
@@ -304,10 +191,4 @@ class AsyncDevicesResourceWithStreamingResponse:
 
         self.list = async_to_streamed_response_wrapper(
             devices.list,
-        )
-        self.deregister = async_to_streamed_response_wrapper(
-            devices.deregister,
-        )
-        self.register = async_to_streamed_response_wrapper(
-            devices.register,
         )

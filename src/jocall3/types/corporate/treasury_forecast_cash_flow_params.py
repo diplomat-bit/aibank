@@ -10,4 +10,14 @@ __all__ = ["TreasuryForecastCashFlowParams"]
 
 
 class TreasuryForecastCashFlowParams(TypedDict, total=False):
-    horizon_days: Annotated[int, PropertyInfo(alias="horizonDays")]
+    forecast_horizon_days: Annotated[int, PropertyInfo(alias="forecastHorizonDays")]
+    """
+    The number of days into the future for which to generate the cash flow forecast
+    (e.g., 30, 90, 180).
+    """
+
+    include_scenario_analysis: Annotated[bool, PropertyInfo(alias="includeScenarioAnalysis")]
+    """
+    If true, the forecast will include best-case and worst-case scenario analysis
+    alongside the most likely projection.
+    """
