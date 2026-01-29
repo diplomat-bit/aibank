@@ -52,7 +52,11 @@ class PreferencesResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> PreferenceRetrieveResponse:
-        """Get User Personalization Preferences"""
+        """
+        Retrieves the user's deep personalization preferences, including AI
+        customization settings, notification channel priorities, thematic choices, and
+        data sharing consents.
+        """
         return self._get(
             "/users/me/preferences",
             options=make_request_options(
@@ -64,8 +68,7 @@ class PreferencesResource(SyncAPIResource):
     def update(
         self,
         *,
-        ai_interaction_mode: str | Omit = omit,
-        theme: str | Omit = omit,
+        notification_channels: object | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -74,9 +77,13 @@ class PreferencesResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> PreferenceUpdateResponse:
         """
-        Update User Personalization Preferences
+        Updates the user's deep personalization preferences, allowing dynamic control
+        over AI behavior, notification delivery, thematic choices, and data privacy
+        settings.
 
         Args:
+          notification_channels: Preferred channels for receiving notifications.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -88,11 +95,7 @@ class PreferencesResource(SyncAPIResource):
         return self._put(
             "/users/me/preferences",
             body=maybe_transform(
-                {
-                    "ai_interaction_mode": ai_interaction_mode,
-                    "theme": theme,
-                },
-                preference_update_params.PreferenceUpdateParams,
+                {"notification_channels": notification_channels}, preference_update_params.PreferenceUpdateParams
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -131,7 +134,11 @@ class AsyncPreferencesResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> PreferenceRetrieveResponse:
-        """Get User Personalization Preferences"""
+        """
+        Retrieves the user's deep personalization preferences, including AI
+        customization settings, notification channel priorities, thematic choices, and
+        data sharing consents.
+        """
         return await self._get(
             "/users/me/preferences",
             options=make_request_options(
@@ -143,8 +150,7 @@ class AsyncPreferencesResource(AsyncAPIResource):
     async def update(
         self,
         *,
-        ai_interaction_mode: str | Omit = omit,
-        theme: str | Omit = omit,
+        notification_channels: object | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -153,9 +159,13 @@ class AsyncPreferencesResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> PreferenceUpdateResponse:
         """
-        Update User Personalization Preferences
+        Updates the user's deep personalization preferences, allowing dynamic control
+        over AI behavior, notification delivery, thematic choices, and data privacy
+        settings.
 
         Args:
+          notification_channels: Preferred channels for receiving notifications.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -167,11 +177,7 @@ class AsyncPreferencesResource(AsyncAPIResource):
         return await self._put(
             "/users/me/preferences",
             body=await async_maybe_transform(
-                {
-                    "ai_interaction_mode": ai_interaction_mode,
-                    "theme": theme,
-                },
-                preference_update_params.PreferenceUpdateParams,
+                {"notification_channels": notification_channels}, preference_update_params.PreferenceUpdateParams
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout

@@ -9,11 +9,7 @@ import pytest
 
 from aibanking import Jocall3, AsyncJocall3
 from tests.utils import assert_matches_type
-from aibanking._utils import parse_date
-from aibanking.types.corporate.compliance import (
-    AuditRequestAuditResponse,
-    AuditRetrieveReportResponse,
-)
+from aibanking.types.corporate.compliance import AuditRetrieveReportResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -24,40 +20,28 @@ class TestAudits:
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_request_audit(self, client: Jocall3) -> None:
-        audit = client.corporate.compliance.audits.request_audit(
-            audit_scope="string",
-            end_date=parse_date("2018-06-28"),
-            start_date=parse_date("2006-12-17"),
-        )
-        assert_matches_type(AuditRequestAuditResponse, audit, path=["response"])
+        audit = client.corporate.compliance.audits.request_audit()
+        assert_matches_type(object, audit, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_request_audit(self, client: Jocall3) -> None:
-        response = client.corporate.compliance.audits.with_raw_response.request_audit(
-            audit_scope="string",
-            end_date=parse_date("2018-06-28"),
-            start_date=parse_date("2006-12-17"),
-        )
+        response = client.corporate.compliance.audits.with_raw_response.request_audit()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         audit = response.parse()
-        assert_matches_type(AuditRequestAuditResponse, audit, path=["response"])
+        assert_matches_type(object, audit, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_request_audit(self, client: Jocall3) -> None:
-        with client.corporate.compliance.audits.with_streaming_response.request_audit(
-            audit_scope="string",
-            end_date=parse_date("2018-06-28"),
-            start_date=parse_date("2006-12-17"),
-        ) as response:
+        with client.corporate.compliance.audits.with_streaming_response.request_audit() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             audit = response.parse()
-            assert_matches_type(AuditRequestAuditResponse, audit, path=["response"])
+            assert_matches_type(object, audit, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -65,7 +49,7 @@ class TestAudits:
     @parametrize
     def test_method_retrieve_report(self, client: Jocall3) -> None:
         audit = client.corporate.compliance.audits.retrieve_report(
-            "string",
+            "audit_corp_xyz789",
         )
         assert_matches_type(AuditRetrieveReportResponse, audit, path=["response"])
 
@@ -73,7 +57,7 @@ class TestAudits:
     @parametrize
     def test_raw_response_retrieve_report(self, client: Jocall3) -> None:
         response = client.corporate.compliance.audits.with_raw_response.retrieve_report(
-            "string",
+            "audit_corp_xyz789",
         )
 
         assert response.is_closed is True
@@ -85,7 +69,7 @@ class TestAudits:
     @parametrize
     def test_streaming_response_retrieve_report(self, client: Jocall3) -> None:
         with client.corporate.compliance.audits.with_streaming_response.retrieve_report(
-            "string",
+            "audit_corp_xyz789",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -112,40 +96,28 @@ class TestAsyncAudits:
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_request_audit(self, async_client: AsyncJocall3) -> None:
-        audit = await async_client.corporate.compliance.audits.request_audit(
-            audit_scope="string",
-            end_date=parse_date("2018-06-28"),
-            start_date=parse_date("2006-12-17"),
-        )
-        assert_matches_type(AuditRequestAuditResponse, audit, path=["response"])
+        audit = await async_client.corporate.compliance.audits.request_audit()
+        assert_matches_type(object, audit, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_request_audit(self, async_client: AsyncJocall3) -> None:
-        response = await async_client.corporate.compliance.audits.with_raw_response.request_audit(
-            audit_scope="string",
-            end_date=parse_date("2018-06-28"),
-            start_date=parse_date("2006-12-17"),
-        )
+        response = await async_client.corporate.compliance.audits.with_raw_response.request_audit()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         audit = await response.parse()
-        assert_matches_type(AuditRequestAuditResponse, audit, path=["response"])
+        assert_matches_type(object, audit, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_request_audit(self, async_client: AsyncJocall3) -> None:
-        async with async_client.corporate.compliance.audits.with_streaming_response.request_audit(
-            audit_scope="string",
-            end_date=parse_date("2018-06-28"),
-            start_date=parse_date("2006-12-17"),
-        ) as response:
+        async with async_client.corporate.compliance.audits.with_streaming_response.request_audit() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             audit = await response.parse()
-            assert_matches_type(AuditRequestAuditResponse, audit, path=["response"])
+            assert_matches_type(object, audit, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -153,7 +125,7 @@ class TestAsyncAudits:
     @parametrize
     async def test_method_retrieve_report(self, async_client: AsyncJocall3) -> None:
         audit = await async_client.corporate.compliance.audits.retrieve_report(
-            "string",
+            "audit_corp_xyz789",
         )
         assert_matches_type(AuditRetrieveReportResponse, audit, path=["response"])
 
@@ -161,7 +133,7 @@ class TestAsyncAudits:
     @parametrize
     async def test_raw_response_retrieve_report(self, async_client: AsyncJocall3) -> None:
         response = await async_client.corporate.compliance.audits.with_raw_response.retrieve_report(
-            "string",
+            "audit_corp_xyz789",
         )
 
         assert response.is_closed is True
@@ -173,7 +145,7 @@ class TestAsyncAudits:
     @parametrize
     async def test_streaming_response_retrieve_report(self, async_client: AsyncJocall3) -> None:
         async with async_client.corporate.compliance.audits.with_streaming_response.retrieve_report(
-            "string",
+            "audit_corp_xyz789",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"

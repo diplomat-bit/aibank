@@ -10,6 +10,5 @@ __all__ = ["PreferenceUpdateParams"]
 
 
 class PreferenceUpdateParams(TypedDict, total=False):
-    ai_interaction_mode: Annotated[str, PropertyInfo(alias="aiInteractionMode")]
-
-    theme: str
+    notification_channels: Annotated[object, PropertyInfo(alias="notificationChannels")]
+    """Preferred channels for receiving notifications."""

@@ -861,7 +861,7 @@ class TestJocall3:
         respx_mock.post("/users/password-reset/initiate").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
-            client.users.password_reset.with_streaming_response.initiate(identifier="string").__enter__()
+            client.users.password_reset.with_streaming_response.initiate().__enter__()
 
         assert _get_open_connections(client) == 0
 
@@ -871,7 +871,7 @@ class TestJocall3:
         respx_mock.post("/users/password-reset/initiate").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
-            client.users.password_reset.with_streaming_response.initiate(identifier="string").__enter__()
+            client.users.password_reset.with_streaming_response.initiate().__enter__()
         assert _get_open_connections(client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
@@ -900,7 +900,7 @@ class TestJocall3:
 
         respx_mock.post("/users/password-reset/initiate").mock(side_effect=retry_handler)
 
-        response = client.users.password_reset.with_raw_response.initiate(identifier="string")
+        response = client.users.password_reset.with_raw_response.initiate()
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -925,7 +925,7 @@ class TestJocall3:
         respx_mock.post("/users/password-reset/initiate").mock(side_effect=retry_handler)
 
         response = client.users.password_reset.with_raw_response.initiate(
-            identifier="string", extra_headers={"x-stainless-retry-count": Omit()}
+            extra_headers={"x-stainless-retry-count": Omit()}
         )
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
@@ -950,7 +950,7 @@ class TestJocall3:
         respx_mock.post("/users/password-reset/initiate").mock(side_effect=retry_handler)
 
         response = client.users.password_reset.with_raw_response.initiate(
-            identifier="string", extra_headers={"x-stainless-retry-count": "42"}
+            extra_headers={"x-stainless-retry-count": "42"}
         )
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
@@ -1774,7 +1774,7 @@ class TestAsyncJocall3:
         respx_mock.post("/users/password-reset/initiate").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
-            await async_client.users.password_reset.with_streaming_response.initiate(identifier="string").__aenter__()
+            await async_client.users.password_reset.with_streaming_response.initiate().__aenter__()
 
         assert _get_open_connections(async_client) == 0
 
@@ -1784,7 +1784,7 @@ class TestAsyncJocall3:
         respx_mock.post("/users/password-reset/initiate").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
-            await async_client.users.password_reset.with_streaming_response.initiate(identifier="string").__aenter__()
+            await async_client.users.password_reset.with_streaming_response.initiate().__aenter__()
         assert _get_open_connections(async_client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
@@ -1813,7 +1813,7 @@ class TestAsyncJocall3:
 
         respx_mock.post("/users/password-reset/initiate").mock(side_effect=retry_handler)
 
-        response = await client.users.password_reset.with_raw_response.initiate(identifier="string")
+        response = await client.users.password_reset.with_raw_response.initiate()
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -1838,7 +1838,7 @@ class TestAsyncJocall3:
         respx_mock.post("/users/password-reset/initiate").mock(side_effect=retry_handler)
 
         response = await client.users.password_reset.with_raw_response.initiate(
-            identifier="string", extra_headers={"x-stainless-retry-count": Omit()}
+            extra_headers={"x-stainless-retry-count": Omit()}
         )
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
@@ -1863,7 +1863,7 @@ class TestAsyncJocall3:
         respx_mock.post("/users/password-reset/initiate").mock(side_effect=retry_handler)
 
         response = await client.users.password_reset.with_raw_response.initiate(
-            identifier="string", extra_headers={"x-stainless-retry-count": "42"}
+            extra_headers={"x-stainless-retry-count": "42"}
         )
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
