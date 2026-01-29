@@ -16,6 +16,14 @@ from .devices import (
     DevicesResourceWithStreamingResponse,
     AsyncDevicesResourceWithStreamingResponse,
 )
+from .security import (
+    SecurityResource,
+    AsyncSecurityResource,
+    SecurityResourceWithRawResponse,
+    AsyncSecurityResourceWithRawResponse,
+    SecurityResourceWithStreamingResponse,
+    AsyncSecurityResourceWithStreamingResponse,
+)
 from .biometrics import (
     BiometricsResource,
     AsyncBiometricsResource,
@@ -40,6 +48,12 @@ __all__ = [
     "AsyncPreferencesResourceWithRawResponse",
     "PreferencesResourceWithStreamingResponse",
     "AsyncPreferencesResourceWithStreamingResponse",
+    "SecurityResource",
+    "AsyncSecurityResource",
+    "SecurityResourceWithRawResponse",
+    "AsyncSecurityResourceWithRawResponse",
+    "SecurityResourceWithStreamingResponse",
+    "AsyncSecurityResourceWithStreamingResponse",
     "DevicesResource",
     "AsyncDevicesResource",
     "DevicesResourceWithRawResponse",

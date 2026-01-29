@@ -15,7 +15,9 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ..._base_client import make_request_options
-from ...types.accounts import transaction_retrieve_pending_params
+from ...types.accounts import transaction_retrieve_archived_params
+from ...types.accounts.transaction_retrieve_pending_response import TransactionRetrievePendingResponse
+from ...types.accounts.transaction_retrieve_archived_response import TransactionRetrieveArchivedResponse
 
 __all__ = ["TransactionsResource", "AsyncTransactionsResource"]
 
@@ -40,28 +42,61 @@ class TransactionsResource(SyncAPIResource):
         """
         return TransactionsResourceWithStreamingResponse(self)
 
-    def retrieve_pending(
+    def retrieve_archived(
         self,
         account_id: str,
         *,
-        limit: int | Omit = omit,
-        offset: int | Omit = omit,
+        year: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> TransactionRetrieveArchivedResponse:
         """
-        Retrieves a list of pending transactions that have not yet cleared for a
-        specific financial account.
+        Get Historical Ledger Archive
 
         Args:
-          limit: Maximum number of items to return in a single page.
+          extra_headers: Send extra headers
 
-          offset: Number of items to skip before starting to collect the result set.
+          extra_query: Add additional query parameters to the request
 
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not account_id:
+            raise ValueError(f"Expected a non-empty value for `account_id` but received {account_id!r}")
+        return self._get(
+            f"/accounts/{account_id}/transactions/archived",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {"year": year}, transaction_retrieve_archived_params.TransactionRetrieveArchivedParams
+                ),
+            ),
+            cast_to=TransactionRetrieveArchivedResponse,
+        )
+
+    def retrieve_pending(
+        self,
+        account_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> TransactionRetrievePendingResponse:
+        """
+        Get Pending Ledger Entries
+
+        Args:
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -75,19 +110,9 @@ class TransactionsResource(SyncAPIResource):
         return self._get(
             f"/accounts/{account_id}/transactions/pending",
             options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                query=maybe_transform(
-                    {
-                        "limit": limit,
-                        "offset": offset,
-                    },
-                    transaction_retrieve_pending_params.TransactionRetrievePendingParams,
-                ),
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            cast_to=TransactionRetrievePendingResponse,
         )
 
 
@@ -111,28 +136,61 @@ class AsyncTransactionsResource(AsyncAPIResource):
         """
         return AsyncTransactionsResourceWithStreamingResponse(self)
 
-    async def retrieve_pending(
+    async def retrieve_archived(
         self,
         account_id: str,
         *,
-        limit: int | Omit = omit,
-        offset: int | Omit = omit,
+        year: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> TransactionRetrieveArchivedResponse:
         """
-        Retrieves a list of pending transactions that have not yet cleared for a
-        specific financial account.
+        Get Historical Ledger Archive
 
         Args:
-          limit: Maximum number of items to return in a single page.
+          extra_headers: Send extra headers
 
-          offset: Number of items to skip before starting to collect the result set.
+          extra_query: Add additional query parameters to the request
 
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not account_id:
+            raise ValueError(f"Expected a non-empty value for `account_id` but received {account_id!r}")
+        return await self._get(
+            f"/accounts/{account_id}/transactions/archived",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=await async_maybe_transform(
+                    {"year": year}, transaction_retrieve_archived_params.TransactionRetrieveArchivedParams
+                ),
+            ),
+            cast_to=TransactionRetrieveArchivedResponse,
+        )
+
+    async def retrieve_pending(
+        self,
+        account_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> TransactionRetrievePendingResponse:
+        """
+        Get Pending Ledger Entries
+
+        Args:
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -146,19 +204,9 @@ class AsyncTransactionsResource(AsyncAPIResource):
         return await self._get(
             f"/accounts/{account_id}/transactions/pending",
             options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                query=await async_maybe_transform(
-                    {
-                        "limit": limit,
-                        "offset": offset,
-                    },
-                    transaction_retrieve_pending_params.TransactionRetrievePendingParams,
-                ),
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            cast_to=TransactionRetrievePendingResponse,
         )
 
 
@@ -166,6 +214,9 @@ class TransactionsResourceWithRawResponse:
     def __init__(self, transactions: TransactionsResource) -> None:
         self._transactions = transactions
 
+        self.retrieve_archived = to_raw_response_wrapper(
+            transactions.retrieve_archived,
+        )
         self.retrieve_pending = to_raw_response_wrapper(
             transactions.retrieve_pending,
         )
@@ -175,6 +226,9 @@ class AsyncTransactionsResourceWithRawResponse:
     def __init__(self, transactions: AsyncTransactionsResource) -> None:
         self._transactions = transactions
 
+        self.retrieve_archived = async_to_raw_response_wrapper(
+            transactions.retrieve_archived,
+        )
         self.retrieve_pending = async_to_raw_response_wrapper(
             transactions.retrieve_pending,
         )
@@ -184,6 +238,9 @@ class TransactionsResourceWithStreamingResponse:
     def __init__(self, transactions: TransactionsResource) -> None:
         self._transactions = transactions
 
+        self.retrieve_archived = to_streamed_response_wrapper(
+            transactions.retrieve_archived,
+        )
         self.retrieve_pending = to_streamed_response_wrapper(
             transactions.retrieve_pending,
         )
@@ -193,6 +250,9 @@ class AsyncTransactionsResourceWithStreamingResponse:
     def __init__(self, transactions: AsyncTransactionsResource) -> None:
         self._transactions = transactions
 
+        self.retrieve_archived = async_to_streamed_response_wrapper(
+            transactions.retrieve_archived,
+        )
         self.retrieve_pending = async_to_streamed_response_wrapper(
             transactions.retrieve_pending,
         )
