@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import httpx
 
-from ..._types import Body, Query, Headers, NoneType, NotGiven, not_given
+from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ..._utils import maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
@@ -14,11 +14,8 @@ from ..._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ...types.web3 import wallet_create_params, wallet_connect_params
+from ...types.web3 import wallet_list_params, wallet_get_balance_params
 from ..._base_client import make_request_options
-from ...types.web3.wallet_list_response import WalletListResponse
-from ...types.web3.wallet_create_response import WalletCreateResponse
-from ...types.web3.wallet_get_balance_response import WalletGetBalanceResponse
 
 __all__ = ["WalletsResource", "AsyncWalletsResource"]
 
@@ -46,71 +43,48 @@ class WalletsResource(SyncAPIResource):
     def create(
         self,
         *,
-        network: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> WalletCreateResponse:
+    ) -> object:
         """
-        Create Non-Custodial Wallet
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
+        Initiates the process to securely connect a new cryptocurrency wallet to the
+        user's profile, typically involving a signed message or OAuth flow from the
+        wallet provider.
         """
         return self._post(
             "/web3/wallets",
-            body=maybe_transform({"network": network}, wallet_create_params.WalletCreateParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=WalletCreateResponse,
+            cast_to=object,
         )
 
     def list(
         self,
         *,
+        limit: int | Omit = omit,
+        offset: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> WalletListResponse:
-        """List Connected Wallets"""
-        return self._get(
-            "/web3/wallets",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=WalletListResponse,
-        )
-
-    def connect(
-        self,
-        *,
-        address: str,
-        provider: str,
-        signature: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
+    ) -> object:
         """
-        Link External Web3 Wallet (MetaMask/Phantom)
+        Retrieves a list of all securely linked cryptocurrency wallets (e.g., MetaMask,
+        Ledger integration), showing their addresses, associated networks, and
+        verification status.
 
         Args:
+          limit: Maximum number of items to return in a single page.
+
+          offset: Number of items to skip before starting to collect the result set.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -119,38 +93,46 @@ class WalletsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return self._post(
-            "/web3/wallets/connect",
-            body=maybe_transform(
-                {
-                    "address": address,
-                    "provider": provider,
-                    "signature": signature,
-                },
-                wallet_connect_params.WalletConnectParams,
-            ),
+        return self._get(
+            "/web3/wallets",
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "limit": limit,
+                        "offset": offset,
+                    },
+                    wallet_list_params.WalletListParams,
+                ),
             ),
-            cast_to=NoneType,
+            cast_to=object,
         )
 
     def get_balance(
         self,
         wallet_id: str,
         *,
+        limit: int | Omit = omit,
+        offset: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> WalletGetBalanceResponse:
+    ) -> object:
         """
-        Get Multi-chain Token Balances
+        Retrieves the current balances of all recognized crypto assets within a specific
+        connected wallet.
 
         Args:
+          limit: Maximum number of items to return in a single page.
+
+          offset: Number of items to skip before starting to collect the result set.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -164,9 +146,19 @@ class WalletsResource(SyncAPIResource):
         return self._get(
             f"/web3/wallets/{wallet_id}/balances",
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "limit": limit,
+                        "offset": offset,
+                    },
+                    wallet_get_balance_params.WalletGetBalanceParams,
+                ),
             ),
-            cast_to=WalletGetBalanceResponse,
+            cast_to=object,
         )
 
 
@@ -193,71 +185,48 @@ class AsyncWalletsResource(AsyncAPIResource):
     async def create(
         self,
         *,
-        network: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> WalletCreateResponse:
+    ) -> object:
         """
-        Create Non-Custodial Wallet
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
+        Initiates the process to securely connect a new cryptocurrency wallet to the
+        user's profile, typically involving a signed message or OAuth flow from the
+        wallet provider.
         """
         return await self._post(
             "/web3/wallets",
-            body=await async_maybe_transform({"network": network}, wallet_create_params.WalletCreateParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=WalletCreateResponse,
+            cast_to=object,
         )
 
     async def list(
         self,
         *,
+        limit: int | Omit = omit,
+        offset: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> WalletListResponse:
-        """List Connected Wallets"""
-        return await self._get(
-            "/web3/wallets",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=WalletListResponse,
-        )
-
-    async def connect(
-        self,
-        *,
-        address: str,
-        provider: str,
-        signature: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
+    ) -> object:
         """
-        Link External Web3 Wallet (MetaMask/Phantom)
+        Retrieves a list of all securely linked cryptocurrency wallets (e.g., MetaMask,
+        Ledger integration), showing their addresses, associated networks, and
+        verification status.
 
         Args:
+          limit: Maximum number of items to return in a single page.
+
+          offset: Number of items to skip before starting to collect the result set.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -266,38 +235,46 @@ class AsyncWalletsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return await self._post(
-            "/web3/wallets/connect",
-            body=await async_maybe_transform(
-                {
-                    "address": address,
-                    "provider": provider,
-                    "signature": signature,
-                },
-                wallet_connect_params.WalletConnectParams,
-            ),
+        return await self._get(
+            "/web3/wallets",
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=await async_maybe_transform(
+                    {
+                        "limit": limit,
+                        "offset": offset,
+                    },
+                    wallet_list_params.WalletListParams,
+                ),
             ),
-            cast_to=NoneType,
+            cast_to=object,
         )
 
     async def get_balance(
         self,
         wallet_id: str,
         *,
+        limit: int | Omit = omit,
+        offset: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> WalletGetBalanceResponse:
+    ) -> object:
         """
-        Get Multi-chain Token Balances
+        Retrieves the current balances of all recognized crypto assets within a specific
+        connected wallet.
 
         Args:
+          limit: Maximum number of items to return in a single page.
+
+          offset: Number of items to skip before starting to collect the result set.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -311,9 +288,19 @@ class AsyncWalletsResource(AsyncAPIResource):
         return await self._get(
             f"/web3/wallets/{wallet_id}/balances",
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=await async_maybe_transform(
+                    {
+                        "limit": limit,
+                        "offset": offset,
+                    },
+                    wallet_get_balance_params.WalletGetBalanceParams,
+                ),
             ),
-            cast_to=WalletGetBalanceResponse,
+            cast_to=object,
         )
 
 
@@ -326,9 +313,6 @@ class WalletsResourceWithRawResponse:
         )
         self.list = to_raw_response_wrapper(
             wallets.list,
-        )
-        self.connect = to_raw_response_wrapper(
-            wallets.connect,
         )
         self.get_balance = to_raw_response_wrapper(
             wallets.get_balance,
@@ -345,9 +329,6 @@ class AsyncWalletsResourceWithRawResponse:
         self.list = async_to_raw_response_wrapper(
             wallets.list,
         )
-        self.connect = async_to_raw_response_wrapper(
-            wallets.connect,
-        )
         self.get_balance = async_to_raw_response_wrapper(
             wallets.get_balance,
         )
@@ -363,9 +344,6 @@ class WalletsResourceWithStreamingResponse:
         self.list = to_streamed_response_wrapper(
             wallets.list,
         )
-        self.connect = to_streamed_response_wrapper(
-            wallets.connect,
-        )
         self.get_balance = to_streamed_response_wrapper(
             wallets.get_balance,
         )
@@ -380,9 +358,6 @@ class AsyncWalletsResourceWithStreamingResponse:
         )
         self.list = async_to_streamed_response_wrapper(
             wallets.list,
-        )
-        self.connect = async_to_streamed_response_wrapper(
-            wallets.connect,
         )
         self.get_balance = async_to_streamed_response_wrapper(
             wallets.get_balance,

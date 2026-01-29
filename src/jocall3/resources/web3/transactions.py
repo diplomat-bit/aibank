@@ -4,8 +4,7 @@ from __future__ import annotations
 
 import httpx
 
-from ..._types import Body, Query, Headers, NoneType, NotGiven, not_given
-from ..._utils import maybe_transform, async_maybe_transform
+from ..._types import Body, Query, Headers, NotGiven, not_given
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -14,14 +13,7 @@ from ..._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ...types.web3 import (
-    transaction_initiate_params,
-    transaction_send_crypto_params,
-    transaction_swap_tokens_params,
-    transaction_bridge_chain_params,
-)
 from ..._base_client import make_request_options
-from ...types.web3.transaction_send_crypto_response import TransactionSendCryptoResponse
 
 __all__ = ["TransactionsResource", "AsyncTransactionsResource"]
 
@@ -46,173 +38,27 @@ class TransactionsResource(SyncAPIResource):
         """
         return TransactionsResourceWithStreamingResponse(self)
 
-    def bridge_chain(
-        self,
-        *,
-        token: str,
-        amount: str,
-        dest_chain: str,
-        source_chain: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
-        """
-        Cross-chain Asset Bridge
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return self._post(
-            "/web3/transactions/bridge",
-            body=maybe_transform(
-                {
-                    "token": token,
-                    "amount": amount,
-                    "dest_chain": dest_chain,
-                    "source_chain": source_chain,
-                },
-                transaction_bridge_chain_params.TransactionBridgeChainParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
-        )
-
     def initiate(
         self,
         *,
-        amount: float,
-        asset: str,
-        wallet_id: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
+    ) -> object:
         """
-        Initiate a Web3 transaction
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
+        Prepares and initiates a cryptocurrency transfer from a connected wallet to a
+        specified recipient address. Requires user confirmation (e.g., via wallet
+        signature).
         """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._post(
             "/web3/transactions/initiate",
-            body=maybe_transform(
-                {
-                    "amount": amount,
-                    "asset": asset,
-                    "wallet_id": wallet_id,
-                },
-                transaction_initiate_params.TransactionInitiateParams,
-            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
-        )
-
-    def send_crypto(
-        self,
-        *,
-        token: str,
-        amount: str,
-        to: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> TransactionSendCryptoResponse:
-        """
-        Initiate On-chain Transfer
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        return self._post(
-            "/web3/transactions/send",
-            body=maybe_transform(
-                {
-                    "token": token,
-                    "amount": amount,
-                    "to": to,
-                },
-                transaction_send_crypto_params.TransactionSendCryptoParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=TransactionSendCryptoResponse,
-        )
-
-    def swap_tokens(
-        self,
-        *,
-        amount: str,
-        from_token: str,
-        to_token: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
-        """
-        Execute Multi-chain Token Swap
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return self._post(
-            "/web3/transactions/swap",
-            body=maybe_transform(
-                {
-                    "amount": amount,
-                    "from_token": from_token,
-                    "to_token": to_token,
-                },
-                transaction_swap_tokens_params.TransactionSwapTokensParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
+            cast_to=object,
         )
 
 
@@ -236,173 +82,27 @@ class AsyncTransactionsResource(AsyncAPIResource):
         """
         return AsyncTransactionsResourceWithStreamingResponse(self)
 
-    async def bridge_chain(
-        self,
-        *,
-        token: str,
-        amount: str,
-        dest_chain: str,
-        source_chain: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
-        """
-        Cross-chain Asset Bridge
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return await self._post(
-            "/web3/transactions/bridge",
-            body=await async_maybe_transform(
-                {
-                    "token": token,
-                    "amount": amount,
-                    "dest_chain": dest_chain,
-                    "source_chain": source_chain,
-                },
-                transaction_bridge_chain_params.TransactionBridgeChainParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
-        )
-
     async def initiate(
         self,
         *,
-        amount: float,
-        asset: str,
-        wallet_id: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
+    ) -> object:
         """
-        Initiate a Web3 transaction
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
+        Prepares and initiates a cryptocurrency transfer from a connected wallet to a
+        specified recipient address. Requires user confirmation (e.g., via wallet
+        signature).
         """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._post(
             "/web3/transactions/initiate",
-            body=await async_maybe_transform(
-                {
-                    "amount": amount,
-                    "asset": asset,
-                    "wallet_id": wallet_id,
-                },
-                transaction_initiate_params.TransactionInitiateParams,
-            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
-        )
-
-    async def send_crypto(
-        self,
-        *,
-        token: str,
-        amount: str,
-        to: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> TransactionSendCryptoResponse:
-        """
-        Initiate On-chain Transfer
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        return await self._post(
-            "/web3/transactions/send",
-            body=await async_maybe_transform(
-                {
-                    "token": token,
-                    "amount": amount,
-                    "to": to,
-                },
-                transaction_send_crypto_params.TransactionSendCryptoParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=TransactionSendCryptoResponse,
-        )
-
-    async def swap_tokens(
-        self,
-        *,
-        amount: str,
-        from_token: str,
-        to_token: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
-        """
-        Execute Multi-chain Token Swap
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return await self._post(
-            "/web3/transactions/swap",
-            body=await async_maybe_transform(
-                {
-                    "amount": amount,
-                    "from_token": from_token,
-                    "to_token": to_token,
-                },
-                transaction_swap_tokens_params.TransactionSwapTokensParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
+            cast_to=object,
         )
 
 
@@ -410,17 +110,8 @@ class TransactionsResourceWithRawResponse:
     def __init__(self, transactions: TransactionsResource) -> None:
         self._transactions = transactions
 
-        self.bridge_chain = to_raw_response_wrapper(
-            transactions.bridge_chain,
-        )
         self.initiate = to_raw_response_wrapper(
             transactions.initiate,
-        )
-        self.send_crypto = to_raw_response_wrapper(
-            transactions.send_crypto,
-        )
-        self.swap_tokens = to_raw_response_wrapper(
-            transactions.swap_tokens,
         )
 
 
@@ -428,17 +119,8 @@ class AsyncTransactionsResourceWithRawResponse:
     def __init__(self, transactions: AsyncTransactionsResource) -> None:
         self._transactions = transactions
 
-        self.bridge_chain = async_to_raw_response_wrapper(
-            transactions.bridge_chain,
-        )
         self.initiate = async_to_raw_response_wrapper(
             transactions.initiate,
-        )
-        self.send_crypto = async_to_raw_response_wrapper(
-            transactions.send_crypto,
-        )
-        self.swap_tokens = async_to_raw_response_wrapper(
-            transactions.swap_tokens,
         )
 
 
@@ -446,17 +128,8 @@ class TransactionsResourceWithStreamingResponse:
     def __init__(self, transactions: TransactionsResource) -> None:
         self._transactions = transactions
 
-        self.bridge_chain = to_streamed_response_wrapper(
-            transactions.bridge_chain,
-        )
         self.initiate = to_streamed_response_wrapper(
             transactions.initiate,
-        )
-        self.send_crypto = to_streamed_response_wrapper(
-            transactions.send_crypto,
-        )
-        self.swap_tokens = to_streamed_response_wrapper(
-            transactions.swap_tokens,
         )
 
 
@@ -464,15 +137,6 @@ class AsyncTransactionsResourceWithStreamingResponse:
     def __init__(self, transactions: AsyncTransactionsResource) -> None:
         self._transactions = transactions
 
-        self.bridge_chain = async_to_streamed_response_wrapper(
-            transactions.bridge_chain,
-        )
         self.initiate = async_to_streamed_response_wrapper(
             transactions.initiate,
-        )
-        self.send_crypto = async_to_streamed_response_wrapper(
-            transactions.send_crypto,
-        )
-        self.swap_tokens = async_to_streamed_response_wrapper(
-            transactions.swap_tokens,
         )

@@ -16,14 +16,6 @@ from .simulate import (
     SimulateResourceWithStreamingResponse,
     AsyncSimulateResourceWithStreamingResponse,
 )
-from .predictions import (
-    PredictionsResource,
-    AsyncPredictionsResource,
-    PredictionsResourceWithRawResponse,
-    AsyncPredictionsResourceWithRawResponse,
-    PredictionsResourceWithStreamingResponse,
-    AsyncPredictionsResourceWithStreamingResponse,
-)
 from .simulations import (
     SimulationsResource,
     AsyncSimulationsResource,
@@ -40,12 +32,6 @@ __all__ = [
     "AsyncSimulateResourceWithRawResponse",
     "SimulateResourceWithStreamingResponse",
     "AsyncSimulateResourceWithStreamingResponse",
-    "PredictionsResource",
-    "AsyncPredictionsResource",
-    "PredictionsResourceWithRawResponse",
-    "AsyncPredictionsResourceWithRawResponse",
-    "PredictionsResourceWithStreamingResponse",
-    "AsyncPredictionsResourceWithStreamingResponse",
     "SimulationsResource",
     "AsyncSimulationsResource",
     "SimulationsResourceWithRawResponse",
