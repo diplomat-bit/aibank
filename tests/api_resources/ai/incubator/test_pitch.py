@@ -20,14 +20,14 @@ class TestPitch:
     @parametrize
     def test_method_retrieve_details(self, client: Jocall3) -> None:
         pitch = client.ai.incubator.pitch.retrieve_details(
-            "pitch_qw_synergychain-xyz",
+            "pitchId",
         )
         assert_matches_type(PitchRetrieveDetailsResponse, pitch, path=["response"])
 
     @parametrize
     def test_raw_response_retrieve_details(self, client: Jocall3) -> None:
         response = client.ai.incubator.pitch.with_raw_response.retrieve_details(
-            "pitch_qw_synergychain-xyz",
+            "pitchId",
         )
 
         assert response.is_closed is True
@@ -38,7 +38,7 @@ class TestPitch:
     @parametrize
     def test_streaming_response_retrieve_details(self, client: Jocall3) -> None:
         with client.ai.incubator.pitch.with_streaming_response.retrieve_details(
-            "pitch_qw_synergychain-xyz",
+            "pitchId",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -58,31 +58,34 @@ class TestPitch:
     @parametrize
     def test_method_submit_feedback(self, client: Jocall3) -> None:
         pitch = client.ai.incubator.pitch.submit_feedback(
-            "pitch_qw_synergychain-xyz",
+            pitch_id="pitchId",
+            answers=[{}],
         )
-        assert_matches_type(object, pitch, path=["response"])
+        assert pitch is None
 
     @parametrize
     def test_raw_response_submit_feedback(self, client: Jocall3) -> None:
         response = client.ai.incubator.pitch.with_raw_response.submit_feedback(
-            "pitch_qw_synergychain-xyz",
+            pitch_id="pitchId",
+            answers=[{}],
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         pitch = response.parse()
-        assert_matches_type(object, pitch, path=["response"])
+        assert pitch is None
 
     @parametrize
     def test_streaming_response_submit_feedback(self, client: Jocall3) -> None:
         with client.ai.incubator.pitch.with_streaming_response.submit_feedback(
-            "pitch_qw_synergychain-xyz",
+            pitch_id="pitchId",
+            answers=[{}],
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             pitch = response.parse()
-            assert_matches_type(object, pitch, path=["response"])
+            assert pitch is None
 
         assert cast(Any, response.is_closed) is True
 
@@ -90,7 +93,8 @@ class TestPitch:
     def test_path_params_submit_feedback(self, client: Jocall3) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `pitch_id` but received ''"):
             client.ai.incubator.pitch.with_raw_response.submit_feedback(
-                "",
+                pitch_id="",
+                answers=[{}],
             )
 
 
@@ -102,14 +106,14 @@ class TestAsyncPitch:
     @parametrize
     async def test_method_retrieve_details(self, async_client: AsyncJocall3) -> None:
         pitch = await async_client.ai.incubator.pitch.retrieve_details(
-            "pitch_qw_synergychain-xyz",
+            "pitchId",
         )
         assert_matches_type(PitchRetrieveDetailsResponse, pitch, path=["response"])
 
     @parametrize
     async def test_raw_response_retrieve_details(self, async_client: AsyncJocall3) -> None:
         response = await async_client.ai.incubator.pitch.with_raw_response.retrieve_details(
-            "pitch_qw_synergychain-xyz",
+            "pitchId",
         )
 
         assert response.is_closed is True
@@ -120,7 +124,7 @@ class TestAsyncPitch:
     @parametrize
     async def test_streaming_response_retrieve_details(self, async_client: AsyncJocall3) -> None:
         async with async_client.ai.incubator.pitch.with_streaming_response.retrieve_details(
-            "pitch_qw_synergychain-xyz",
+            "pitchId",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -140,31 +144,34 @@ class TestAsyncPitch:
     @parametrize
     async def test_method_submit_feedback(self, async_client: AsyncJocall3) -> None:
         pitch = await async_client.ai.incubator.pitch.submit_feedback(
-            "pitch_qw_synergychain-xyz",
+            pitch_id="pitchId",
+            answers=[{}],
         )
-        assert_matches_type(object, pitch, path=["response"])
+        assert pitch is None
 
     @parametrize
     async def test_raw_response_submit_feedback(self, async_client: AsyncJocall3) -> None:
         response = await async_client.ai.incubator.pitch.with_raw_response.submit_feedback(
-            "pitch_qw_synergychain-xyz",
+            pitch_id="pitchId",
+            answers=[{}],
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         pitch = await response.parse()
-        assert_matches_type(object, pitch, path=["response"])
+        assert pitch is None
 
     @parametrize
     async def test_streaming_response_submit_feedback(self, async_client: AsyncJocall3) -> None:
         async with async_client.ai.incubator.pitch.with_streaming_response.submit_feedback(
-            "pitch_qw_synergychain-xyz",
+            pitch_id="pitchId",
+            answers=[{}],
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             pitch = await response.parse()
-            assert_matches_type(object, pitch, path=["response"])
+            assert pitch is None
 
         assert cast(Any, response.is_closed) is True
 
@@ -172,5 +179,6 @@ class TestAsyncPitch:
     async def test_path_params_submit_feedback(self, async_client: AsyncJocall3) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `pitch_id` but received ''"):
             await async_client.ai.incubator.pitch.with_raw_response.submit_feedback(
-                "",
+                pitch_id="",
+                answers=[{}],
             )

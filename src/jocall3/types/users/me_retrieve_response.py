@@ -1,26 +1,33 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Optional
+from typing import Dict, Optional
+from datetime import datetime
 
 from pydantic import Field as FieldInfo
 
 from ..._models import BaseModel
+from ..shared.address import Address
 
-__all__ = ["MeRetrieveResponse", "Preferences"]
+__all__ = ["MeRetrieveResponse", "SecurityStatus"]
 
 
-class Preferences(BaseModel):
-    """User's personalized preferences for the platform."""
+class SecurityStatus(BaseModel):
+    last_login: Optional[datetime] = FieldInfo(alias="lastLogin", default=None)
 
-    notification_channels: Optional[object] = FieldInfo(alias="notificationChannels", default=None)
-    """Preferred channels for receiving notifications."""
+    two_factor_enabled: Optional[bool] = FieldInfo(alias="twoFactorEnabled", default=None)
 
 
 class MeRetrieveResponse(BaseModel):
-    address: Optional[object] = None
+    id: str
 
-    preferences: Optional[Preferences] = None
-    """User's personalized preferences for the platform."""
+    email: str
 
-    security_status: Optional[object] = FieldInfo(alias="securityStatus", default=None)
-    """Security-related status for the user account."""
+    identity_verified: bool = FieldInfo(alias="identityVerified")
+
+    name: str
+
+    address: Optional[Address] = None
+
+    preferences: Optional[Dict[str, object]] = None
+
+    security_status: Optional[SecurityStatus] = FieldInfo(alias="securityStatus", default=None)

@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import httpx
 
-from ...._types import Body, Query, Headers, NotGiven, not_given
+from ...._types import Body, Omit, Query, Headers, NoneType, NotGiven, SequenceNotStr, omit, not_given
+from ...._utils import maybe_transform, async_maybe_transform
 from ...._compat import cached_property
 from ...._resource import SyncAPIResource, AsyncAPIResource
 from ...._response import (
@@ -14,7 +15,7 @@ from ...._response import (
     async_to_streamed_response_wrapper,
 )
 from ...._base_client import make_request_options
-from ....types.corporate.cards.control_update_response import ControlUpdateResponse
+from ....types.corporate.cards import control_update_params
 
 __all__ = ["ControlsResource", "AsyncControlsResource"]
 
@@ -43,17 +44,18 @@ class ControlsResource(SyncAPIResource):
         self,
         card_id: str,
         *,
+        allowed_categories: SequenceNotStr[str] | Omit = omit,
+        geo_restriction: SequenceNotStr[str] | Omit = omit,
+        monthly_limit: float | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> ControlUpdateResponse:
+    ) -> None:
         """
-        Updates the sophisticated spending controls, limits, and policy overrides for a
-        specific corporate card, enabling real-time adjustments for security and budget
-        adherence.
+        Update Spending Limits & MCC Controls
 
         Args:
           extra_headers: Send extra headers
@@ -66,12 +68,21 @@ class ControlsResource(SyncAPIResource):
         """
         if not card_id:
             raise ValueError(f"Expected a non-empty value for `card_id` but received {card_id!r}")
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._put(
             f"/corporate/cards/{card_id}/controls",
+            body=maybe_transform(
+                {
+                    "allowed_categories": allowed_categories,
+                    "geo_restriction": geo_restriction,
+                    "monthly_limit": monthly_limit,
+                },
+                control_update_params.ControlUpdateParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=ControlUpdateResponse,
+            cast_to=NoneType,
         )
 
 
@@ -99,17 +110,18 @@ class AsyncControlsResource(AsyncAPIResource):
         self,
         card_id: str,
         *,
+        allowed_categories: SequenceNotStr[str] | Omit = omit,
+        geo_restriction: SequenceNotStr[str] | Omit = omit,
+        monthly_limit: float | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> ControlUpdateResponse:
+    ) -> None:
         """
-        Updates the sophisticated spending controls, limits, and policy overrides for a
-        specific corporate card, enabling real-time adjustments for security and budget
-        adherence.
+        Update Spending Limits & MCC Controls
 
         Args:
           extra_headers: Send extra headers
@@ -122,12 +134,21 @@ class AsyncControlsResource(AsyncAPIResource):
         """
         if not card_id:
             raise ValueError(f"Expected a non-empty value for `card_id` but received {card_id!r}")
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._put(
             f"/corporate/cards/{card_id}/controls",
+            body=await async_maybe_transform(
+                {
+                    "allowed_categories": allowed_categories,
+                    "geo_restriction": geo_restriction,
+                    "monthly_limit": monthly_limit,
+                },
+                control_update_params.ControlUpdateParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=ControlUpdateResponse,
+            cast_to=NoneType,
         )
 
 

@@ -1,6 +1,7 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 from typing import Optional
+from datetime import datetime
 
 from pydantic import Field as FieldInfo
 
@@ -10,7 +11,6 @@ __all__ = ["FxGetRatesResponse"]
 
 
 class FxGetRatesResponse(BaseModel):
-    current_rate: object = FieldInfo(alias="currentRate")
-    """Real-time foreign exchange rates."""
+    mid_rate: Optional[float] = FieldInfo(alias="midRate", default=None)
 
-    historical_volatility: Optional[object] = FieldInfo(alias="historicalVolatility", default=None)
+    timestamp: Optional[datetime] = None

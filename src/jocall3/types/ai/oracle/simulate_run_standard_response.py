@@ -10,5 +10,10 @@ __all__ = ["SimulateRunStandardResponse"]
 
 
 class SimulateRunStandardResponse(BaseModel):
-    risk_analysis: Optional[object] = FieldInfo(alias="riskAnalysis", default=None)
-    """AI-driven risk assessment of the simulated scenario."""
+    simulation_id: str = FieldInfo(alias="simulationId")
+
+    status: str
+
+    outcome_narrative: Optional[str] = FieldInfo(alias="outcomeNarrative", default=None)
+
+    projected_value: Optional[float] = FieldInfo(alias="projectedValue", default=None)
