@@ -25,47 +25,30 @@ pip install aibanking
 The full API of this library can be found in [api.md](api.md).
 
 ```python
-import os
 from aibanking import Jocall3
 
 client = Jocall3(
-    api_key=os.environ.get("X_API_KEY"),  # This is the default and can be omitted
+    api_key="My API Key",
 )
 
-response = client.accounts.open(
-    currency="USD",
-    initial_deposit=8885.832056335083,
-    product_type="high_yield_vault",
-)
-print(response.id)
+response = client.users.login()
 ```
-
-While you can provide an `api_key` keyword argument,
-we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)
-to add `X_API_KEY="My API Key"` to your `.env` file
-so that your API Key is not stored in source control.
 
 ## Async usage
 
 Simply import `AsyncJocall3` instead of `Jocall3` and use `await` with each API call:
 
 ```python
-import os
 import asyncio
 from aibanking import AsyncJocall3
 
 client = AsyncJocall3(
-    api_key=os.environ.get("X_API_KEY"),  # This is the default and can be omitted
+    api_key="My API Key",
 )
 
 
 async def main() -> None:
-    response = await client.accounts.open(
-        currency="USD",
-        initial_deposit=8885.832056335083,
-        product_type="high_yield_vault",
-    )
-    print(response.id)
+    response = await client.users.login()
 
 
 asyncio.run(main())
@@ -87,7 +70,6 @@ pip install aibanking[aiohttp]
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
 
 ```python
-import os
 import asyncio
 from aibanking import DefaultAioHttpClient
 from aibanking import AsyncJocall3
@@ -95,15 +77,10 @@ from aibanking import AsyncJocall3
 
 async def main() -> None:
     async with AsyncJocall3(
-        api_key=os.environ.get("X_API_KEY"),  # This is the default and can be omitted
+        api_key="My API Key",
         http_client=DefaultAioHttpClient(),
     ) as client:
-        response = await client.accounts.open(
-            currency="USD",
-            initial_deposit=8885.832056335083,
-            product_type="high_yield_vault",
-        )
-        print(response.id)
+        response = await client.users.login()
 
 
 asyncio.run(main())
@@ -125,19 +102,14 @@ Nested parameters are dictionaries, typed using `TypedDict`, for example:
 ```python
 from aibanking import Jocall3
 
-client = Jocall3()
-
-response = client.corporate.cards.request_physical_card(
-    holder_name="string",
-    shipping_address={
-        "city": "string",
-        "country": "string",
-        "street": "string",
-        "state": "string",
-        "zip": "string",
-    },
+client = Jocall3(
+    api_key="My API Key",
 )
-print(response.shipping_address)
+
+me = client.users.me.update(
+    preferences={},
+)
+print(me.preferences)
 ```
 
 ## Handling errors
@@ -153,14 +125,12 @@ All errors inherit from `aibanking.APIError`.
 import aibanking
 from aibanking import Jocall3
 
-client = Jocall3()
+client = Jocall3(
+    api_key="My API Key",
+)
 
 try:
-    client.accounts.open(
-        currency="USD",
-        initial_deposit=8885.832056335083,
-        product_type="high_yield_vault",
-    )
+    client.users.login()
 except aibanking.APIConnectionError as e:
     print("The server could not be reached")
     print(e.__cause__)  # an underlying Exception, likely raised within httpx.
@@ -198,16 +168,13 @@ from aibanking import Jocall3
 
 # Configure the default for all requests:
 client = Jocall3(
+    api_key="My API Key",
     # default is 2
     max_retries=0,
 )
 
 # Or, configure per-request:
-client.with_options(max_retries=5).accounts.open(
-    currency="USD",
-    initial_deposit=8885.832056335083,
-    product_type="high_yield_vault",
-)
+client.with_options(max_retries=5).users.login()
 ```
 
 ### Timeouts
@@ -220,21 +187,19 @@ from aibanking import Jocall3
 
 # Configure the default for all requests:
 client = Jocall3(
+    api_key="My API Key",
     # 20 seconds (default is 1 minute)
     timeout=20.0,
 )
 
 # More granular control:
 client = Jocall3(
+    api_key="My API Key",
     timeout=httpx.Timeout(60.0, read=5.0, write=10.0, connect=2.0),
 )
 
 # Override per-request:
-client.with_options(timeout=5.0).accounts.open(
-    currency="USD",
-    initial_deposit=8885.832056335083,
-    product_type="high_yield_vault",
-)
+client.with_options(timeout=5.0).users.login()
 ```
 
 On timeout, an `APITimeoutError` is thrown.
@@ -274,16 +239,14 @@ The "raw" Response object can be accessed by prefixing `.with_raw_response.` to 
 ```py
 from aibanking import Jocall3
 
-client = Jocall3()
-response = client.accounts.with_raw_response.open(
-    currency="USD",
-    initial_deposit=8885.832056335083,
-    product_type="high_yield_vault",
+client = Jocall3(
+    api_key="My API Key",
 )
+response = client.users.with_raw_response.login()
 print(response.headers.get('X-My-Header'))
 
-account = response.parse()  # get the object that `accounts.open()` would have returned
-print(account.id)
+user = response.parse()  # get the object that `users.login()` would have returned
+print(user)
 ```
 
 These methods return an [`APIResponse`](https://github.com/diplomat-bit/aibank/tree/main/src/aibanking/_response.py) object.
@@ -297,11 +260,7 @@ The above interface eagerly reads the full response body when you make the reque
 To stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.
 
 ```python
-with client.accounts.with_streaming_response.open(
-    currency="USD",
-    initial_deposit=8885.832056335083,
-    product_type="high_yield_vault",
-) as response:
+with client.users.with_streaming_response.login() as response:
     print(response.headers.get("X-My-Header"))
 
     for line in response.iter_lines():
@@ -357,6 +316,7 @@ import httpx
 from aibanking import Jocall3, DefaultHttpxClient
 
 client = Jocall3(
+    api_key="My API Key",
     # Or use the `JOCALL3_BASE_URL` env var
     base_url="http://my.test.server.example.com:8083",
     http_client=DefaultHttpxClient(
@@ -379,7 +339,9 @@ By default the library closes underlying HTTP connections whenever the client is
 ```py
 from aibanking import Jocall3
 
-with Jocall3() as client:
+with Jocall3(
+    api_key="My API Key",
+) as client:
   # make requests here
   ...
 
