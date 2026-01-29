@@ -16,7 +16,6 @@ from ..._response import (
 )
 from ..._base_client import make_request_options
 from ...types.transactions import recurring_list_params
-from ...types.transactions.recurring_list_response import RecurringListResponse
 
 __all__ = ["RecurringResource", "AsyncRecurringResource"]
 
@@ -52,7 +51,7 @@ class RecurringResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> RecurringListResponse:
+    ) -> object:
         """
         Retrieves a list of all detected or user-defined recurring transactions, useful
         for budget tracking and subscription management.
@@ -85,7 +84,7 @@ class RecurringResource(SyncAPIResource):
                     recurring_list_params.RecurringListParams,
                 ),
             ),
-            cast_to=RecurringListResponse,
+            cast_to=object,
         )
 
 
@@ -120,7 +119,7 @@ class AsyncRecurringResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> RecurringListResponse:
+    ) -> object:
         """
         Retrieves a list of all detected or user-defined recurring transactions, useful
         for budget tracking and subscription management.
@@ -153,7 +152,7 @@ class AsyncRecurringResource(AsyncAPIResource):
                     recurring_list_params.RecurringListParams,
                 ),
             ),
-            cast_to=RecurringListResponse,
+            cast_to=object,
         )
 
 

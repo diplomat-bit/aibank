@@ -104,9 +104,7 @@ class MeResource(SyncAPIResource):
     def update(
         self,
         *,
-        address: me_update_params.Address | Omit = omit,
-        name: str | Omit = omit,
-        phone: str | Omit = omit,
+        address: object | Omit = omit,
         preferences: me_update_params.Preferences | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -135,8 +133,6 @@ class MeResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "address": address,
-                    "name": name,
-                    "phone": phone,
                     "preferences": preferences,
                 },
                 me_update_params.MeUpdateParams,
@@ -206,9 +202,7 @@ class AsyncMeResource(AsyncAPIResource):
     async def update(
         self,
         *,
-        address: me_update_params.Address | Omit = omit,
-        name: str | Omit = omit,
-        phone: str | Omit = omit,
+        address: object | Omit = omit,
         preferences: me_update_params.Preferences | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -237,8 +231,6 @@ class AsyncMeResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "address": address,
-                    "name": name,
-                    "phone": phone,
                     "preferences": preferences,
                 },
                 me_update_params.MeUpdateParams,
