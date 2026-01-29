@@ -11,7 +11,7 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 ## Documentation
 
-The REST API documentation can be found on [github.com](https://github.com/diplomat-bit/aibank). The full API of this library can be found in [api.md](api.md).
+The full API of this library can be found in [api.md](api.md).
 
 ## Installation
 
@@ -26,15 +26,16 @@ The full API of this library can be found in [api.md](api.md).
 
 ```python
 import os
-from jocall3 import Jocall3
+from aibanking import Jocall3
 
 client = Jocall3(
     api_key=os.environ.get("JOCALL3_API_KEY"),  # This is the default and can be omitted
-    # or 'production' | 'gemini_direct'; defaults to "production".
-    environment="sandbox",
 )
 
-response = client.ai.oracle.simulate.run_advanced()
+response = client.users.password_reset.initiate(
+    identifier="REPLACE_ME",
+)
+print(response.message)
 ```
 
 While you can provide an `api_key` keyword argument,
@@ -49,17 +50,18 @@ Simply import `AsyncJocall3` instead of `Jocall3` and use `await` with each API 
 ```python
 import os
 import asyncio
-from jocall3 import AsyncJocall3
+from aibanking import AsyncJocall3
 
 client = AsyncJocall3(
     api_key=os.environ.get("JOCALL3_API_KEY"),  # This is the default and can be omitted
-    # or 'production' | 'gemini_direct'; defaults to "production".
-    environment="sandbox",
 )
 
 
 async def main() -> None:
-    response = await client.ai.oracle.simulate.run_advanced()
+    response = await client.users.password_reset.initiate(
+        identifier="REPLACE_ME",
+    )
+    print(response.message)
 
 
 asyncio.run(main())
@@ -83,8 +85,8 @@ Then you can enable it by instantiating the client with `http_client=DefaultAioH
 ```python
 import os
 import asyncio
-from jocall3 import DefaultAioHttpClient
-from jocall3 import AsyncJocall3
+from aibanking import DefaultAioHttpClient
+from aibanking import AsyncJocall3
 
 
 async def main() -> None:
@@ -92,7 +94,10 @@ async def main() -> None:
         api_key=os.environ.get("JOCALL3_API_KEY"),  # This is the default and can be omitted
         http_client=DefaultAioHttpClient(),
     ) as client:
-        response = await client.ai.oracle.simulate.run_advanced()
+        response = await client.users.password_reset.initiate(
+            identifier="REPLACE_ME",
+        )
+        print(response.message)
 
 
 asyncio.run(main())
@@ -112,46 +117,48 @@ Typed requests and responses provide autocomplete and documentation within your 
 Nested parameters are dictionaries, typed using `TypedDict`, for example:
 
 ```python
-from jocall3 import Jocall3
+from aibanking import Jocall3
 
 client = Jocall3()
 
-response = client.users.register(
-    email="alice.w@example.com",
-    name="Alice Wonderland",
-    password="SecureP@ssw0rd2024!",
-    address={},
+response = client.corporate.cards.request_physical_card(
+    holder_name="string",
+    shipping_address={
+        "city": "string",
+        "country": "string",
+        "street": "string",
+        "state": "string",
+        "zip": "string",
+    },
 )
-print(response.address)
+print(response.shipping_address)
 ```
 
 ## Handling errors
 
-When the library is unable to connect to the API (for example, due to network connection problems or a timeout), a subclass of `jocall3.APIConnectionError` is raised.
+When the library is unable to connect to the API (for example, due to network connection problems or a timeout), a subclass of `aibanking.APIConnectionError` is raised.
 
 When the API returns a non-success status code (that is, 4xx or 5xx
-response), a subclass of `jocall3.APIStatusError` is raised, containing `status_code` and `response` properties.
+response), a subclass of `aibanking.APIStatusError` is raised, containing `status_code` and `response` properties.
 
-All errors inherit from `jocall3.APIError`.
+All errors inherit from `aibanking.APIError`.
 
 ```python
-import jocall3
-from jocall3 import Jocall3
+import aibanking
+from aibanking import Jocall3
 
 client = Jocall3()
 
 try:
-    client.users.register(
-        email="user@quantum-ledger.com",
-        name="Standard User",
-        password="DefaultPassword123!",
+    client.users.password_reset.initiate(
+        identifier="REPLACE_ME",
     )
-except jocall3.APIConnectionError as e:
+except aibanking.APIConnectionError as e:
     print("The server could not be reached")
     print(e.__cause__)  # an underlying Exception, likely raised within httpx.
-except jocall3.RateLimitError as e:
+except aibanking.RateLimitError as e:
     print("A 429 status code was received; we should back off a bit.")
-except jocall3.APIStatusError as e:
+except aibanking.APIStatusError as e:
     print("Another non-200-range status code was received")
     print(e.status_code)
     print(e.response)
@@ -179,7 +186,7 @@ Connection errors (for example, due to a network connectivity problem), 408 Requ
 You can use the `max_retries` option to configure or disable retry settings:
 
 ```python
-from jocall3 import Jocall3
+from aibanking import Jocall3
 
 # Configure the default for all requests:
 client = Jocall3(
@@ -188,10 +195,8 @@ client = Jocall3(
 )
 
 # Or, configure per-request:
-client.with_options(max_retries=5).users.register(
-    email="user@quantum-ledger.com",
-    name="Standard User",
-    password="DefaultPassword123!",
+client.with_options(max_retries=5).users.password_reset.initiate(
+    identifier="REPLACE_ME",
 )
 ```
 
@@ -201,7 +206,7 @@ By default requests time out after 1 minute. You can configure this with a `time
 which accepts a float or an [`httpx.Timeout`](https://www.python-httpx.org/advanced/timeouts/#fine-tuning-the-configuration) object:
 
 ```python
-from jocall3 import Jocall3
+from aibanking import Jocall3
 
 # Configure the default for all requests:
 client = Jocall3(
@@ -215,10 +220,8 @@ client = Jocall3(
 )
 
 # Override per-request:
-client.with_options(timeout=5.0).users.register(
-    email="user@quantum-ledger.com",
-    name="Standard User",
-    password="DefaultPassword123!",
+client.with_options(timeout=5.0).users.password_reset.initiate(
+    identifier="REPLACE_ME",
 )
 ```
 
@@ -257,23 +260,21 @@ if response.my_field is None:
 The "raw" Response object can be accessed by prefixing `.with_raw_response.` to any HTTP method call, e.g.,
 
 ```py
-from jocall3 import Jocall3
+from aibanking import Jocall3
 
 client = Jocall3()
-response = client.users.with_raw_response.register(
-    email="user@quantum-ledger.com",
-    name="Standard User",
-    password="DefaultPassword123!",
+response = client.users.password_reset.with_raw_response.initiate(
+    identifier="REPLACE_ME",
 )
 print(response.headers.get('X-My-Header'))
 
-user = response.parse()  # get the object that `users.register()` would have returned
-print(user.id)
+password_reset = response.parse()  # get the object that `users.password_reset.initiate()` would have returned
+print(password_reset.message)
 ```
 
-These methods return an [`APIResponse`](https://github.com/diplomat-bit/aibank/tree/main/src/jocall3/_response.py) object.
+These methods return an [`APIResponse`](https://github.com/diplomat-bit/aibank/tree/main/src/aibanking/_response.py) object.
 
-The async client returns an [`AsyncAPIResponse`](https://github.com/diplomat-bit/aibank/tree/main/src/jocall3/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
+The async client returns an [`AsyncAPIResponse`](https://github.com/diplomat-bit/aibank/tree/main/src/aibanking/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
 
 #### `.with_streaming_response`
 
@@ -282,10 +283,8 @@ The above interface eagerly reads the full response body when you make the reque
 To stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.
 
 ```python
-with client.users.with_streaming_response.register(
-    email="user@quantum-ledger.com",
-    name="Standard User",
-    password="DefaultPassword123!",
+with client.users.password_reset.with_streaming_response.initiate(
+    identifier="REPLACE_ME",
 ) as response:
     print(response.headers.get("X-My-Header"))
 
@@ -339,7 +338,7 @@ You can directly override the [httpx client](https://www.python-httpx.org/api/#c
 
 ```python
 import httpx
-from jocall3 import Jocall3, DefaultHttpxClient
+from aibanking import Jocall3, DefaultHttpxClient
 
 client = Jocall3(
     # Or use the `JOCALL3_BASE_URL` env var
@@ -362,7 +361,7 @@ client.with_options(http_client=DefaultHttpxClient(...))
 By default the library closes underlying HTTP connections whenever the client is [garbage collected](https://docs.python.org/3/reference/datamodel.html#object.__del__). You can manually close the client using the `.close()` method if desired, or with a context manager that closes when exiting.
 
 ```py
-from jocall3 import Jocall3
+from aibanking import Jocall3
 
 with Jocall3() as client:
   # make requests here
@@ -390,8 +389,8 @@ If you've upgraded to the latest version but aren't seeing any new features you 
 You can determine the version that is being used at runtime with:
 
 ```py
-import jocall3
-print(jocall3.__version__)
+import aibanking
+print(aibanking.__version__)
 ```
 
 ## Requirements

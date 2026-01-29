@@ -7,9 +7,9 @@ import pytest
 import pydantic
 from pydantic import Field
 
-from jocall3._utils import PropertyInfo
-from jocall3._compat import PYDANTIC_V1, parse_obj, model_dump, model_json
-from jocall3._models import DISCRIMINATOR_CACHE, BaseModel, construct_type
+from aibanking._utils import PropertyInfo
+from aibanking._compat import PYDANTIC_V1, parse_obj, model_dump, model_json
+from aibanking._models import DISCRIMINATOR_CACHE, BaseModel, construct_type
 
 
 class BasicModel(BaseModel):

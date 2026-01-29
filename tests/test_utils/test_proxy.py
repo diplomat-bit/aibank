@@ -2,7 +2,7 @@ import operator
 from typing import Any
 from typing_extensions import override
 
-from jocall3._utils import LazyProxy
+from aibanking._utils import LazyProxy
 
 
 class RecursiveLazyProxy(LazyProxy[Any]):
