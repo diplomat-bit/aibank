@@ -38,7 +38,7 @@ class InternationalResource(SyncAPIResource):
         """
         return InternationalResourceWithStreamingResponse(self)
 
-    def get_status(
+    def retrieve_status(
         self,
         payment_id: str,
         *,
@@ -93,7 +93,7 @@ class AsyncInternationalResource(AsyncAPIResource):
         """
         return AsyncInternationalResourceWithStreamingResponse(self)
 
-    async def get_status(
+    async def retrieve_status(
         self,
         payment_id: str,
         *,
@@ -132,8 +132,8 @@ class InternationalResourceWithRawResponse:
     def __init__(self, international: InternationalResource) -> None:
         self._international = international
 
-        self.get_status = to_raw_response_wrapper(
-            international.get_status,
+        self.retrieve_status = to_raw_response_wrapper(
+            international.retrieve_status,
         )
 
 
@@ -141,8 +141,8 @@ class AsyncInternationalResourceWithRawResponse:
     def __init__(self, international: AsyncInternationalResource) -> None:
         self._international = international
 
-        self.get_status = async_to_raw_response_wrapper(
-            international.get_status,
+        self.retrieve_status = async_to_raw_response_wrapper(
+            international.retrieve_status,
         )
 
 
@@ -150,8 +150,8 @@ class InternationalResourceWithStreamingResponse:
     def __init__(self, international: InternationalResource) -> None:
         self._international = international
 
-        self.get_status = to_streamed_response_wrapper(
-            international.get_status,
+        self.retrieve_status = to_streamed_response_wrapper(
+            international.retrieve_status,
         )
 
 
@@ -159,6 +159,6 @@ class AsyncInternationalResourceWithStreamingResponse:
     def __init__(self, international: AsyncInternationalResource) -> None:
         self._international = international
 
-        self.get_status = async_to_streamed_response_wrapper(
-            international.get_status,
+        self.retrieve_status = async_to_streamed_response_wrapper(
+            international.retrieve_status,
         )

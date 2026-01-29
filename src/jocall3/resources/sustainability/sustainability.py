@@ -13,24 +13,12 @@ from ..._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from .investments import (
-    InvestmentsResource,
-    AsyncInvestmentsResource,
-    InvestmentsResourceWithRawResponse,
-    AsyncInvestmentsResourceWithRawResponse,
-    InvestmentsResourceWithStreamingResponse,
-    AsyncInvestmentsResourceWithStreamingResponse,
-)
 from ..._base_client import make_request_options
 
 __all__ = ["SustainabilityResource", "AsyncSustainabilityResource"]
 
 
 class SustainabilityResource(SyncAPIResource):
-    @cached_property
-    def investments(self) -> InvestmentsResource:
-        return InvestmentsResource(self._client)
-
     @cached_property
     def with_raw_response(self) -> SustainabilityResourceWithRawResponse:
         """
@@ -50,7 +38,7 @@ class SustainabilityResource(SyncAPIResource):
         """
         return SustainabilityResourceWithStreamingResponse(self)
 
-    def get_footprint(
+    def retrieve_carbon_footprint(
         self,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -76,10 +64,6 @@ class SustainabilityResource(SyncAPIResource):
 
 class AsyncSustainabilityResource(AsyncAPIResource):
     @cached_property
-    def investments(self) -> AsyncInvestmentsResource:
-        return AsyncInvestmentsResource(self._client)
-
-    @cached_property
     def with_raw_response(self) -> AsyncSustainabilityResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
@@ -98,7 +82,7 @@ class AsyncSustainabilityResource(AsyncAPIResource):
         """
         return AsyncSustainabilityResourceWithStreamingResponse(self)
 
-    async def get_footprint(
+    async def retrieve_carbon_footprint(
         self,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -126,49 +110,33 @@ class SustainabilityResourceWithRawResponse:
     def __init__(self, sustainability: SustainabilityResource) -> None:
         self._sustainability = sustainability
 
-        self.get_footprint = to_raw_response_wrapper(
-            sustainability.get_footprint,
+        self.retrieve_carbon_footprint = to_raw_response_wrapper(
+            sustainability.retrieve_carbon_footprint,
         )
-
-    @cached_property
-    def investments(self) -> InvestmentsResourceWithRawResponse:
-        return InvestmentsResourceWithRawResponse(self._sustainability.investments)
 
 
 class AsyncSustainabilityResourceWithRawResponse:
     def __init__(self, sustainability: AsyncSustainabilityResource) -> None:
         self._sustainability = sustainability
 
-        self.get_footprint = async_to_raw_response_wrapper(
-            sustainability.get_footprint,
+        self.retrieve_carbon_footprint = async_to_raw_response_wrapper(
+            sustainability.retrieve_carbon_footprint,
         )
-
-    @cached_property
-    def investments(self) -> AsyncInvestmentsResourceWithRawResponse:
-        return AsyncInvestmentsResourceWithRawResponse(self._sustainability.investments)
 
 
 class SustainabilityResourceWithStreamingResponse:
     def __init__(self, sustainability: SustainabilityResource) -> None:
         self._sustainability = sustainability
 
-        self.get_footprint = to_streamed_response_wrapper(
-            sustainability.get_footprint,
+        self.retrieve_carbon_footprint = to_streamed_response_wrapper(
+            sustainability.retrieve_carbon_footprint,
         )
-
-    @cached_property
-    def investments(self) -> InvestmentsResourceWithStreamingResponse:
-        return InvestmentsResourceWithStreamingResponse(self._sustainability.investments)
 
 
 class AsyncSustainabilityResourceWithStreamingResponse:
     def __init__(self, sustainability: AsyncSustainabilityResource) -> None:
         self._sustainability = sustainability
 
-        self.get_footprint = async_to_streamed_response_wrapper(
-            sustainability.get_footprint,
+        self.retrieve_carbon_footprint = async_to_streamed_response_wrapper(
+            sustainability.retrieve_carbon_footprint,
         )
-
-    @cached_property
-    def investments(self) -> AsyncInvestmentsResourceWithStreamingResponse:
-        return AsyncInvestmentsResourceWithStreamingResponse(self._sustainability.investments)

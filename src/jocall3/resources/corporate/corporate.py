@@ -2,14 +2,6 @@
 
 from __future__ import annotations
 
-from .treasury import (
-    TreasuryResource,
-    AsyncTreasuryResource,
-    TreasuryResourceWithRawResponse,
-    AsyncTreasuryResourceWithRawResponse,
-    TreasuryResourceWithStreamingResponse,
-    AsyncTreasuryResourceWithStreamingResponse,
-)
 from ..._compat import cached_property
 from .anomalies import (
     AnomaliesResource,
@@ -36,13 +28,13 @@ from .cards.cards import (
     CardsResourceWithStreamingResponse,
     AsyncCardsResourceWithStreamingResponse,
 )
-from .sanction_screening import (
-    SanctionScreeningResource,
-    AsyncSanctionScreeningResource,
-    SanctionScreeningResourceWithRawResponse,
-    AsyncSanctionScreeningResourceWithRawResponse,
-    SanctionScreeningResourceWithStreamingResponse,
-    AsyncSanctionScreeningResourceWithStreamingResponse,
+from .treasury.treasury import (
+    TreasuryResource,
+    AsyncTreasuryResource,
+    TreasuryResourceWithRawResponse,
+    AsyncTreasuryResourceWithRawResponse,
+    TreasuryResourceWithStreamingResponse,
+    AsyncTreasuryResourceWithStreamingResponse,
 )
 from .compliance.compliance import (
     ComplianceResource,
@@ -57,10 +49,6 @@ __all__ = ["CorporateResource", "AsyncCorporateResource"]
 
 
 class CorporateResource(SyncAPIResource):
-    @cached_property
-    def sanction_screening(self) -> SanctionScreeningResource:
-        return SanctionScreeningResource(self._client)
-
     @cached_property
     def compliance(self) -> ComplianceResource:
         return ComplianceResource(self._client)
@@ -102,10 +90,6 @@ class CorporateResource(SyncAPIResource):
 
 
 class AsyncCorporateResource(AsyncAPIResource):
-    @cached_property
-    def sanction_screening(self) -> AsyncSanctionScreeningResource:
-        return AsyncSanctionScreeningResource(self._client)
-
     @cached_property
     def compliance(self) -> AsyncComplianceResource:
         return AsyncComplianceResource(self._client)
@@ -151,10 +135,6 @@ class CorporateResourceWithRawResponse:
         self._corporate = corporate
 
     @cached_property
-    def sanction_screening(self) -> SanctionScreeningResourceWithRawResponse:
-        return SanctionScreeningResourceWithRawResponse(self._corporate.sanction_screening)
-
-    @cached_property
     def compliance(self) -> ComplianceResourceWithRawResponse:
         return ComplianceResourceWithRawResponse(self._corporate.compliance)
 
@@ -178,10 +158,6 @@ class CorporateResourceWithRawResponse:
 class AsyncCorporateResourceWithRawResponse:
     def __init__(self, corporate: AsyncCorporateResource) -> None:
         self._corporate = corporate
-
-    @cached_property
-    def sanction_screening(self) -> AsyncSanctionScreeningResourceWithRawResponse:
-        return AsyncSanctionScreeningResourceWithRawResponse(self._corporate.sanction_screening)
 
     @cached_property
     def compliance(self) -> AsyncComplianceResourceWithRawResponse:
@@ -209,10 +185,6 @@ class CorporateResourceWithStreamingResponse:
         self._corporate = corporate
 
     @cached_property
-    def sanction_screening(self) -> SanctionScreeningResourceWithStreamingResponse:
-        return SanctionScreeningResourceWithStreamingResponse(self._corporate.sanction_screening)
-
-    @cached_property
     def compliance(self) -> ComplianceResourceWithStreamingResponse:
         return ComplianceResourceWithStreamingResponse(self._corporate.compliance)
 
@@ -236,10 +208,6 @@ class CorporateResourceWithStreamingResponse:
 class AsyncCorporateResourceWithStreamingResponse:
     def __init__(self, corporate: AsyncCorporateResource) -> None:
         self._corporate = corporate
-
-    @cached_property
-    def sanction_screening(self) -> AsyncSanctionScreeningResourceWithStreamingResponse:
-        return AsyncSanctionScreeningResourceWithStreamingResponse(self._corporate.sanction_screening)
 
     @cached_property
     def compliance(self) -> AsyncComplianceResourceWithStreamingResponse:

@@ -17,7 +17,6 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestStatements:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_list(self, client: Jocall3) -> None:
         statement = client.accounts.statements.list(
@@ -25,7 +24,6 @@ class TestStatements:
         )
         assert_matches_type(StatementListResponse, statement, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_list_with_all_params(self, client: Jocall3) -> None:
         statement = client.accounts.statements.list(
@@ -36,7 +34,6 @@ class TestStatements:
         )
         assert_matches_type(StatementListResponse, statement, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_list(self, client: Jocall3) -> None:
         response = client.accounts.statements.with_raw_response.list(
@@ -48,7 +45,6 @@ class TestStatements:
         statement = response.parse()
         assert_matches_type(StatementListResponse, statement, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_list(self, client: Jocall3) -> None:
         with client.accounts.statements.with_streaming_response.list(
@@ -62,7 +58,6 @@ class TestStatements:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_path_params_list(self, client: Jocall3) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `account_id` but received ''"):
@@ -76,7 +71,6 @@ class TestAsyncStatements:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_list(self, async_client: AsyncJocall3) -> None:
         statement = await async_client.accounts.statements.list(
@@ -84,7 +78,6 @@ class TestAsyncStatements:
         )
         assert_matches_type(StatementListResponse, statement, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncJocall3) -> None:
         statement = await async_client.accounts.statements.list(
@@ -95,7 +88,6 @@ class TestAsyncStatements:
         )
         assert_matches_type(StatementListResponse, statement, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_list(self, async_client: AsyncJocall3) -> None:
         response = await async_client.accounts.statements.with_raw_response.list(
@@ -107,7 +99,6 @@ class TestAsyncStatements:
         statement = await response.parse()
         assert_matches_type(StatementListResponse, statement, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_list(self, async_client: AsyncJocall3) -> None:
         async with async_client.accounts.statements.with_streaming_response.list(
@@ -121,7 +112,6 @@ class TestAsyncStatements:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_path_params_list(self, async_client: AsyncJocall3) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `account_id` but received ''"):

@@ -4,10 +4,10 @@ from pydantic import Field as FieldInfo
 
 from ..._models import BaseModel
 
-__all__ = ["TreasuryForecastCashFlowResponse"]
+__all__ = ["TreasuryRetrieveCashFlowForecastResponse"]
 
 
-class TreasuryForecastCashFlowResponse(BaseModel):
+class TreasuryRetrieveCashFlowForecastResponse(BaseModel):
     inflow_forecast: object = FieldInfo(alias="inflowForecast")
     """Forecast of cash inflows by source."""
 

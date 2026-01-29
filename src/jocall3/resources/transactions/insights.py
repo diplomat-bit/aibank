@@ -14,6 +14,7 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ..._base_client import make_request_options
+from ...types.transactions.insight_retrieve_spending_trends_response import InsightRetrieveSpendingTrendsResponse
 
 __all__ = ["InsightsResource", "AsyncInsightsResource"]
 
@@ -38,7 +39,7 @@ class InsightsResource(SyncAPIResource):
         """
         return InsightsResourceWithStreamingResponse(self)
 
-    def get_trends(
+    def retrieve_spending_trends(
         self,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -47,7 +48,7 @@ class InsightsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> InsightRetrieveSpendingTrendsResponse:
         """
         Retrieves AI-generated insights into user spending trends over time, identifying
         patterns and anomalies.
@@ -57,7 +58,7 @@ class InsightsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            cast_to=InsightRetrieveSpendingTrendsResponse,
         )
 
 
@@ -81,7 +82,7 @@ class AsyncInsightsResource(AsyncAPIResource):
         """
         return AsyncInsightsResourceWithStreamingResponse(self)
 
-    async def get_trends(
+    async def retrieve_spending_trends(
         self,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -90,7 +91,7 @@ class AsyncInsightsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> InsightRetrieveSpendingTrendsResponse:
         """
         Retrieves AI-generated insights into user spending trends over time, identifying
         patterns and anomalies.
@@ -100,7 +101,7 @@ class AsyncInsightsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            cast_to=InsightRetrieveSpendingTrendsResponse,
         )
 
 
@@ -108,8 +109,8 @@ class InsightsResourceWithRawResponse:
     def __init__(self, insights: InsightsResource) -> None:
         self._insights = insights
 
-        self.get_trends = to_raw_response_wrapper(
-            insights.get_trends,
+        self.retrieve_spending_trends = to_raw_response_wrapper(
+            insights.retrieve_spending_trends,
         )
 
 
@@ -117,8 +118,8 @@ class AsyncInsightsResourceWithRawResponse:
     def __init__(self, insights: AsyncInsightsResource) -> None:
         self._insights = insights
 
-        self.get_trends = async_to_raw_response_wrapper(
-            insights.get_trends,
+        self.retrieve_spending_trends = async_to_raw_response_wrapper(
+            insights.retrieve_spending_trends,
         )
 
 
@@ -126,8 +127,8 @@ class InsightsResourceWithStreamingResponse:
     def __init__(self, insights: InsightsResource) -> None:
         self._insights = insights
 
-        self.get_trends = to_streamed_response_wrapper(
-            insights.get_trends,
+        self.retrieve_spending_trends = to_streamed_response_wrapper(
+            insights.retrieve_spending_trends,
         )
 
 
@@ -135,6 +136,6 @@ class AsyncInsightsResourceWithStreamingResponse:
     def __init__(self, insights: AsyncInsightsResource) -> None:
         self._insights = insights
 
-        self.get_trends = async_to_streamed_response_wrapper(
-            insights.get_trends,
+        self.retrieve_spending_trends = async_to_streamed_response_wrapper(
+            insights.retrieve_spending_trends,
         )

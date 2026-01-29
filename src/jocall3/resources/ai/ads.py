@@ -91,30 +91,7 @@ class AdsResource(SyncAPIResource):
             cast_to=object,
         )
 
-    def generate(
-        self,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
-        """
-        Submits a request to generate a high-quality video ad using the advanced Veo 2.0
-        generative AI model. This is an asynchronous operation, suitable for standard ad
-        content creation.
-        """
-        return self._post(
-            "/ai/ads/generate",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=object,
-        )
-
-    def get_operation(
+    def retrieve_operation_status(
         self,
         operation_id: str,
         *,
@@ -222,30 +199,7 @@ class AsyncAdsResource(AsyncAPIResource):
             cast_to=object,
         )
 
-    async def generate(
-        self,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
-        """
-        Submits a request to generate a high-quality video ad using the advanced Veo 2.0
-        generative AI model. This is an asynchronous operation, suitable for standard ad
-        content creation.
-        """
-        return await self._post(
-            "/ai/ads/generate",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=object,
-        )
-
-    async def get_operation(
+    async def retrieve_operation_status(
         self,
         operation_id: str,
         *,
@@ -289,11 +243,8 @@ class AdsResourceWithRawResponse:
         self.list = to_raw_response_wrapper(
             ads.list,
         )
-        self.generate = to_raw_response_wrapper(
-            ads.generate,
-        )
-        self.get_operation = to_raw_response_wrapper(
-            ads.get_operation,
+        self.retrieve_operation_status = to_raw_response_wrapper(
+            ads.retrieve_operation_status,
         )
 
 
@@ -304,11 +255,8 @@ class AsyncAdsResourceWithRawResponse:
         self.list = async_to_raw_response_wrapper(
             ads.list,
         )
-        self.generate = async_to_raw_response_wrapper(
-            ads.generate,
-        )
-        self.get_operation = async_to_raw_response_wrapper(
-            ads.get_operation,
+        self.retrieve_operation_status = async_to_raw_response_wrapper(
+            ads.retrieve_operation_status,
         )
 
 
@@ -319,11 +267,8 @@ class AdsResourceWithStreamingResponse:
         self.list = to_streamed_response_wrapper(
             ads.list,
         )
-        self.generate = to_streamed_response_wrapper(
-            ads.generate,
-        )
-        self.get_operation = to_streamed_response_wrapper(
-            ads.get_operation,
+        self.retrieve_operation_status = to_streamed_response_wrapper(
+            ads.retrieve_operation_status,
         )
 
 
@@ -334,9 +279,6 @@ class AsyncAdsResourceWithStreamingResponse:
         self.list = async_to_streamed_response_wrapper(
             ads.list,
         )
-        self.generate = async_to_streamed_response_wrapper(
-            ads.generate,
-        )
-        self.get_operation = async_to_streamed_response_wrapper(
-            ads.get_operation,
+        self.retrieve_operation_status = async_to_streamed_response_wrapper(
+            ads.retrieve_operation_status,
         )

@@ -17,13 +17,11 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestSimulate:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_run_advanced(self, client: Jocall3) -> None:
         simulate = client.ai.oracle.simulate.run_advanced()
         assert_matches_type(object, simulate, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_run_advanced_with_all_params(self, client: Jocall3) -> None:
         simulate = client.ai.oracle.simulate.run_advanced(
@@ -32,7 +30,6 @@ class TestSimulate:
         )
         assert_matches_type(object, simulate, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_run_advanced(self, client: Jocall3) -> None:
         response = client.ai.oracle.simulate.with_raw_response.run_advanced()
@@ -42,7 +39,6 @@ class TestSimulate:
         simulate = response.parse()
         assert_matches_type(object, simulate, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_run_advanced(self, client: Jocall3) -> None:
         with client.ai.oracle.simulate.with_streaming_response.run_advanced() as response:
@@ -54,13 +50,11 @@ class TestSimulate:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_run_standard(self, client: Jocall3) -> None:
         simulate = client.ai.oracle.simulate.run_standard()
         assert_matches_type(SimulateRunStandardResponse, simulate, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_run_standard(self, client: Jocall3) -> None:
         response = client.ai.oracle.simulate.with_raw_response.run_standard()
@@ -70,7 +64,6 @@ class TestSimulate:
         simulate = response.parse()
         assert_matches_type(SimulateRunStandardResponse, simulate, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_run_standard(self, client: Jocall3) -> None:
         with client.ai.oracle.simulate.with_streaming_response.run_standard() as response:
@@ -88,13 +81,11 @@ class TestAsyncSimulate:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_run_advanced(self, async_client: AsyncJocall3) -> None:
         simulate = await async_client.ai.oracle.simulate.run_advanced()
         assert_matches_type(object, simulate, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_run_advanced_with_all_params(self, async_client: AsyncJocall3) -> None:
         simulate = await async_client.ai.oracle.simulate.run_advanced(
@@ -103,7 +94,6 @@ class TestAsyncSimulate:
         )
         assert_matches_type(object, simulate, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_run_advanced(self, async_client: AsyncJocall3) -> None:
         response = await async_client.ai.oracle.simulate.with_raw_response.run_advanced()
@@ -113,7 +103,6 @@ class TestAsyncSimulate:
         simulate = await response.parse()
         assert_matches_type(object, simulate, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_run_advanced(self, async_client: AsyncJocall3) -> None:
         async with async_client.ai.oracle.simulate.with_streaming_response.run_advanced() as response:
@@ -125,13 +114,11 @@ class TestAsyncSimulate:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_run_standard(self, async_client: AsyncJocall3) -> None:
         simulate = await async_client.ai.oracle.simulate.run_standard()
         assert_matches_type(SimulateRunStandardResponse, simulate, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_run_standard(self, async_client: AsyncJocall3) -> None:
         response = await async_client.ai.oracle.simulate.with_raw_response.run_standard()
@@ -141,7 +128,6 @@ class TestAsyncSimulate:
         simulate = await response.parse()
         assert_matches_type(SimulateRunStandardResponse, simulate, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_run_standard(self, async_client: AsyncJocall3) -> None:
         async with async_client.ai.oracle.simulate.with_streaming_response.run_standard() as response:

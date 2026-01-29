@@ -4,6 +4,6 @@ from __future__ import annotations
 
 from .ad_list_params import AdListParams as AdListParams
 from .advisor_chat_params import AdvisorChatParams as AdvisorChatParams
-from .advisor_history_params import AdvisorHistoryParams as AdvisorHistoryParams
 from .incubator_list_pitches_params import IncubatorListPitchesParams as IncubatorListPitchesParams
-from .incubator_generate_pitch_params import IncubatorGeneratePitchParams as IncubatorGeneratePitchParams
+from .incubator_submit_pitch_params import IncubatorSubmitPitchParams as IncubatorSubmitPitchParams
+from .advisor_retrieve_history_params import AdvisorRetrieveHistoryParams as AdvisorRetrieveHistoryParams

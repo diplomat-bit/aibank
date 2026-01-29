@@ -14,7 +14,7 @@ from ..._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ...types.web3 import wallet_list_params, wallet_get_balance_params
+from ...types.web3 import wallet_list_params, wallet_retrieve_balances_params
 from ..._base_client import make_request_options
 
 __all__ = ["WalletsResource", "AsyncWalletsResource"]
@@ -39,6 +39,29 @@ class WalletsResource(SyncAPIResource):
         For more information, see https://www.github.com/diplomat-bit/aibank#with_streaming_response
         """
         return WalletsResourceWithStreamingResponse(self)
+
+    def create(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> object:
+        """
+        Initiates the process to securely connect a new cryptocurrency wallet to the
+        user's profile, typically involving a signed message or OAuth flow from the
+        wallet provider.
+        """
+        return self._post(
+            "/web3/wallets",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=object,
+        )
 
     def list(
         self,
@@ -88,30 +111,7 @@ class WalletsResource(SyncAPIResource):
             cast_to=object,
         )
 
-    def connect(
-        self,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
-        """
-        Initiates the process to securely connect a new cryptocurrency wallet to the
-        user's profile, typically involving a signed message or OAuth flow from the
-        wallet provider.
-        """
-        return self._post(
-            "/web3/wallets",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=object,
-        )
-
-    def get_balance(
+    def retrieve_balances(
         self,
         wallet_id: str,
         *,
@@ -155,7 +155,7 @@ class WalletsResource(SyncAPIResource):
                         "limit": limit,
                         "offset": offset,
                     },
-                    wallet_get_balance_params.WalletGetBalanceParams,
+                    wallet_retrieve_balances_params.WalletRetrieveBalancesParams,
                 ),
             ),
             cast_to=object,
@@ -181,6 +181,29 @@ class AsyncWalletsResource(AsyncAPIResource):
         For more information, see https://www.github.com/diplomat-bit/aibank#with_streaming_response
         """
         return AsyncWalletsResourceWithStreamingResponse(self)
+
+    async def create(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> object:
+        """
+        Initiates the process to securely connect a new cryptocurrency wallet to the
+        user's profile, typically involving a signed message or OAuth flow from the
+        wallet provider.
+        """
+        return await self._post(
+            "/web3/wallets",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=object,
+        )
 
     async def list(
         self,
@@ -230,30 +253,7 @@ class AsyncWalletsResource(AsyncAPIResource):
             cast_to=object,
         )
 
-    async def connect(
-        self,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
-        """
-        Initiates the process to securely connect a new cryptocurrency wallet to the
-        user's profile, typically involving a signed message or OAuth flow from the
-        wallet provider.
-        """
-        return await self._post(
-            "/web3/wallets",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=object,
-        )
-
-    async def get_balance(
+    async def retrieve_balances(
         self,
         wallet_id: str,
         *,
@@ -297,7 +297,7 @@ class AsyncWalletsResource(AsyncAPIResource):
                         "limit": limit,
                         "offset": offset,
                     },
-                    wallet_get_balance_params.WalletGetBalanceParams,
+                    wallet_retrieve_balances_params.WalletRetrieveBalancesParams,
                 ),
             ),
             cast_to=object,
@@ -308,14 +308,14 @@ class WalletsResourceWithRawResponse:
     def __init__(self, wallets: WalletsResource) -> None:
         self._wallets = wallets
 
+        self.create = to_raw_response_wrapper(
+            wallets.create,
+        )
         self.list = to_raw_response_wrapper(
             wallets.list,
         )
-        self.connect = to_raw_response_wrapper(
-            wallets.connect,
-        )
-        self.get_balance = to_raw_response_wrapper(
-            wallets.get_balance,
+        self.retrieve_balances = to_raw_response_wrapper(
+            wallets.retrieve_balances,
         )
 
 
@@ -323,14 +323,14 @@ class AsyncWalletsResourceWithRawResponse:
     def __init__(self, wallets: AsyncWalletsResource) -> None:
         self._wallets = wallets
 
+        self.create = async_to_raw_response_wrapper(
+            wallets.create,
+        )
         self.list = async_to_raw_response_wrapper(
             wallets.list,
         )
-        self.connect = async_to_raw_response_wrapper(
-            wallets.connect,
-        )
-        self.get_balance = async_to_raw_response_wrapper(
-            wallets.get_balance,
+        self.retrieve_balances = async_to_raw_response_wrapper(
+            wallets.retrieve_balances,
         )
 
 
@@ -338,14 +338,14 @@ class WalletsResourceWithStreamingResponse:
     def __init__(self, wallets: WalletsResource) -> None:
         self._wallets = wallets
 
+        self.create = to_streamed_response_wrapper(
+            wallets.create,
+        )
         self.list = to_streamed_response_wrapper(
             wallets.list,
         )
-        self.connect = to_streamed_response_wrapper(
-            wallets.connect,
-        )
-        self.get_balance = to_streamed_response_wrapper(
-            wallets.get_balance,
+        self.retrieve_balances = to_streamed_response_wrapper(
+            wallets.retrieve_balances,
         )
 
 
@@ -353,12 +353,12 @@ class AsyncWalletsResourceWithStreamingResponse:
     def __init__(self, wallets: AsyncWalletsResource) -> None:
         self._wallets = wallets
 
+        self.create = async_to_streamed_response_wrapper(
+            wallets.create,
+        )
         self.list = async_to_streamed_response_wrapper(
             wallets.list,
         )
-        self.connect = async_to_streamed_response_wrapper(
-            wallets.connect,
-        )
-        self.get_balance = async_to_streamed_response_wrapper(
-            wallets.get_balance,
+        self.retrieve_balances = async_to_streamed_response_wrapper(
+            wallets.retrieve_balances,
         )

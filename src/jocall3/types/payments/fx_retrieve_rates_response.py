@@ -6,10 +6,10 @@ from pydantic import Field as FieldInfo
 
 from ..._models import BaseModel
 
-__all__ = ["FxGetRatesResponse"]
+__all__ = ["FxRetrieveRatesResponse"]
 
 
-class FxGetRatesResponse(BaseModel):
+class FxRetrieveRatesResponse(BaseModel):
     current_rate: object = FieldInfo(alias="currentRate")
     """Real-time foreign exchange rates."""
 

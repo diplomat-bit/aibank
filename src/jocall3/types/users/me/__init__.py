@@ -3,6 +3,10 @@
 from __future__ import annotations
 
 from .device_list_params import DeviceListParams as DeviceListParams
+from .device_list_response import DeviceListResponse as DeviceListResponse
+from .biometric_verify_params import BiometricVerifyParams as BiometricVerifyParams
 from .preference_update_params import PreferenceUpdateParams as PreferenceUpdateParams
+from .biometric_verify_response import BiometricVerifyResponse as BiometricVerifyResponse
 from .preference_update_response import PreferenceUpdateResponse as PreferenceUpdateResponse
 from .preference_retrieve_response import PreferenceRetrieveResponse as PreferenceRetrieveResponse
+from .biometric_retrieve_status_response import BiometricRetrieveStatusResponse as BiometricRetrieveStatusResponse

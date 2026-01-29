@@ -15,8 +15,8 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ..._base_client import make_request_options
-from ...types.payments import fx_get_rates_params
-from ...types.payments.fx_get_rates_response import FxGetRatesResponse
+from ...types.payments import fx_retrieve_rates_params
+from ...types.payments.fx_retrieve_rates_response import FxRetrieveRatesResponse
 
 __all__ = ["FxResource", "AsyncFxResource"]
 
@@ -41,7 +41,7 @@ class FxResource(SyncAPIResource):
         """
         return FxResourceWithStreamingResponse(self)
 
-    def convert(
+    def convert_currency(
         self,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -63,7 +63,7 @@ class FxResource(SyncAPIResource):
             cast_to=object,
         )
 
-    def get_rates(
+    def retrieve_rates(
         self,
         *,
         base_currency: str | Omit = omit,
@@ -75,7 +75,7 @@ class FxResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> FxGetRatesResponse:
+    ) -> FxRetrieveRatesResponse:
         """
         Retrieves current and AI-predicted future foreign exchange rates for a specified
         currency pair, including bid/ask spreads and historical volatility data for
@@ -109,10 +109,10 @@ class FxResource(SyncAPIResource):
                         "forecast_days": forecast_days,
                         "target_currency": target_currency,
                     },
-                    fx_get_rates_params.FxGetRatesParams,
+                    fx_retrieve_rates_params.FxRetrieveRatesParams,
                 ),
             ),
-            cast_to=FxGetRatesResponse,
+            cast_to=FxRetrieveRatesResponse,
         )
 
 
@@ -136,7 +136,7 @@ class AsyncFxResource(AsyncAPIResource):
         """
         return AsyncFxResourceWithStreamingResponse(self)
 
-    async def convert(
+    async def convert_currency(
         self,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -158,7 +158,7 @@ class AsyncFxResource(AsyncAPIResource):
             cast_to=object,
         )
 
-    async def get_rates(
+    async def retrieve_rates(
         self,
         *,
         base_currency: str | Omit = omit,
@@ -170,7 +170,7 @@ class AsyncFxResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> FxGetRatesResponse:
+    ) -> FxRetrieveRatesResponse:
         """
         Retrieves current and AI-predicted future foreign exchange rates for a specified
         currency pair, including bid/ask spreads and historical volatility data for
@@ -204,10 +204,10 @@ class AsyncFxResource(AsyncAPIResource):
                         "forecast_days": forecast_days,
                         "target_currency": target_currency,
                     },
-                    fx_get_rates_params.FxGetRatesParams,
+                    fx_retrieve_rates_params.FxRetrieveRatesParams,
                 ),
             ),
-            cast_to=FxGetRatesResponse,
+            cast_to=FxRetrieveRatesResponse,
         )
 
 
@@ -215,11 +215,11 @@ class FxResourceWithRawResponse:
     def __init__(self, fx: FxResource) -> None:
         self._fx = fx
 
-        self.convert = to_raw_response_wrapper(
-            fx.convert,
+        self.convert_currency = to_raw_response_wrapper(
+            fx.convert_currency,
         )
-        self.get_rates = to_raw_response_wrapper(
-            fx.get_rates,
+        self.retrieve_rates = to_raw_response_wrapper(
+            fx.retrieve_rates,
         )
 
 
@@ -227,11 +227,11 @@ class AsyncFxResourceWithRawResponse:
     def __init__(self, fx: AsyncFxResource) -> None:
         self._fx = fx
 
-        self.convert = async_to_raw_response_wrapper(
-            fx.convert,
+        self.convert_currency = async_to_raw_response_wrapper(
+            fx.convert_currency,
         )
-        self.get_rates = async_to_raw_response_wrapper(
-            fx.get_rates,
+        self.retrieve_rates = async_to_raw_response_wrapper(
+            fx.retrieve_rates,
         )
 
 
@@ -239,11 +239,11 @@ class FxResourceWithStreamingResponse:
     def __init__(self, fx: FxResource) -> None:
         self._fx = fx
 
-        self.convert = to_streamed_response_wrapper(
-            fx.convert,
+        self.convert_currency = to_streamed_response_wrapper(
+            fx.convert_currency,
         )
-        self.get_rates = to_streamed_response_wrapper(
-            fx.get_rates,
+        self.retrieve_rates = to_streamed_response_wrapper(
+            fx.retrieve_rates,
         )
 
 
@@ -251,9 +251,9 @@ class AsyncFxResourceWithStreamingResponse:
     def __init__(self, fx: AsyncFxResource) -> None:
         self._fx = fx
 
-        self.convert = async_to_streamed_response_wrapper(
-            fx.convert,
+        self.convert_currency = async_to_streamed_response_wrapper(
+            fx.convert_currency,
         )
-        self.get_rates = async_to_streamed_response_wrapper(
-            fx.get_rates,
+        self.retrieve_rates = async_to_streamed_response_wrapper(
+            fx.retrieve_rates,
         )

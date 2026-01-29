@@ -6,10 +6,10 @@ from typing_extensions import Annotated, TypedDict
 
 from ..._utils import PropertyInfo
 
-__all__ = ["FxGetRatesParams"]
+__all__ = ["FxRetrieveRatesParams"]
 
 
-class FxGetRatesParams(TypedDict, total=False):
+class FxRetrieveRatesParams(TypedDict, total=False):
     base_currency: Annotated[str, PropertyInfo(alias="baseCurrency")]
     """The base currency code (e.g., USD)."""
 

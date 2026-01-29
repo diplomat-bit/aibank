@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from typing_extensions import TypedDict
 
-__all__ = ["WalletGetBalanceParams"]
+__all__ = ["WalletRetrieveBalancesParams"]
 
 
-class WalletGetBalanceParams(TypedDict, total=False):
+class WalletRetrieveBalancesParams(TypedDict, total=False):
     limit: int
     """Maximum number of items to return in a single page."""
 

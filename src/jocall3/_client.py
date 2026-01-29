@@ -12,6 +12,7 @@ from . import _exceptions
 from ._qs import Querystring
 from ._types import (
     Omit,
+    Headers,
     Timeout,
     NotGiven,
     Transport,
@@ -31,20 +32,8 @@ from ._base_client import (
 )
 
 if TYPE_CHECKING:
-    from .resources import (
-        ai,
-        web3,
-        users,
-        budgets,
-        accounts,
-        payments,
-        corporate,
-        investments,
-        transactions,
-        sustainability,
-    )
+    from .resources import ai, web3, users, accounts, payments, corporate, investments, transactions, sustainability
     from .resources.ai.ai import AIResource, AsyncAIResource
-    from .resources.budgets import BudgetsResource, AsyncBudgetsResource
     from .resources.web3.web3 import Web3Resource, AsyncWeb3Resource
     from .resources.users.users import UsersResource, AsyncUsersResource
     from .resources.accounts.accounts import AccountsResource, AsyncAccountsResource
@@ -67,8 +56,8 @@ __all__ = [
 ]
 
 ENVIRONMENTS: Dict[str, str] = {
-    "production": "https://api.quantum-core.finance/v1",
-    "sandbox": "https://sandbox.quantum-core.finance/v1",
+    "production": "https://75975599-8fdc-4274-8701-05fc0b8089cc.mock.pstmn.io",
+    "sandbox": "https://75975599-8fdc-4274-8701-05fc0b8089cc.mock.pstmn.io",
     "gemini_direct": "https://generativelanguage.googleapis.com/v1beta",
 }
 
@@ -175,18 +164,6 @@ class Jocall3(SyncAPIClient):
         return TransactionsResource(self)
 
     @cached_property
-    def budgets(self) -> BudgetsResource:
-        from .resources.budgets import BudgetsResource
-
-        return BudgetsResource(self)
-
-    @cached_property
-    def investments(self) -> InvestmentsResource:
-        from .resources.investments import InvestmentsResource
-
-        return InvestmentsResource(self)
-
-    @cached_property
     def ai(self) -> AIResource:
         from .resources.ai import AIResource
 
@@ -217,6 +194,12 @@ class Jocall3(SyncAPIClient):
         return SustainabilityResource(self)
 
     @cached_property
+    def investments(self) -> InvestmentsResource:
+        from .resources.investments import InvestmentsResource
+
+        return InvestmentsResource(self)
+
+    @cached_property
     def with_raw_response(self) -> Jocall3WithRawResponse:
         return Jocall3WithRawResponse(self)
 
@@ -231,12 +214,43 @@ class Jocall3(SyncAPIClient):
 
     @property
     @override
+    def auth_headers(self) -> dict[str, str]:
+        return {**self._bearer_auth, **self._gemini_header}
+
+    @property
+    def _bearer_auth(self) -> dict[str, str]:
+        api_key = self.api_key
+        if api_key is None:
+            return {}
+        return {"Authorization": f"Bearer {api_key}"}
+
+    @property
+    def _gemini_header(self) -> dict[str, str]:
+        gemini_api_key = self.gemini_api_key
+        if gemini_api_key is None:
+            return {}
+        return {"x-goog-api-key": gemini_api_key}
+
+    @property
+    @override
     def default_headers(self) -> dict[str, str | Omit]:
         return {
             **super().default_headers,
             "X-Stainless-Async": "false",
             **self._custom_headers,
         }
+
+    @override
+    def _validate_headers(self, headers: Headers, custom_headers: Headers) -> None:
+        if headers.get("Authorization") or isinstance(custom_headers.get("Authorization"), Omit):
+            return
+
+        if headers.get("x-goog-api-key") or isinstance(custom_headers.get("x-goog-api-key"), Omit):
+            return
+
+        raise TypeError(
+            '"Could not resolve authentication method. Expected either api_key or gemini_api_key to be set. Or for one of the `Authorization` or `x-goog-api-key` headers to be explicitly omitted"'
+        )
 
     def copy(
         self,
@@ -429,18 +443,6 @@ class AsyncJocall3(AsyncAPIClient):
         return AsyncTransactionsResource(self)
 
     @cached_property
-    def budgets(self) -> AsyncBudgetsResource:
-        from .resources.budgets import AsyncBudgetsResource
-
-        return AsyncBudgetsResource(self)
-
-    @cached_property
-    def investments(self) -> AsyncInvestmentsResource:
-        from .resources.investments import AsyncInvestmentsResource
-
-        return AsyncInvestmentsResource(self)
-
-    @cached_property
     def ai(self) -> AsyncAIResource:
         from .resources.ai import AsyncAIResource
 
@@ -471,6 +473,12 @@ class AsyncJocall3(AsyncAPIClient):
         return AsyncSustainabilityResource(self)
 
     @cached_property
+    def investments(self) -> AsyncInvestmentsResource:
+        from .resources.investments import AsyncInvestmentsResource
+
+        return AsyncInvestmentsResource(self)
+
+    @cached_property
     def with_raw_response(self) -> AsyncJocall3WithRawResponse:
         return AsyncJocall3WithRawResponse(self)
 
@@ -485,12 +493,43 @@ class AsyncJocall3(AsyncAPIClient):
 
     @property
     @override
+    def auth_headers(self) -> dict[str, str]:
+        return {**self._bearer_auth, **self._gemini_header}
+
+    @property
+    def _bearer_auth(self) -> dict[str, str]:
+        api_key = self.api_key
+        if api_key is None:
+            return {}
+        return {"Authorization": f"Bearer {api_key}"}
+
+    @property
+    def _gemini_header(self) -> dict[str, str]:
+        gemini_api_key = self.gemini_api_key
+        if gemini_api_key is None:
+            return {}
+        return {"x-goog-api-key": gemini_api_key}
+
+    @property
+    @override
     def default_headers(self) -> dict[str, str | Omit]:
         return {
             **super().default_headers,
             "X-Stainless-Async": f"async:{get_async_library()}",
             **self._custom_headers,
         }
+
+    @override
+    def _validate_headers(self, headers: Headers, custom_headers: Headers) -> None:
+        if headers.get("Authorization") or isinstance(custom_headers.get("Authorization"), Omit):
+            return
+
+        if headers.get("x-goog-api-key") or isinstance(custom_headers.get("x-goog-api-key"), Omit):
+            return
+
+        raise TypeError(
+            '"Could not resolve authentication method. Expected either api_key or gemini_api_key to be set. Or for one of the `Authorization` or `x-goog-api-key` headers to be explicitly omitted"'
+        )
 
     def copy(
         self,
@@ -606,18 +645,6 @@ class Jocall3WithRawResponse:
         return TransactionsResourceWithRawResponse(self._client.transactions)
 
     @cached_property
-    def budgets(self) -> budgets.BudgetsResourceWithRawResponse:
-        from .resources.budgets import BudgetsResourceWithRawResponse
-
-        return BudgetsResourceWithRawResponse(self._client.budgets)
-
-    @cached_property
-    def investments(self) -> investments.InvestmentsResourceWithRawResponse:
-        from .resources.investments import InvestmentsResourceWithRawResponse
-
-        return InvestmentsResourceWithRawResponse(self._client.investments)
-
-    @cached_property
     def ai(self) -> ai.AIResourceWithRawResponse:
         from .resources.ai import AIResourceWithRawResponse
 
@@ -647,6 +674,12 @@ class Jocall3WithRawResponse:
 
         return SustainabilityResourceWithRawResponse(self._client.sustainability)
 
+    @cached_property
+    def investments(self) -> investments.InvestmentsResourceWithRawResponse:
+        from .resources.investments import InvestmentsResourceWithRawResponse
+
+        return InvestmentsResourceWithRawResponse(self._client.investments)
+
 
 class AsyncJocall3WithRawResponse:
     _client: AsyncJocall3
@@ -671,18 +704,6 @@ class AsyncJocall3WithRawResponse:
         from .resources.transactions import AsyncTransactionsResourceWithRawResponse
 
         return AsyncTransactionsResourceWithRawResponse(self._client.transactions)
-
-    @cached_property
-    def budgets(self) -> budgets.AsyncBudgetsResourceWithRawResponse:
-        from .resources.budgets import AsyncBudgetsResourceWithRawResponse
-
-        return AsyncBudgetsResourceWithRawResponse(self._client.budgets)
-
-    @cached_property
-    def investments(self) -> investments.AsyncInvestmentsResourceWithRawResponse:
-        from .resources.investments import AsyncInvestmentsResourceWithRawResponse
-
-        return AsyncInvestmentsResourceWithRawResponse(self._client.investments)
 
     @cached_property
     def ai(self) -> ai.AsyncAIResourceWithRawResponse:
@@ -714,6 +735,12 @@ class AsyncJocall3WithRawResponse:
 
         return AsyncSustainabilityResourceWithRawResponse(self._client.sustainability)
 
+    @cached_property
+    def investments(self) -> investments.AsyncInvestmentsResourceWithRawResponse:
+        from .resources.investments import AsyncInvestmentsResourceWithRawResponse
+
+        return AsyncInvestmentsResourceWithRawResponse(self._client.investments)
+
 
 class Jocall3WithStreamedResponse:
     _client: Jocall3
@@ -738,18 +765,6 @@ class Jocall3WithStreamedResponse:
         from .resources.transactions import TransactionsResourceWithStreamingResponse
 
         return TransactionsResourceWithStreamingResponse(self._client.transactions)
-
-    @cached_property
-    def budgets(self) -> budgets.BudgetsResourceWithStreamingResponse:
-        from .resources.budgets import BudgetsResourceWithStreamingResponse
-
-        return BudgetsResourceWithStreamingResponse(self._client.budgets)
-
-    @cached_property
-    def investments(self) -> investments.InvestmentsResourceWithStreamingResponse:
-        from .resources.investments import InvestmentsResourceWithStreamingResponse
-
-        return InvestmentsResourceWithStreamingResponse(self._client.investments)
 
     @cached_property
     def ai(self) -> ai.AIResourceWithStreamingResponse:
@@ -781,6 +796,12 @@ class Jocall3WithStreamedResponse:
 
         return SustainabilityResourceWithStreamingResponse(self._client.sustainability)
 
+    @cached_property
+    def investments(self) -> investments.InvestmentsResourceWithStreamingResponse:
+        from .resources.investments import InvestmentsResourceWithStreamingResponse
+
+        return InvestmentsResourceWithStreamingResponse(self._client.investments)
+
 
 class AsyncJocall3WithStreamedResponse:
     _client: AsyncJocall3
@@ -805,18 +826,6 @@ class AsyncJocall3WithStreamedResponse:
         from .resources.transactions import AsyncTransactionsResourceWithStreamingResponse
 
         return AsyncTransactionsResourceWithStreamingResponse(self._client.transactions)
-
-    @cached_property
-    def budgets(self) -> budgets.AsyncBudgetsResourceWithStreamingResponse:
-        from .resources.budgets import AsyncBudgetsResourceWithStreamingResponse
-
-        return AsyncBudgetsResourceWithStreamingResponse(self._client.budgets)
-
-    @cached_property
-    def investments(self) -> investments.AsyncInvestmentsResourceWithStreamingResponse:
-        from .resources.investments import AsyncInvestmentsResourceWithStreamingResponse
-
-        return AsyncInvestmentsResourceWithStreamingResponse(self._client.investments)
 
     @cached_property
     def ai(self) -> ai.AsyncAIResourceWithStreamingResponse:
@@ -847,6 +856,12 @@ class AsyncJocall3WithStreamedResponse:
         from .resources.sustainability import AsyncSustainabilityResourceWithStreamingResponse
 
         return AsyncSustainabilityResourceWithStreamingResponse(self._client.sustainability)
+
+    @cached_property
+    def investments(self) -> investments.AsyncInvestmentsResourceWithStreamingResponse:
+        from .resources.investments import AsyncInvestmentsResourceWithStreamingResponse
+
+        return AsyncInvestmentsResourceWithStreamingResponse(self._client.investments)
 
 
 Client = Jocall3

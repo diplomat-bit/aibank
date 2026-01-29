@@ -6,10 +6,10 @@ from typing_extensions import Annotated, TypedDict
 
 from ..._utils import PropertyInfo
 
-__all__ = ["TreasuryForecastCashFlowParams"]
+__all__ = ["TreasuryRetrieveCashFlowForecastParams"]
 
 
-class TreasuryForecastCashFlowParams(TypedDict, total=False):
+class TreasuryRetrieveCashFlowForecastParams(TypedDict, total=False):
     forecast_horizon_days: Annotated[int, PropertyInfo(alias="forecastHorizonDays")]
     """
     The number of days into the future for which to generate the cash flow forecast

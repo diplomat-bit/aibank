@@ -2,5 +2,5 @@
 
 from __future__ import annotations
 
-from .fx_get_rates_params import FxGetRatesParams as FxGetRatesParams
-from .fx_get_rates_response import FxGetRatesResponse as FxGetRatesResponse
+from .fx_retrieve_rates_params import FxRetrieveRatesParams as FxRetrieveRatesParams
+from .fx_retrieve_rates_response import FxRetrieveRatesResponse as FxRetrieveRatesResponse

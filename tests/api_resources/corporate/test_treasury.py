@@ -10,8 +10,8 @@ import pytest
 from jocall3 import Jocall3, AsyncJocall3
 from tests.utils import assert_matches_type
 from jocall3.types.corporate import (
-    TreasuryForecastCashFlowResponse,
-    TreasuryGetLiquidityPositionsResponse,
+    TreasuryRetrieveCashFlowForecastResponse,
+    TreasuryRetrieveLiquidityPositionsResponse,
 )
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
@@ -20,68 +20,61 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestTreasury:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_method_forecast_cash_flow(self, client: Jocall3) -> None:
-        treasury = client.corporate.treasury.forecast_cash_flow()
-        assert_matches_type(TreasuryForecastCashFlowResponse, treasury, path=["response"])
+    def test_method_retrieve_cash_flow_forecast(self, client: Jocall3) -> None:
+        treasury = client.corporate.treasury.retrieve_cash_flow_forecast()
+        assert_matches_type(TreasuryRetrieveCashFlowForecastResponse, treasury, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_method_forecast_cash_flow_with_all_params(self, client: Jocall3) -> None:
-        treasury = client.corporate.treasury.forecast_cash_flow(
+    def test_method_retrieve_cash_flow_forecast_with_all_params(self, client: Jocall3) -> None:
+        treasury = client.corporate.treasury.retrieve_cash_flow_forecast(
             forecast_horizon_days=0,
             include_scenario_analysis=True,
         )
-        assert_matches_type(TreasuryForecastCashFlowResponse, treasury, path=["response"])
+        assert_matches_type(TreasuryRetrieveCashFlowForecastResponse, treasury, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_raw_response_forecast_cash_flow(self, client: Jocall3) -> None:
-        response = client.corporate.treasury.with_raw_response.forecast_cash_flow()
+    def test_raw_response_retrieve_cash_flow_forecast(self, client: Jocall3) -> None:
+        response = client.corporate.treasury.with_raw_response.retrieve_cash_flow_forecast()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         treasury = response.parse()
-        assert_matches_type(TreasuryForecastCashFlowResponse, treasury, path=["response"])
+        assert_matches_type(TreasuryRetrieveCashFlowForecastResponse, treasury, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_streaming_response_forecast_cash_flow(self, client: Jocall3) -> None:
-        with client.corporate.treasury.with_streaming_response.forecast_cash_flow() as response:
+    def test_streaming_response_retrieve_cash_flow_forecast(self, client: Jocall3) -> None:
+        with client.corporate.treasury.with_streaming_response.retrieve_cash_flow_forecast() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             treasury = response.parse()
-            assert_matches_type(TreasuryForecastCashFlowResponse, treasury, path=["response"])
+            assert_matches_type(TreasuryRetrieveCashFlowForecastResponse, treasury, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_method_get_liquidity_positions(self, client: Jocall3) -> None:
-        treasury = client.corporate.treasury.get_liquidity_positions()
-        assert_matches_type(TreasuryGetLiquidityPositionsResponse, treasury, path=["response"])
+    def test_method_retrieve_liquidity_positions(self, client: Jocall3) -> None:
+        treasury = client.corporate.treasury.retrieve_liquidity_positions()
+        assert_matches_type(TreasuryRetrieveLiquidityPositionsResponse, treasury, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_raw_response_get_liquidity_positions(self, client: Jocall3) -> None:
-        response = client.corporate.treasury.with_raw_response.get_liquidity_positions()
+    def test_raw_response_retrieve_liquidity_positions(self, client: Jocall3) -> None:
+        response = client.corporate.treasury.with_raw_response.retrieve_liquidity_positions()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         treasury = response.parse()
-        assert_matches_type(TreasuryGetLiquidityPositionsResponse, treasury, path=["response"])
+        assert_matches_type(TreasuryRetrieveLiquidityPositionsResponse, treasury, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_streaming_response_get_liquidity_positions(self, client: Jocall3) -> None:
-        with client.corporate.treasury.with_streaming_response.get_liquidity_positions() as response:
+    def test_streaming_response_retrieve_liquidity_positions(self, client: Jocall3) -> None:
+        with client.corporate.treasury.with_streaming_response.retrieve_liquidity_positions() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             treasury = response.parse()
-            assert_matches_type(TreasuryGetLiquidityPositionsResponse, treasury, path=["response"])
+            assert_matches_type(TreasuryRetrieveLiquidityPositionsResponse, treasury, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -91,67 +84,60 @@ class TestAsyncTreasury:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_method_forecast_cash_flow(self, async_client: AsyncJocall3) -> None:
-        treasury = await async_client.corporate.treasury.forecast_cash_flow()
-        assert_matches_type(TreasuryForecastCashFlowResponse, treasury, path=["response"])
+    async def test_method_retrieve_cash_flow_forecast(self, async_client: AsyncJocall3) -> None:
+        treasury = await async_client.corporate.treasury.retrieve_cash_flow_forecast()
+        assert_matches_type(TreasuryRetrieveCashFlowForecastResponse, treasury, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_method_forecast_cash_flow_with_all_params(self, async_client: AsyncJocall3) -> None:
-        treasury = await async_client.corporate.treasury.forecast_cash_flow(
+    async def test_method_retrieve_cash_flow_forecast_with_all_params(self, async_client: AsyncJocall3) -> None:
+        treasury = await async_client.corporate.treasury.retrieve_cash_flow_forecast(
             forecast_horizon_days=0,
             include_scenario_analysis=True,
         )
-        assert_matches_type(TreasuryForecastCashFlowResponse, treasury, path=["response"])
+        assert_matches_type(TreasuryRetrieveCashFlowForecastResponse, treasury, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_raw_response_forecast_cash_flow(self, async_client: AsyncJocall3) -> None:
-        response = await async_client.corporate.treasury.with_raw_response.forecast_cash_flow()
+    async def test_raw_response_retrieve_cash_flow_forecast(self, async_client: AsyncJocall3) -> None:
+        response = await async_client.corporate.treasury.with_raw_response.retrieve_cash_flow_forecast()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         treasury = await response.parse()
-        assert_matches_type(TreasuryForecastCashFlowResponse, treasury, path=["response"])
+        assert_matches_type(TreasuryRetrieveCashFlowForecastResponse, treasury, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_streaming_response_forecast_cash_flow(self, async_client: AsyncJocall3) -> None:
-        async with async_client.corporate.treasury.with_streaming_response.forecast_cash_flow() as response:
+    async def test_streaming_response_retrieve_cash_flow_forecast(self, async_client: AsyncJocall3) -> None:
+        async with async_client.corporate.treasury.with_streaming_response.retrieve_cash_flow_forecast() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             treasury = await response.parse()
-            assert_matches_type(TreasuryForecastCashFlowResponse, treasury, path=["response"])
+            assert_matches_type(TreasuryRetrieveCashFlowForecastResponse, treasury, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_method_get_liquidity_positions(self, async_client: AsyncJocall3) -> None:
-        treasury = await async_client.corporate.treasury.get_liquidity_positions()
-        assert_matches_type(TreasuryGetLiquidityPositionsResponse, treasury, path=["response"])
+    async def test_method_retrieve_liquidity_positions(self, async_client: AsyncJocall3) -> None:
+        treasury = await async_client.corporate.treasury.retrieve_liquidity_positions()
+        assert_matches_type(TreasuryRetrieveLiquidityPositionsResponse, treasury, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_raw_response_get_liquidity_positions(self, async_client: AsyncJocall3) -> None:
-        response = await async_client.corporate.treasury.with_raw_response.get_liquidity_positions()
+    async def test_raw_response_retrieve_liquidity_positions(self, async_client: AsyncJocall3) -> None:
+        response = await async_client.corporate.treasury.with_raw_response.retrieve_liquidity_positions()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         treasury = await response.parse()
-        assert_matches_type(TreasuryGetLiquidityPositionsResponse, treasury, path=["response"])
+        assert_matches_type(TreasuryRetrieveLiquidityPositionsResponse, treasury, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_streaming_response_get_liquidity_positions(self, async_client: AsyncJocall3) -> None:
-        async with async_client.corporate.treasury.with_streaming_response.get_liquidity_positions() as response:
+    async def test_streaming_response_retrieve_liquidity_positions(self, async_client: AsyncJocall3) -> None:
+        async with async_client.corporate.treasury.with_streaming_response.retrieve_liquidity_positions() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             treasury = await response.parse()
-            assert_matches_type(TreasuryGetLiquidityPositionsResponse, treasury, path=["response"])
+            assert_matches_type(TreasuryRetrieveLiquidityPositionsResponse, treasury, path=["response"])
 
         assert cast(Any, response.is_closed) is True

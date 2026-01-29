@@ -6,10 +6,10 @@ from typing_extensions import Annotated, TypedDict
 
 from ..._utils import PropertyInfo
 
-__all__ = ["AdvisorHistoryParams"]
+__all__ = ["AdvisorRetrieveHistoryParams"]
 
 
-class AdvisorHistoryParams(TypedDict, total=False):
+class AdvisorRetrieveHistoryParams(TypedDict, total=False):
     limit: int
     """Maximum number of items to return in a single page."""
 

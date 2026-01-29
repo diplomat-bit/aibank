@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import httpx
 
-from ...types import account_list_params
+from ...types import account_link_params, account_list_params
 from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ..._utils import maybe_transform, async_maybe_transform
 from ..._compat import cached_property
@@ -40,7 +40,9 @@ from .transactions import (
     AsyncTransactionsResourceWithStreamingResponse,
 )
 from ..._base_client import make_request_options
-from ...types.account_retrieve_response import AccountRetrieveResponse
+from ...types.account_link_response import AccountLinkResponse
+from ...types.account_list_response import AccountListResponse
+from ...types.account_retrieve_details_response import AccountRetrieveDetailsResponse
 
 __all__ = ["AccountsResource", "AsyncAccountsResource"]
 
@@ -77,41 +79,6 @@ class AccountsResource(SyncAPIResource):
         """
         return AccountsResourceWithStreamingResponse(self)
 
-    def retrieve(
-        self,
-        account_id: str,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> AccountRetrieveResponse:
-        """
-        Retrieves comprehensive analytics for a specific financial account, including
-        historical balance trends, projected cash flow, and AI-driven insights into
-        spending patterns.
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not account_id:
-            raise ValueError(f"Expected a non-empty value for `account_id` but received {account_id!r}")
-        return self._get(
-            f"/accounts/{account_id}/details",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=AccountRetrieveResponse,
-        )
-
     def list(
         self,
         *,
@@ -123,7 +90,7 @@ class AccountsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> AccountListResponse:
         """
         Fetches a comprehensive, real-time list of all external financial accounts
         linked to the user's profile, including consolidated balances and institutional
@@ -157,11 +124,53 @@ class AccountsResource(SyncAPIResource):
                     account_list_params.AccountListParams,
                 ),
             ),
-            cast_to=object,
+            cast_to=AccountListResponse,
         )
 
     def link(
         self,
+        *,
+        country_code: str,
+        institution_name: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> AccountLinkResponse:
+        """
+        Begins the secure process of linking a new external financial institution (e.g.,
+        another bank, investment platform) to the user's profile, typically involving a
+        third-party tokenized flow.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._post(
+            "/accounts/link",
+            body=maybe_transform(
+                {
+                    "country_code": country_code,
+                    "institution_name": institution_name,
+                },
+                account_link_params.AccountLinkParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=AccountLinkResponse,
+        )
+
+    def retrieve_details(
+        self,
+        account_id: str,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -169,18 +178,29 @@ class AccountsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> AccountRetrieveDetailsResponse:
         """
-        Begins the secure process of linking a new external financial institution (e.g.,
-        another bank, investment platform) to the user's profile, typically involving a
-        third-party tokenized flow.
+        Retrieves comprehensive analytics for a specific financial account, including
+        historical balance trends, projected cash flow, and AI-driven insights into
+        spending patterns.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
         """
-        return self._post(
-            "/accounts/link",
+        if not account_id:
+            raise ValueError(f"Expected a non-empty value for `account_id` but received {account_id!r}")
+        return self._get(
+            f"/accounts/{account_id}/details",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            cast_to=AccountRetrieveDetailsResponse,
         )
 
 
@@ -216,41 +236,6 @@ class AsyncAccountsResource(AsyncAPIResource):
         """
         return AsyncAccountsResourceWithStreamingResponse(self)
 
-    async def retrieve(
-        self,
-        account_id: str,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> AccountRetrieveResponse:
-        """
-        Retrieves comprehensive analytics for a specific financial account, including
-        historical balance trends, projected cash flow, and AI-driven insights into
-        spending patterns.
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not account_id:
-            raise ValueError(f"Expected a non-empty value for `account_id` but received {account_id!r}")
-        return await self._get(
-            f"/accounts/{account_id}/details",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=AccountRetrieveResponse,
-        )
-
     async def list(
         self,
         *,
@@ -262,7 +247,7 @@ class AsyncAccountsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> AccountListResponse:
         """
         Fetches a comprehensive, real-time list of all external financial accounts
         linked to the user's profile, including consolidated balances and institutional
@@ -296,11 +281,53 @@ class AsyncAccountsResource(AsyncAPIResource):
                     account_list_params.AccountListParams,
                 ),
             ),
-            cast_to=object,
+            cast_to=AccountListResponse,
         )
 
     async def link(
         self,
+        *,
+        country_code: str,
+        institution_name: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> AccountLinkResponse:
+        """
+        Begins the secure process of linking a new external financial institution (e.g.,
+        another bank, investment platform) to the user's profile, typically involving a
+        third-party tokenized flow.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return await self._post(
+            "/accounts/link",
+            body=await async_maybe_transform(
+                {
+                    "country_code": country_code,
+                    "institution_name": institution_name,
+                },
+                account_link_params.AccountLinkParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=AccountLinkResponse,
+        )
+
+    async def retrieve_details(
+        self,
+        account_id: str,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -308,18 +335,29 @@ class AsyncAccountsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> AccountRetrieveDetailsResponse:
         """
-        Begins the secure process of linking a new external financial institution (e.g.,
-        another bank, investment platform) to the user's profile, typically involving a
-        third-party tokenized flow.
+        Retrieves comprehensive analytics for a specific financial account, including
+        historical balance trends, projected cash flow, and AI-driven insights into
+        spending patterns.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
         """
-        return await self._post(
-            "/accounts/link",
+        if not account_id:
+            raise ValueError(f"Expected a non-empty value for `account_id` but received {account_id!r}")
+        return await self._get(
+            f"/accounts/{account_id}/details",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            cast_to=AccountRetrieveDetailsResponse,
         )
 
 
@@ -327,14 +365,14 @@ class AccountsResourceWithRawResponse:
     def __init__(self, accounts: AccountsResource) -> None:
         self._accounts = accounts
 
-        self.retrieve = to_raw_response_wrapper(
-            accounts.retrieve,
-        )
         self.list = to_raw_response_wrapper(
             accounts.list,
         )
         self.link = to_raw_response_wrapper(
             accounts.link,
+        )
+        self.retrieve_details = to_raw_response_wrapper(
+            accounts.retrieve_details,
         )
 
     @cached_property
@@ -354,14 +392,14 @@ class AsyncAccountsResourceWithRawResponse:
     def __init__(self, accounts: AsyncAccountsResource) -> None:
         self._accounts = accounts
 
-        self.retrieve = async_to_raw_response_wrapper(
-            accounts.retrieve,
-        )
         self.list = async_to_raw_response_wrapper(
             accounts.list,
         )
         self.link = async_to_raw_response_wrapper(
             accounts.link,
+        )
+        self.retrieve_details = async_to_raw_response_wrapper(
+            accounts.retrieve_details,
         )
 
     @cached_property
@@ -381,14 +419,14 @@ class AccountsResourceWithStreamingResponse:
     def __init__(self, accounts: AccountsResource) -> None:
         self._accounts = accounts
 
-        self.retrieve = to_streamed_response_wrapper(
-            accounts.retrieve,
-        )
         self.list = to_streamed_response_wrapper(
             accounts.list,
         )
         self.link = to_streamed_response_wrapper(
             accounts.link,
+        )
+        self.retrieve_details = to_streamed_response_wrapper(
+            accounts.retrieve_details,
         )
 
     @cached_property
@@ -408,14 +446,14 @@ class AsyncAccountsResourceWithStreamingResponse:
     def __init__(self, accounts: AsyncAccountsResource) -> None:
         self._accounts = accounts
 
-        self.retrieve = async_to_streamed_response_wrapper(
-            accounts.retrieve,
-        )
         self.list = async_to_streamed_response_wrapper(
             accounts.list,
         )
         self.link = async_to_streamed_response_wrapper(
             accounts.link,
+        )
+        self.retrieve_details = async_to_streamed_response_wrapper(
+            accounts.retrieve_details,
         )
 
     @cached_property

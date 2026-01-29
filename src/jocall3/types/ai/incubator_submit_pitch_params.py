@@ -6,9 +6,9 @@ from typing_extensions import Required, Annotated, TypedDict
 
 from ..._utils import PropertyInfo
 
-__all__ = ["IncubatorGeneratePitchParams"]
+__all__ = ["IncubatorSubmitPitchParams"]
 
 
-class IncubatorGeneratePitchParams(TypedDict, total=False):
+class IncubatorSubmitPitchParams(TypedDict, total=False):
     financial_projections: Required[Annotated[object, PropertyInfo(alias="financialProjections")]]
     """Key financial metrics and projections for the next 3-5 years."""

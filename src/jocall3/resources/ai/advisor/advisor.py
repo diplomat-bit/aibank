@@ -15,7 +15,7 @@ from .tools import (
 from ...._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ...._utils import maybe_transform, async_maybe_transform
 from ...._compat import cached_property
-from ....types.ai import advisor_chat_params, advisor_history_params
+from ....types.ai import advisor_chat_params, advisor_retrieve_history_params
 from ...._resource import SyncAPIResource, AsyncAPIResource
 from ...._response import (
     to_raw_response_wrapper,
@@ -91,7 +91,7 @@ class AdvisorResource(SyncAPIResource):
             cast_to=object,
         )
 
-    def history(
+    def retrieve_history(
         self,
         *,
         limit: int | Omit = omit,
@@ -137,7 +137,7 @@ class AdvisorResource(SyncAPIResource):
                         "offset": offset,
                         "session_id": session_id,
                     },
-                    advisor_history_params.AdvisorHistoryParams,
+                    advisor_retrieve_history_params.AdvisorRetrieveHistoryParams,
                 ),
             ),
             cast_to=object,
@@ -209,7 +209,7 @@ class AsyncAdvisorResource(AsyncAPIResource):
             cast_to=object,
         )
 
-    async def history(
+    async def retrieve_history(
         self,
         *,
         limit: int | Omit = omit,
@@ -255,7 +255,7 @@ class AsyncAdvisorResource(AsyncAPIResource):
                         "offset": offset,
                         "session_id": session_id,
                     },
-                    advisor_history_params.AdvisorHistoryParams,
+                    advisor_retrieve_history_params.AdvisorRetrieveHistoryParams,
                 ),
             ),
             cast_to=object,
@@ -269,8 +269,8 @@ class AdvisorResourceWithRawResponse:
         self.chat = to_raw_response_wrapper(
             advisor.chat,
         )
-        self.history = to_raw_response_wrapper(
-            advisor.history,
+        self.retrieve_history = to_raw_response_wrapper(
+            advisor.retrieve_history,
         )
 
     @cached_property
@@ -285,8 +285,8 @@ class AsyncAdvisorResourceWithRawResponse:
         self.chat = async_to_raw_response_wrapper(
             advisor.chat,
         )
-        self.history = async_to_raw_response_wrapper(
-            advisor.history,
+        self.retrieve_history = async_to_raw_response_wrapper(
+            advisor.retrieve_history,
         )
 
     @cached_property
@@ -301,8 +301,8 @@ class AdvisorResourceWithStreamingResponse:
         self.chat = to_streamed_response_wrapper(
             advisor.chat,
         )
-        self.history = to_streamed_response_wrapper(
-            advisor.history,
+        self.retrieve_history = to_streamed_response_wrapper(
+            advisor.retrieve_history,
         )
 
     @cached_property
@@ -317,8 +317,8 @@ class AsyncAdvisorResourceWithStreamingResponse:
         self.chat = async_to_streamed_response_wrapper(
             advisor.chat,
         )
-        self.history = async_to_streamed_response_wrapper(
-            advisor.history,
+        self.retrieve_history = async_to_streamed_response_wrapper(
+            advisor.retrieve_history,
         )
 
     @cached_property

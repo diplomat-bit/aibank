@@ -4,10 +4,10 @@ from pydantic import Field as FieldInfo
 
 from ..._models import BaseModel
 
-__all__ = ["TreasuryGetLiquidityPositionsResponse"]
+__all__ = ["TreasuryRetrieveLiquidityPositionsResponse"]
 
 
-class TreasuryGetLiquidityPositionsResponse(BaseModel):
+class TreasuryRetrieveLiquidityPositionsResponse(BaseModel):
     ai_liquidity_assessment: object = FieldInfo(alias="aiLiquidityAssessment")
     """AI's overall assessment of liquidity."""
 
