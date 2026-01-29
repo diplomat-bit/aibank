@@ -13,12 +13,34 @@ __all__ = ["RecurringListResponse", "Data"]
 class Data(BaseModel):
     id: Optional[str] = None
 
+    ai_confidence_score: Optional[float] = FieldInfo(alias="aiConfidenceScore", default=None)
+
+    amount: Optional[float] = None
+
+    category: Optional[str] = None
+
+    currency: Optional[str] = None
+
     description: Optional[str] = None
 
     frequency: Optional[str] = None
 
-    next_expected_date: Optional[date] = FieldInfo(alias="nextExpectedDate", default=None)
+    last_paid_date: Optional[date] = FieldInfo(alias="lastPaidDate", default=None)
+
+    linked_account_id: Optional[str] = FieldInfo(alias="linkedAccountId", default=None)
+
+    next_due_date: Optional[date] = FieldInfo(alias="nextDueDate", default=None)
+
+    status: Optional[str] = None
 
 
 class RecurringListResponse(BaseModel):
-    data: Optional[List[Data]] = None
+    data: List[Data]
+
+    limit: int
+
+    offset: int
+
+    total: int
+
+    next_offset: Optional[int] = FieldInfo(alias="nextOffset", default=None)

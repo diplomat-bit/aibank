@@ -15,4 +15,3 @@ class PasswordResetConfirmParams(TypedDict, total=False):
     new_password: Required[Annotated[str, PropertyInfo(alias="newPassword")]]
 
     verification_code: Required[Annotated[str, PropertyInfo(alias="verificationCode")]]
-    """The 6-digit code sent to user"""

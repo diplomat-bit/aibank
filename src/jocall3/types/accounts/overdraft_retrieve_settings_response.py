@@ -10,8 +10,14 @@ __all__ = ["OverdraftRetrieveSettingsResponse"]
 
 
 class OverdraftRetrieveSettingsResponse(BaseModel):
-    enabled: Optional[bool] = None
+    account_id: str = FieldInfo(alias="accountId")
 
-    fee_preference: Optional[str] = FieldInfo(alias="feePreference", default=None)
+    enabled: bool
 
-    limit: Optional[float] = None
+    fee_preference: str = FieldInfo(alias="feePreference")
+
+    linked_savings_account_id: Optional[str] = FieldInfo(alias="linkedSavingsAccountId", default=None)
+
+    link_to_savings: Optional[bool] = FieldInfo(alias="linkToSavings", default=None)
+
+    protection_limit: Optional[float] = FieldInfo(alias="protectionLimit", default=None)

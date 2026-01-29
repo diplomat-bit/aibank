@@ -24,14 +24,6 @@ from .wallets import (
     WalletsResourceWithStreamingResponse,
     AsyncWalletsResourceWithStreamingResponse,
 )
-from .contracts import (
-    ContractsResource,
-    AsyncContractsResource,
-    ContractsResourceWithRawResponse,
-    AsyncContractsResourceWithRawResponse,
-    ContractsResourceWithStreamingResponse,
-    AsyncContractsResourceWithStreamingResponse,
-)
 from .transactions import (
     TransactionsResource,
     AsyncTransactionsResource,
@@ -60,12 +52,6 @@ __all__ = [
     "AsyncNFTsResourceWithRawResponse",
     "NFTsResourceWithStreamingResponse",
     "AsyncNFTsResourceWithStreamingResponse",
-    "ContractsResource",
-    "AsyncContractsResource",
-    "ContractsResourceWithRawResponse",
-    "AsyncContractsResourceWithRawResponse",
-    "ContractsResourceWithStreamingResponse",
-    "AsyncContractsResourceWithStreamingResponse",
     "Web3Resource",
     "AsyncWeb3Resource",
     "Web3ResourceWithRawResponse",

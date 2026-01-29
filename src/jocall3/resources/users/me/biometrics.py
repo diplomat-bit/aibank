@@ -2,11 +2,9 @@
 
 from __future__ import annotations
 
-from typing_extensions import Literal
-
 import httpx
 
-from ...._types import Body, Query, Headers, NoneType, NotGiven, not_given
+from ...._types import Body, Query, Headers, NotGiven, not_given
 from ...._utils import maybe_transform, async_maybe_transform
 from ...._compat import cached_property
 from ...._resource import SyncAPIResource, AsyncAPIResource
@@ -17,7 +15,7 @@ from ...._response import (
     async_to_streamed_response_wrapper,
 )
 from ...._base_client import make_request_options
-from ....types.users.me import biometric_enroll_params, biometric_verify_params
+from ....types.users.me import biometric_verify_params
 from ....types.users.me.biometric_verify_response import BiometricVerifyResponse
 from ....types.users.me.biometric_retrieve_status_response import BiometricRetrieveStatusResponse
 
@@ -44,68 +42,6 @@ class BiometricsResource(SyncAPIResource):
         """
         return BiometricsResourceWithStreamingResponse(self)
 
-    def delete(
-        self,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
-        """Remove All Biometric Data"""
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return self._delete(
-            "/users/me/biometrics",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
-        )
-
-    def enroll(
-        self,
-        *,
-        biometric_type: Literal["fingerprint", "facial_recognition"],
-        signature: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
-        """
-        Enroll New Biometric Signature
-
-        Args:
-          signature: Public key or hash of signature
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return self._post(
-            "/users/me/biometrics/enroll",
-            body=maybe_transform(
-                {
-                    "biometric_type": biometric_type,
-                    "signature": signature,
-                },
-                biometric_enroll_params.BiometricEnrollParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
-        )
-
     def retrieve_status(
         self,
         *,
@@ -116,7 +52,10 @@ class BiometricsResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> BiometricRetrieveStatusResponse:
-        """Get Biometric Enrollment Status"""
+        """
+        Retrieves the current status of biometric enrollments for the authenticated
+        user.
+        """
         return self._get(
             "/users/me/biometrics",
             options=make_request_options(
@@ -129,6 +68,8 @@ class BiometricsResource(SyncAPIResource):
         self,
         *,
         biometric_signature: str,
+        biometric_type: str,
+        device_id: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -137,7 +78,8 @@ class BiometricsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> BiometricVerifyResponse:
         """
-        Verify Biometric Data for Sensitive Operations
+        Performs real-time biometric verification to authorize sensitive actions or
+        access protected resources, using a one-time biometric signature.
 
         Args:
           extra_headers: Send extra headers
@@ -151,7 +93,12 @@ class BiometricsResource(SyncAPIResource):
         return self._post(
             "/users/me/biometrics/verify",
             body=maybe_transform(
-                {"biometric_signature": biometric_signature}, biometric_verify_params.BiometricVerifyParams
+                {
+                    "biometric_signature": biometric_signature,
+                    "biometric_type": biometric_type,
+                    "device_id": device_id,
+                },
+                biometric_verify_params.BiometricVerifyParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -180,68 +127,6 @@ class AsyncBiometricsResource(AsyncAPIResource):
         """
         return AsyncBiometricsResourceWithStreamingResponse(self)
 
-    async def delete(
-        self,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
-        """Remove All Biometric Data"""
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return await self._delete(
-            "/users/me/biometrics",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
-        )
-
-    async def enroll(
-        self,
-        *,
-        biometric_type: Literal["fingerprint", "facial_recognition"],
-        signature: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
-        """
-        Enroll New Biometric Signature
-
-        Args:
-          signature: Public key or hash of signature
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return await self._post(
-            "/users/me/biometrics/enroll",
-            body=await async_maybe_transform(
-                {
-                    "biometric_type": biometric_type,
-                    "signature": signature,
-                },
-                biometric_enroll_params.BiometricEnrollParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
-        )
-
     async def retrieve_status(
         self,
         *,
@@ -252,7 +137,10 @@ class AsyncBiometricsResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> BiometricRetrieveStatusResponse:
-        """Get Biometric Enrollment Status"""
+        """
+        Retrieves the current status of biometric enrollments for the authenticated
+        user.
+        """
         return await self._get(
             "/users/me/biometrics",
             options=make_request_options(
@@ -265,6 +153,8 @@ class AsyncBiometricsResource(AsyncAPIResource):
         self,
         *,
         biometric_signature: str,
+        biometric_type: str,
+        device_id: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -273,7 +163,8 @@ class AsyncBiometricsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> BiometricVerifyResponse:
         """
-        Verify Biometric Data for Sensitive Operations
+        Performs real-time biometric verification to authorize sensitive actions or
+        access protected resources, using a one-time biometric signature.
 
         Args:
           extra_headers: Send extra headers
@@ -287,7 +178,12 @@ class AsyncBiometricsResource(AsyncAPIResource):
         return await self._post(
             "/users/me/biometrics/verify",
             body=await async_maybe_transform(
-                {"biometric_signature": biometric_signature}, biometric_verify_params.BiometricVerifyParams
+                {
+                    "biometric_signature": biometric_signature,
+                    "biometric_type": biometric_type,
+                    "device_id": device_id,
+                },
+                biometric_verify_params.BiometricVerifyParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -300,12 +196,6 @@ class BiometricsResourceWithRawResponse:
     def __init__(self, biometrics: BiometricsResource) -> None:
         self._biometrics = biometrics
 
-        self.delete = to_raw_response_wrapper(
-            biometrics.delete,
-        )
-        self.enroll = to_raw_response_wrapper(
-            biometrics.enroll,
-        )
         self.retrieve_status = to_raw_response_wrapper(
             biometrics.retrieve_status,
         )
@@ -318,12 +208,6 @@ class AsyncBiometricsResourceWithRawResponse:
     def __init__(self, biometrics: AsyncBiometricsResource) -> None:
         self._biometrics = biometrics
 
-        self.delete = async_to_raw_response_wrapper(
-            biometrics.delete,
-        )
-        self.enroll = async_to_raw_response_wrapper(
-            biometrics.enroll,
-        )
         self.retrieve_status = async_to_raw_response_wrapper(
             biometrics.retrieve_status,
         )
@@ -336,12 +220,6 @@ class BiometricsResourceWithStreamingResponse:
     def __init__(self, biometrics: BiometricsResource) -> None:
         self._biometrics = biometrics
 
-        self.delete = to_streamed_response_wrapper(
-            biometrics.delete,
-        )
-        self.enroll = to_streamed_response_wrapper(
-            biometrics.enroll,
-        )
         self.retrieve_status = to_streamed_response_wrapper(
             biometrics.retrieve_status,
         )
@@ -354,12 +232,6 @@ class AsyncBiometricsResourceWithStreamingResponse:
     def __init__(self, biometrics: AsyncBiometricsResource) -> None:
         self._biometrics = biometrics
 
-        self.delete = async_to_streamed_response_wrapper(
-            biometrics.delete,
-        )
-        self.enroll = async_to_streamed_response_wrapper(
-            biometrics.enroll,
-        )
         self.retrieve_status = async_to_streamed_response_wrapper(
             biometrics.retrieve_status,
         )

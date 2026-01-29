@@ -1,7 +1,7 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 from typing import List, Optional
-from typing_extensions import Literal
+from datetime import datetime
 
 from pydantic import Field as FieldInfo
 
@@ -13,12 +13,28 @@ __all__ = ["DeviceListResponse", "Data"]
 class Data(BaseModel):
     id: Optional[str] = None
 
+    ip_address: Optional[str] = FieldInfo(alias="ipAddress", default=None)
+
+    last_active: Optional[datetime] = FieldInfo(alias="lastActive", default=None)
+
+    model: Optional[str] = None
+
     os: Optional[str] = None
 
-    trust_level: Optional[Literal["trusted", "untrusted"]] = FieldInfo(alias="trustLevel", default=None)
+    push_token: Optional[str] = FieldInfo(alias="pushToken", default=None)
+
+    trust_level: Optional[str] = FieldInfo(alias="trustLevel", default=None)
 
     type: Optional[str] = None
 
 
 class DeviceListResponse(BaseModel):
-    data: Optional[List[Data]] = None
+    data: List[Data]
+
+    limit: int
+
+    offset: int
+
+    total: int
+
+    next_offset: Optional[int] = FieldInfo(alias="nextOffset", default=None)

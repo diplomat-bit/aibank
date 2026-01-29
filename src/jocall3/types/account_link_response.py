@@ -10,6 +10,10 @@ __all__ = ["AccountLinkResponse"]
 
 
 class AccountLinkResponse(BaseModel):
-    link_session_id: Optional[str] = FieldInfo(alias="linkSessionId", default=None)
+    auth_uri: str = FieldInfo(alias="authUri")
 
-    status: Optional[str] = None
+    link_session_id: str = FieldInfo(alias="linkSessionId")
+
+    status: str
+
+    message: Optional[str] = None

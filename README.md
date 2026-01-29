@@ -34,16 +34,7 @@ client = Jocall3(
     environment="sandbox",
 )
 
-response = client.ai.oracle.simulate.run_advanced(
-    prompt="Analyze systemic risk of a 20% BTC drop.",
-    scenarios=[
-        {
-            "name": "Crypto Black Swan",
-            "description": "Extreme market volatility scenario.",
-        }
-    ],
-)
-print(response.simulation_id)
+response = client.ai.oracle.simulate.run_advanced()
 ```
 
 While you can provide an `api_key` keyword argument,
@@ -68,16 +59,7 @@ client = AsyncJocall3(
 
 
 async def main() -> None:
-    response = await client.ai.oracle.simulate.run_advanced(
-        prompt="Analyze systemic risk of a 20% BTC drop.",
-        scenarios=[
-            {
-                "name": "Crypto Black Swan",
-                "description": "Extreme market volatility scenario.",
-            }
-        ],
-    )
-    print(response.simulation_id)
+    response = await client.ai.oracle.simulate.run_advanced()
 
 
 asyncio.run(main())
@@ -110,16 +92,7 @@ async def main() -> None:
         api_key=os.environ.get("JOCALL3_API_KEY"),  # This is the default and can be omitted
         http_client=DefaultAioHttpClient(),
     ) as client:
-        response = await client.ai.oracle.simulate.run_advanced(
-            prompt="Analyze systemic risk of a 20% BTC drop.",
-            scenarios=[
-                {
-                    "name": "Crypto Black Swan",
-                    "description": "Extreme market volatility scenario.",
-                }
-            ],
-        )
-        print(response.simulation_id)
+        response = await client.ai.oracle.simulate.run_advanced()
 
 
 asyncio.run(main())
@@ -143,33 +116,14 @@ from jocall3 import Jocall3
 
 client = Jocall3()
 
-response = client.corporate.cards.issue_physical(
-    holder_name="holderName",
-    shipping_address={
-        "city": "city",
-        "country": "country",
-        "street": "street",
-    },
+response = client.users.register(
+    email="alice.w@example.com",
+    name="Alice Wonderland",
+    password="SecureP@ssw0rd2024!",
+    address={},
 )
-print(response.shipping_address)
+print(response.address)
 ```
-
-## File uploads
-
-Request parameters that correspond to file uploads can be passed as `bytes`, or a [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike) instance or a tuple of `(filename, contents, media type)`.
-
-```python
-from pathlib import Path
-from jocall3 import Jocall3
-
-client = Jocall3()
-
-client.system.verification.verify_document(
-    file=Path("/path/to/file"),
-)
-```
-
-The async client uses the exact same interface. If you pass a [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike) instance, the file contents will be read asynchronously automatically.
 
 ## Handling errors
 

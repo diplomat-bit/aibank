@@ -9,7 +9,10 @@ import pytest
 
 from jocall3 import Jocall3, AsyncJocall3
 from tests.utils import assert_matches_type
-from jocall3.types.accounts import OverdraftRetrieveSettingsResponse
+from jocall3.types.accounts import (
+    OverdraftUpdateSettingsResponse,
+    OverdraftRetrieveSettingsResponse,
+)
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -20,14 +23,14 @@ class TestOverdraft:
     @parametrize
     def test_method_retrieve_settings(self, client: Jocall3) -> None:
         overdraft = client.accounts.overdraft.retrieve_settings(
-            "accountId",
+            "acc_chase_checking_4567",
         )
         assert_matches_type(OverdraftRetrieveSettingsResponse, overdraft, path=["response"])
 
     @parametrize
     def test_raw_response_retrieve_settings(self, client: Jocall3) -> None:
         response = client.accounts.overdraft.with_raw_response.retrieve_settings(
-            "accountId",
+            "acc_chase_checking_4567",
         )
 
         assert response.is_closed is True
@@ -38,7 +41,7 @@ class TestOverdraft:
     @parametrize
     def test_streaming_response_retrieve_settings(self, client: Jocall3) -> None:
         with client.accounts.overdraft.with_streaming_response.retrieve_settings(
-            "accountId",
+            "acc_chase_checking_4567",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -58,40 +61,41 @@ class TestOverdraft:
     @parametrize
     def test_method_update_settings(self, client: Jocall3) -> None:
         overdraft = client.accounts.overdraft.update_settings(
-            account_id="accountId",
+            account_id="acc_chase_checking_4567",
         )
-        assert overdraft is None
+        assert_matches_type(OverdraftUpdateSettingsResponse, overdraft, path=["response"])
 
     @parametrize
     def test_method_update_settings_with_all_params(self, client: Jocall3) -> None:
         overdraft = client.accounts.overdraft.update_settings(
-            account_id="accountId",
-            enabled=True,
-            limit=0,
+            account_id="acc_chase_checking_4567",
+            enabled=False,
+            fee_preference="decline_if_over_limit",
+            link_to_savings=False,
         )
-        assert overdraft is None
+        assert_matches_type(OverdraftUpdateSettingsResponse, overdraft, path=["response"])
 
     @parametrize
     def test_raw_response_update_settings(self, client: Jocall3) -> None:
         response = client.accounts.overdraft.with_raw_response.update_settings(
-            account_id="accountId",
+            account_id="acc_chase_checking_4567",
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         overdraft = response.parse()
-        assert overdraft is None
+        assert_matches_type(OverdraftUpdateSettingsResponse, overdraft, path=["response"])
 
     @parametrize
     def test_streaming_response_update_settings(self, client: Jocall3) -> None:
         with client.accounts.overdraft.with_streaming_response.update_settings(
-            account_id="accountId",
+            account_id="acc_chase_checking_4567",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             overdraft = response.parse()
-            assert overdraft is None
+            assert_matches_type(OverdraftUpdateSettingsResponse, overdraft, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -111,14 +115,14 @@ class TestAsyncOverdraft:
     @parametrize
     async def test_method_retrieve_settings(self, async_client: AsyncJocall3) -> None:
         overdraft = await async_client.accounts.overdraft.retrieve_settings(
-            "accountId",
+            "acc_chase_checking_4567",
         )
         assert_matches_type(OverdraftRetrieveSettingsResponse, overdraft, path=["response"])
 
     @parametrize
     async def test_raw_response_retrieve_settings(self, async_client: AsyncJocall3) -> None:
         response = await async_client.accounts.overdraft.with_raw_response.retrieve_settings(
-            "accountId",
+            "acc_chase_checking_4567",
         )
 
         assert response.is_closed is True
@@ -129,7 +133,7 @@ class TestAsyncOverdraft:
     @parametrize
     async def test_streaming_response_retrieve_settings(self, async_client: AsyncJocall3) -> None:
         async with async_client.accounts.overdraft.with_streaming_response.retrieve_settings(
-            "accountId",
+            "acc_chase_checking_4567",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -149,40 +153,41 @@ class TestAsyncOverdraft:
     @parametrize
     async def test_method_update_settings(self, async_client: AsyncJocall3) -> None:
         overdraft = await async_client.accounts.overdraft.update_settings(
-            account_id="accountId",
+            account_id="acc_chase_checking_4567",
         )
-        assert overdraft is None
+        assert_matches_type(OverdraftUpdateSettingsResponse, overdraft, path=["response"])
 
     @parametrize
     async def test_method_update_settings_with_all_params(self, async_client: AsyncJocall3) -> None:
         overdraft = await async_client.accounts.overdraft.update_settings(
-            account_id="accountId",
-            enabled=True,
-            limit=0,
+            account_id="acc_chase_checking_4567",
+            enabled=False,
+            fee_preference="decline_if_over_limit",
+            link_to_savings=False,
         )
-        assert overdraft is None
+        assert_matches_type(OverdraftUpdateSettingsResponse, overdraft, path=["response"])
 
     @parametrize
     async def test_raw_response_update_settings(self, async_client: AsyncJocall3) -> None:
         response = await async_client.accounts.overdraft.with_raw_response.update_settings(
-            account_id="accountId",
+            account_id="acc_chase_checking_4567",
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         overdraft = await response.parse()
-        assert overdraft is None
+        assert_matches_type(OverdraftUpdateSettingsResponse, overdraft, path=["response"])
 
     @parametrize
     async def test_streaming_response_update_settings(self, async_client: AsyncJocall3) -> None:
         async with async_client.accounts.overdraft.with_streaming_response.update_settings(
-            account_id="accountId",
+            account_id="acc_chase_checking_4567",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             overdraft = await response.parse()
-            assert overdraft is None
+            assert_matches_type(OverdraftUpdateSettingsResponse, overdraft, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 

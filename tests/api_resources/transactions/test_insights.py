@@ -9,38 +9,13 @@ import pytest
 
 from jocall3 import Jocall3, AsyncJocall3
 from tests.utils import assert_matches_type
-from jocall3.types.transactions import InsightRetrieveFutureFlowResponse, InsightRetrieveSpendingTrendsResponse
+from jocall3.types.transactions import InsightRetrieveSpendingTrendsResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
 
 class TestInsights:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
-
-    @parametrize
-    def test_method_retrieve_future_flow(self, client: Jocall3) -> None:
-        insight = client.transactions.insights.retrieve_future_flow()
-        assert_matches_type(InsightRetrieveFutureFlowResponse, insight, path=["response"])
-
-    @parametrize
-    def test_raw_response_retrieve_future_flow(self, client: Jocall3) -> None:
-        response = client.transactions.insights.with_raw_response.retrieve_future_flow()
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        insight = response.parse()
-        assert_matches_type(InsightRetrieveFutureFlowResponse, insight, path=["response"])
-
-    @parametrize
-    def test_streaming_response_retrieve_future_flow(self, client: Jocall3) -> None:
-        with client.transactions.insights.with_streaming_response.retrieve_future_flow() as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            insight = response.parse()
-            assert_matches_type(InsightRetrieveFutureFlowResponse, insight, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
 
     @parametrize
     def test_method_retrieve_spending_trends(self, client: Jocall3) -> None:
@@ -72,31 +47,6 @@ class TestAsyncInsights:
     parametrize = pytest.mark.parametrize(
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
-
-    @parametrize
-    async def test_method_retrieve_future_flow(self, async_client: AsyncJocall3) -> None:
-        insight = await async_client.transactions.insights.retrieve_future_flow()
-        assert_matches_type(InsightRetrieveFutureFlowResponse, insight, path=["response"])
-
-    @parametrize
-    async def test_raw_response_retrieve_future_flow(self, async_client: AsyncJocall3) -> None:
-        response = await async_client.transactions.insights.with_raw_response.retrieve_future_flow()
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        insight = await response.parse()
-        assert_matches_type(InsightRetrieveFutureFlowResponse, insight, path=["response"])
-
-    @parametrize
-    async def test_streaming_response_retrieve_future_flow(self, async_client: AsyncJocall3) -> None:
-        async with async_client.transactions.insights.with_streaming_response.retrieve_future_flow() as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            insight = await response.parse()
-            assert_matches_type(InsightRetrieveFutureFlowResponse, insight, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
 
     @parametrize
     async def test_method_retrieve_spending_trends(self, async_client: AsyncJocall3) -> None:

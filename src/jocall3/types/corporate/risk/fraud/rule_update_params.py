@@ -8,6 +8,8 @@ __all__ = ["RuleUpdateParams"]
 
 
 class RuleUpdateParams(TypedDict, total=False):
-    action: str
+    action: object
+    """Action to take when a fraud rule is triggered."""
 
-    name: str
+    criteria: object
+    """Criteria that define when a fraud rule should trigger."""

@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from typing_extensions import TypedDict
+from typing_extensions import Annotated, TypedDict
+
+from ..._utils import PropertyInfo
 
 __all__ = ["OverdraftUpdateSettingsParams"]
 
@@ -10,4 +12,6 @@ __all__ = ["OverdraftUpdateSettingsParams"]
 class OverdraftUpdateSettingsParams(TypedDict, total=False):
     enabled: bool
 
-    limit: float
+    fee_preference: Annotated[str, PropertyInfo(alias="feePreference")]
+
+    link_to_savings: Annotated[bool, PropertyInfo(alias="linkToSavings")]
