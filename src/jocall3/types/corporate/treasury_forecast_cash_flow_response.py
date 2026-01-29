@@ -1,5 +1,7 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+from typing import List, Optional
+
 from pydantic import Field as FieldInfo
 
 from ..._models import BaseModel
@@ -8,8 +10,8 @@ __all__ = ["TreasuryForecastCashFlowResponse"]
 
 
 class TreasuryForecastCashFlowResponse(BaseModel):
-    inflow_forecast: object = FieldInfo(alias="inflowForecast")
-    """Forecast of cash inflows by source."""
+    ai_recommendations: Optional[List[str]] = FieldInfo(alias="aiRecommendations", default=None)
 
-    outflow_forecast: object = FieldInfo(alias="outflowForecast")
-    """Forecast of cash outflows by category."""
+    forecast_id: Optional[str] = FieldInfo(alias="forecastId", default=None)
+
+    projected_runway: Optional[int] = FieldInfo(alias="projectedRunway", default=None)

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import httpx
 
-from ..._types import Body, Query, Headers, NotGiven, not_given
+from ..._types import Body, Query, Headers, NoneType, NotGiven, not_given
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -14,6 +14,7 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ..._base_client import make_request_options
+from ...types.marketplace.offer_list_response import OfferListResponse
 
 __all__ = ["OffersResource", "AsyncOffersResource"]
 
@@ -38,6 +39,25 @@ class OffersResource(SyncAPIResource):
         """
         return OffersResourceWithStreamingResponse(self)
 
+    def list(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> OfferListResponse:
+        """List AI-Targeted Loyalty Offers"""
+        return self._get(
+            "/marketplace/offers",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=OfferListResponse,
+        )
+
     def redeem(
         self,
         offer_id: str,
@@ -48,10 +68,9 @@ class OffersResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> None:
         """
-        Redeems a personalized, exclusive offer from the Plato AI marketplace, often
-        resulting in a discount, special rate, or credit to the user's account.
+        Redeem Marketplace Reward
 
         Args:
           extra_headers: Send extra headers
@@ -64,12 +83,13 @@ class OffersResource(SyncAPIResource):
         """
         if not offer_id:
             raise ValueError(f"Expected a non-empty value for `offer_id` but received {offer_id!r}")
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._post(
             f"/marketplace/offers/{offer_id}/redeem",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            cast_to=NoneType,
         )
 
 
@@ -93,6 +113,25 @@ class AsyncOffersResource(AsyncAPIResource):
         """
         return AsyncOffersResourceWithStreamingResponse(self)
 
+    async def list(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> OfferListResponse:
+        """List AI-Targeted Loyalty Offers"""
+        return await self._get(
+            "/marketplace/offers",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=OfferListResponse,
+        )
+
     async def redeem(
         self,
         offer_id: str,
@@ -103,10 +142,9 @@ class AsyncOffersResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> None:
         """
-        Redeems a personalized, exclusive offer from the Plato AI marketplace, often
-        resulting in a discount, special rate, or credit to the user's account.
+        Redeem Marketplace Reward
 
         Args:
           extra_headers: Send extra headers
@@ -119,12 +157,13 @@ class AsyncOffersResource(AsyncAPIResource):
         """
         if not offer_id:
             raise ValueError(f"Expected a non-empty value for `offer_id` but received {offer_id!r}")
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._post(
             f"/marketplace/offers/{offer_id}/redeem",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            cast_to=NoneType,
         )
 
 
@@ -132,6 +171,9 @@ class OffersResourceWithRawResponse:
     def __init__(self, offers: OffersResource) -> None:
         self._offers = offers
 
+        self.list = to_raw_response_wrapper(
+            offers.list,
+        )
         self.redeem = to_raw_response_wrapper(
             offers.redeem,
         )
@@ -141,6 +183,9 @@ class AsyncOffersResourceWithRawResponse:
     def __init__(self, offers: AsyncOffersResource) -> None:
         self._offers = offers
 
+        self.list = async_to_raw_response_wrapper(
+            offers.list,
+        )
         self.redeem = async_to_raw_response_wrapper(
             offers.redeem,
         )
@@ -150,6 +195,9 @@ class OffersResourceWithStreamingResponse:
     def __init__(self, offers: OffersResource) -> None:
         self._offers = offers
 
+        self.list = to_streamed_response_wrapper(
+            offers.list,
+        )
         self.redeem = to_streamed_response_wrapper(
             offers.redeem,
         )
@@ -159,6 +207,9 @@ class AsyncOffersResourceWithStreamingResponse:
     def __init__(self, offers: AsyncOffersResource) -> None:
         self._offers = offers
 
+        self.list = async_to_streamed_response_wrapper(
+            offers.list,
+        )
         self.redeem = async_to_streamed_response_wrapper(
             offers.redeem,
         )

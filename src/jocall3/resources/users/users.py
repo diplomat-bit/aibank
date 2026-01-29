@@ -12,8 +12,8 @@ from .me.me import (
     MeResourceWithStreamingResponse,
     AsyncMeResourceWithStreamingResponse,
 )
-from ...types import user_register_params
-from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from ...types import user_login_params, user_register_params
+from ..._types import Body, Query, Headers, NoneType, NotGiven, not_given
 from ..._utils import maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
@@ -32,6 +32,7 @@ from .password_reset import (
     PasswordResetResourceWithStreamingResponse,
     AsyncPasswordResetResourceWithStreamingResponse,
 )
+from ...types.user_login_response import UserLoginResponse
 from ...types.user_register_response import UserRegisterResponse
 
 __all__ = ["UsersResource", "AsyncUsersResource"]
@@ -68,30 +69,65 @@ class UsersResource(SyncAPIResource):
     def login(
         self,
         *,
+        email: str,
+        password: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
-        """Authenticates a user and creates a secure session, returning access tokens.
+    ) -> UserLoginResponse:
+        """
+        Args:
+          extra_headers: Send extra headers
 
-        May
-        require MFA depending on user settings.
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._post(
             "/users/login",
+            body=maybe_transform(
+                {
+                    "email": email,
+                    "password": password,
+                },
+                user_login_params.UserLoginParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            cast_to=UserLoginResponse,
+        )
+
+    def logout(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> None:
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+        return self._post(
+            "/users/logout",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=NoneType,
         )
 
     def register(
         self,
         *,
-        address: object | Omit = omit,
+        email: str,
+        name: str,
+        password: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -99,11 +135,7 @@ class UsersResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> UserRegisterResponse:
-        """Registers a new user account with , initiating the onboarding process.
-
-        Requires
-        basic user details.
-
+        """
         Args:
           extra_headers: Send extra headers
 
@@ -115,7 +147,14 @@ class UsersResource(SyncAPIResource):
         """
         return self._post(
             "/users/register",
-            body=maybe_transform({"address": address}, user_register_params.UserRegisterParams),
+            body=maybe_transform(
+                {
+                    "email": email,
+                    "name": name,
+                    "password": password,
+                },
+                user_register_params.UserRegisterParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -154,30 +193,65 @@ class AsyncUsersResource(AsyncAPIResource):
     async def login(
         self,
         *,
+        email: str,
+        password: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
-        """Authenticates a user and creates a secure session, returning access tokens.
+    ) -> UserLoginResponse:
+        """
+        Args:
+          extra_headers: Send extra headers
 
-        May
-        require MFA depending on user settings.
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
         """
         return await self._post(
             "/users/login",
+            body=await async_maybe_transform(
+                {
+                    "email": email,
+                    "password": password,
+                },
+                user_login_params.UserLoginParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            cast_to=UserLoginResponse,
+        )
+
+    async def logout(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> None:
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+        return await self._post(
+            "/users/logout",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=NoneType,
         )
 
     async def register(
         self,
         *,
-        address: object | Omit = omit,
+        email: str,
+        name: str,
+        password: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -185,11 +259,7 @@ class AsyncUsersResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> UserRegisterResponse:
-        """Registers a new user account with , initiating the onboarding process.
-
-        Requires
-        basic user details.
-
+        """
         Args:
           extra_headers: Send extra headers
 
@@ -201,7 +271,14 @@ class AsyncUsersResource(AsyncAPIResource):
         """
         return await self._post(
             "/users/register",
-            body=await async_maybe_transform({"address": address}, user_register_params.UserRegisterParams),
+            body=await async_maybe_transform(
+                {
+                    "email": email,
+                    "name": name,
+                    "password": password,
+                },
+                user_register_params.UserRegisterParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -215,6 +292,9 @@ class UsersResourceWithRawResponse:
 
         self.login = to_raw_response_wrapper(
             users.login,
+        )
+        self.logout = to_raw_response_wrapper(
+            users.logout,
         )
         self.register = to_raw_response_wrapper(
             users.register,
@@ -236,6 +316,9 @@ class AsyncUsersResourceWithRawResponse:
         self.login = async_to_raw_response_wrapper(
             users.login,
         )
+        self.logout = async_to_raw_response_wrapper(
+            users.logout,
+        )
         self.register = async_to_raw_response_wrapper(
             users.register,
         )
@@ -256,6 +339,9 @@ class UsersResourceWithStreamingResponse:
         self.login = to_streamed_response_wrapper(
             users.login,
         )
+        self.logout = to_streamed_response_wrapper(
+            users.logout,
+        )
         self.register = to_streamed_response_wrapper(
             users.register,
         )
@@ -275,6 +361,9 @@ class AsyncUsersResourceWithStreamingResponse:
 
         self.login = async_to_streamed_response_wrapper(
             users.login,
+        )
+        self.logout = async_to_streamed_response_wrapper(
+            users.logout,
         )
         self.register = async_to_streamed_response_wrapper(
             users.register,

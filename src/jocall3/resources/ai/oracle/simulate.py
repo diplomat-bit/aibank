@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+from typing import Iterable
+
 import httpx
 
-from ...._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from ...._types import Body, Omit, Query, Headers, NoneType, NotGiven, SequenceNotStr, omit, not_given
 from ...._utils import maybe_transform, async_maybe_transform
 from ...._compat import cached_property
 from ...._resource import SyncAPIResource, AsyncAPIResource
@@ -15,7 +17,12 @@ from ...._response import (
     async_to_streamed_response_wrapper,
 )
 from ...._base_client import make_request_options
-from ....types.ai.oracle import simulate_run_advanced_params
+from ....types.ai.oracle import (
+    simulate_run_advanced_params,
+    simulate_run_standard_params,
+    simulate_run_monte_carlo_params,
+)
+from ....types.ai.oracle.simulate_run_advanced_response import SimulateRunAdvancedResponse
 from ....types.ai.oracle.simulate_run_standard_response import SimulateRunStandardResponse
 
 __all__ = ["SimulateResource", "AsyncSimulateResource"]
@@ -44,26 +51,17 @@ class SimulateResource(SyncAPIResource):
     def run_advanced(
         self,
         *,
-        global_economic_factors: object | Omit = omit,
-        personal_assumptions: object | Omit = omit,
+        prompt: str,
+        scenarios: Iterable[simulate_run_advanced_params.Scenario],
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> SimulateRunAdvancedResponse:
         """
-        Engages the Quantum Oracle for highly complex, multi-variable simulations,
-        allowing precise control over numerous financial parameters, market conditions,
-        and personal events to generate deep, predictive insights and sensitivity
-        analysis.
-
         Args:
-          global_economic_factors: Optional: Global economic conditions to apply to all scenarios.
-
-          personal_assumptions: Optional: Personal financial assumptions to override defaults.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -76,20 +74,60 @@ class SimulateResource(SyncAPIResource):
             "/ai/oracle/simulate/advanced",
             body=maybe_transform(
                 {
-                    "global_economic_factors": global_economic_factors,
-                    "personal_assumptions": personal_assumptions,
+                    "prompt": prompt,
+                    "scenarios": scenarios,
                 },
                 simulate_run_advanced_params.SimulateRunAdvancedParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            cast_to=SimulateRunAdvancedResponse,
+        )
+
+    def run_monte_carlo(
+        self,
+        *,
+        iterations: int,
+        variables: SequenceNotStr[str],
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> None:
+        """
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+        return self._post(
+            "/ai/oracle/simulate/monte-carlo",
+            body=maybe_transform(
+                {
+                    "iterations": iterations,
+                    "variables": variables,
+                },
+                simulate_run_monte_carlo_params.SimulateRunMonteCarloParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=NoneType,
         )
 
     def run_standard(
         self,
         *,
+        prompt: str,
+        parameters: object | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -98,12 +136,30 @@ class SimulateResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SimulateRunStandardResponse:
         """
-        Submits a hypothetical scenario to the Quantum Oracle AI for standard financial
-        impact analysis. The AI simulates the effect on the user's current financial
-        state and provides a summary.
+        Run a 'What-If' Financial Simulation (Standard)
+
+        Args:
+          prompt: Describe the financial scenario
+
+          parameters: Key variables like duration, rate, or amount
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._post(
             "/ai/oracle/simulate",
+            body=maybe_transform(
+                {
+                    "prompt": prompt,
+                    "parameters": parameters,
+                },
+                simulate_run_standard_params.SimulateRunStandardParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -134,26 +190,17 @@ class AsyncSimulateResource(AsyncAPIResource):
     async def run_advanced(
         self,
         *,
-        global_economic_factors: object | Omit = omit,
-        personal_assumptions: object | Omit = omit,
+        prompt: str,
+        scenarios: Iterable[simulate_run_advanced_params.Scenario],
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> SimulateRunAdvancedResponse:
         """
-        Engages the Quantum Oracle for highly complex, multi-variable simulations,
-        allowing precise control over numerous financial parameters, market conditions,
-        and personal events to generate deep, predictive insights and sensitivity
-        analysis.
-
         Args:
-          global_economic_factors: Optional: Global economic conditions to apply to all scenarios.
-
-          personal_assumptions: Optional: Personal financial assumptions to override defaults.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -166,20 +213,60 @@ class AsyncSimulateResource(AsyncAPIResource):
             "/ai/oracle/simulate/advanced",
             body=await async_maybe_transform(
                 {
-                    "global_economic_factors": global_economic_factors,
-                    "personal_assumptions": personal_assumptions,
+                    "prompt": prompt,
+                    "scenarios": scenarios,
                 },
                 simulate_run_advanced_params.SimulateRunAdvancedParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            cast_to=SimulateRunAdvancedResponse,
+        )
+
+    async def run_monte_carlo(
+        self,
+        *,
+        iterations: int,
+        variables: SequenceNotStr[str],
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> None:
+        """
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+        return await self._post(
+            "/ai/oracle/simulate/monte-carlo",
+            body=await async_maybe_transform(
+                {
+                    "iterations": iterations,
+                    "variables": variables,
+                },
+                simulate_run_monte_carlo_params.SimulateRunMonteCarloParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=NoneType,
         )
 
     async def run_standard(
         self,
         *,
+        prompt: str,
+        parameters: object | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -188,12 +275,30 @@ class AsyncSimulateResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SimulateRunStandardResponse:
         """
-        Submits a hypothetical scenario to the Quantum Oracle AI for standard financial
-        impact analysis. The AI simulates the effect on the user's current financial
-        state and provides a summary.
+        Run a 'What-If' Financial Simulation (Standard)
+
+        Args:
+          prompt: Describe the financial scenario
+
+          parameters: Key variables like duration, rate, or amount
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
         """
         return await self._post(
             "/ai/oracle/simulate",
+            body=await async_maybe_transform(
+                {
+                    "prompt": prompt,
+                    "parameters": parameters,
+                },
+                simulate_run_standard_params.SimulateRunStandardParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -208,6 +313,9 @@ class SimulateResourceWithRawResponse:
         self.run_advanced = to_raw_response_wrapper(
             simulate.run_advanced,
         )
+        self.run_monte_carlo = to_raw_response_wrapper(
+            simulate.run_monte_carlo,
+        )
         self.run_standard = to_raw_response_wrapper(
             simulate.run_standard,
         )
@@ -219,6 +327,9 @@ class AsyncSimulateResourceWithRawResponse:
 
         self.run_advanced = async_to_raw_response_wrapper(
             simulate.run_advanced,
+        )
+        self.run_monte_carlo = async_to_raw_response_wrapper(
+            simulate.run_monte_carlo,
         )
         self.run_standard = async_to_raw_response_wrapper(
             simulate.run_standard,
@@ -232,6 +343,9 @@ class SimulateResourceWithStreamingResponse:
         self.run_advanced = to_streamed_response_wrapper(
             simulate.run_advanced,
         )
+        self.run_monte_carlo = to_streamed_response_wrapper(
+            simulate.run_monte_carlo,
+        )
         self.run_standard = to_streamed_response_wrapper(
             simulate.run_standard,
         )
@@ -243,6 +357,9 @@ class AsyncSimulateResourceWithStreamingResponse:
 
         self.run_advanced = async_to_streamed_response_wrapper(
             simulate.run_advanced,
+        )
+        self.run_monte_carlo = async_to_streamed_response_wrapper(
+            simulate.run_monte_carlo,
         )
         self.run_standard = async_to_streamed_response_wrapper(
             simulate.run_standard,

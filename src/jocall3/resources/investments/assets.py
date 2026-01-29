@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing_extensions import Literal
+
 import httpx
 
 from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
@@ -16,6 +18,7 @@ from ..._response import (
 )
 from ..._base_client import make_request_options
 from ...types.investments import asset_search_params
+from ...types.investments.asset_search_response import AssetSearchResponse
 
 __all__ = ["AssetsResource", "AsyncAssetsResource"]
 
@@ -43,30 +46,19 @@ class AssetsResource(SyncAPIResource):
     def search(
         self,
         *,
-        limit: int | Omit = omit,
-        min_esg_score: int | Omit = omit,
-        offset: int | Omit = omit,
-        query: str | Omit = omit,
+        query: str,
+        asset_type: Literal["EQUITY", "CRYPTO", "ETF", "BOND"] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> AssetSearchResponse:
         """
-        Searches for available investment assets (stocks, ETFs, mutual funds) and
-        returns their ESG impact scores.
+        Global Multi-Asset Search (Equities, Crypto, ESG)
 
         Args:
-          limit: Maximum number of items to return in a single page.
-
-          min_esg_score: Minimum desired ESG score (0-10).
-
-          offset: Number of items to skip before starting to collect the result set.
-
-          query: Search query for asset name or symbol.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -84,15 +76,13 @@ class AssetsResource(SyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
-                        "limit": limit,
-                        "min_esg_score": min_esg_score,
-                        "offset": offset,
                         "query": query,
+                        "asset_type": asset_type,
                     },
                     asset_search_params.AssetSearchParams,
                 ),
             ),
-            cast_to=object,
+            cast_to=AssetSearchResponse,
         )
 
 
@@ -119,30 +109,19 @@ class AsyncAssetsResource(AsyncAPIResource):
     async def search(
         self,
         *,
-        limit: int | Omit = omit,
-        min_esg_score: int | Omit = omit,
-        offset: int | Omit = omit,
-        query: str | Omit = omit,
+        query: str,
+        asset_type: Literal["EQUITY", "CRYPTO", "ETF", "BOND"] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> AssetSearchResponse:
         """
-        Searches for available investment assets (stocks, ETFs, mutual funds) and
-        returns their ESG impact scores.
+        Global Multi-Asset Search (Equities, Crypto, ESG)
 
         Args:
-          limit: Maximum number of items to return in a single page.
-
-          min_esg_score: Minimum desired ESG score (0-10).
-
-          offset: Number of items to skip before starting to collect the result set.
-
-          query: Search query for asset name or symbol.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -160,15 +139,13 @@ class AsyncAssetsResource(AsyncAPIResource):
                 timeout=timeout,
                 query=await async_maybe_transform(
                     {
-                        "limit": limit,
-                        "min_esg_score": min_esg_score,
-                        "offset": offset,
                         "query": query,
+                        "asset_type": asset_type,
                     },
                     asset_search_params.AssetSearchParams,
                 ),
             ),
-            cast_to=object,
+            cast_to=AssetSearchResponse,
         )
 
 

@@ -6,26 +6,10 @@ from pydantic import Field as FieldInfo
 
 from ...._models import BaseModel
 
-__all__ = ["PitchRetrieveDetailsResponse", "AIFinancialModel"]
-
-
-class AIFinancialModel(BaseModel):
-    """AI's detailed financial model analysis."""
-
-    cost_structure_analysis: Optional[object] = FieldInfo(alias="costStructureAnalysis", default=None)
-
-    revenue_breakdown: Optional[object] = FieldInfo(alias="revenueBreakdown", default=None)
+__all__ = ["PitchRetrieveDetailsResponse"]
 
 
 class PitchRetrieveDetailsResponse(BaseModel):
-    ai_coaching_plan: Optional[object] = FieldInfo(alias="aiCoachingPlan", default=None)
-    """AI-generated coaching plan for the entrepreneur."""
+    ai_feedback: Optional[str] = FieldInfo(alias="aiFeedback", default=None)
 
-    ai_financial_model: Optional[AIFinancialModel] = FieldInfo(alias="aiFinancialModel", default=None)
-    """AI's detailed financial model analysis."""
-
-    ai_market_analysis: Optional[object] = FieldInfo(alias="aiMarketAnalysis", default=None)
-    """AI's detailed market analysis."""
-
-    ai_risk_assessment: Optional[object] = FieldInfo(alias="aiRiskAssessment", default=None)
-    """AI's assessment of risks associated with the venture."""
+    funding_eligibility: Optional[bool] = FieldInfo(alias="fundingEligibility", default=None)

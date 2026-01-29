@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import httpx
 
-from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from ..._types import Body, Query, Headers, NoneType, NotGiven, not_given
 from ..._utils import maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
@@ -14,8 +14,9 @@ from ..._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ...types.web3 import nft_list_params
+from ...types.web3 import nft_mint_params
 from ..._base_client import make_request_options
+from ...types.web3.nft_list_response import NFTListResponse
 
 __all__ = ["NFTsResource", "AsyncNFTsResource"]
 
@@ -43,25 +44,37 @@ class NFTsResource(SyncAPIResource):
     def list(
         self,
         *,
-        limit: int | Omit = omit,
-        offset: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> NFTListResponse:
+        """List NFT Collection"""
+        return self._get(
+            "/web3/nfts",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=NFTListResponse,
+        )
+
+    def mint(
+        self,
+        *,
+        metadata_uri: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> None:
         """
-        Fetches a comprehensive list of Non-Fungible Tokens (NFTs) owned by the user
-        across all connected wallets and supported blockchain networks, including
-        metadata and market values.
+        Mint Utility NFT
 
         Args:
-          limit: Maximum number of items to return in a single page.
-
-          offset: Number of items to skip before starting to collect the result set.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -70,22 +83,14 @@ class NFTsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return self._get(
-            "/web3/nfts",
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+        return self._post(
+            "/web3/nfts/mint",
+            body=maybe_transform({"metadata_uri": metadata_uri}, nft_mint_params.NFTMintParams),
             options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                query=maybe_transform(
-                    {
-                        "limit": limit,
-                        "offset": offset,
-                    },
-                    nft_list_params.NFTListParams,
-                ),
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            cast_to=NoneType,
         )
 
 
@@ -112,25 +117,37 @@ class AsyncNFTsResource(AsyncAPIResource):
     async def list(
         self,
         *,
-        limit: int | Omit = omit,
-        offset: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> object:
+    ) -> NFTListResponse:
+        """List NFT Collection"""
+        return await self._get(
+            "/web3/nfts",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=NFTListResponse,
+        )
+
+    async def mint(
+        self,
+        *,
+        metadata_uri: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> None:
         """
-        Fetches a comprehensive list of Non-Fungible Tokens (NFTs) owned by the user
-        across all connected wallets and supported blockchain networks, including
-        metadata and market values.
+        Mint Utility NFT
 
         Args:
-          limit: Maximum number of items to return in a single page.
-
-          offset: Number of items to skip before starting to collect the result set.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -139,22 +156,14 @@ class AsyncNFTsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return await self._get(
-            "/web3/nfts",
+        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
+        return await self._post(
+            "/web3/nfts/mint",
+            body=await async_maybe_transform({"metadata_uri": metadata_uri}, nft_mint_params.NFTMintParams),
             options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                query=await async_maybe_transform(
-                    {
-                        "limit": limit,
-                        "offset": offset,
-                    },
-                    nft_list_params.NFTListParams,
-                ),
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=object,
+            cast_to=NoneType,
         )
 
 
@@ -165,6 +174,9 @@ class NFTsResourceWithRawResponse:
         self.list = to_raw_response_wrapper(
             nfts.list,
         )
+        self.mint = to_raw_response_wrapper(
+            nfts.mint,
+        )
 
 
 class AsyncNFTsResourceWithRawResponse:
@@ -173,6 +185,9 @@ class AsyncNFTsResourceWithRawResponse:
 
         self.list = async_to_raw_response_wrapper(
             nfts.list,
+        )
+        self.mint = async_to_raw_response_wrapper(
+            nfts.mint,
         )
 
 
@@ -183,6 +198,9 @@ class NFTsResourceWithStreamingResponse:
         self.list = to_streamed_response_wrapper(
             nfts.list,
         )
+        self.mint = to_streamed_response_wrapper(
+            nfts.mint,
+        )
 
 
 class AsyncNFTsResourceWithStreamingResponse:
@@ -191,4 +209,7 @@ class AsyncNFTsResourceWithStreamingResponse:
 
         self.list = async_to_streamed_response_wrapper(
             nfts.list,
+        )
+        self.mint = async_to_streamed_response_wrapper(
+            nfts.mint,
         )
