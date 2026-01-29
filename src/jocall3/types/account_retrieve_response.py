@@ -7,13 +7,7 @@ from pydantic import Field as FieldInfo
 
 from .._models import BaseModel
 
-__all__ = ["AccountRetrieveResponse", "ProjectedCashFlow"]
-
-
-class ProjectedCashFlow(BaseModel):
-    confidence_score: Optional[int] = FieldInfo(alias="confidenceScore", default=None)
-
-    days30: Optional[float] = None
+__all__ = ["AccountRetrieveResponse"]
 
 
 class AccountRetrieveResponse(BaseModel):
@@ -23,14 +17,12 @@ class AccountRetrieveResponse(BaseModel):
 
     current_balance: float = FieldInfo(alias="currentBalance")
 
+    institution_name: str = FieldInfo(alias="institutionName")
+
     type: str
 
     available_balance: Optional[float] = FieldInfo(alias="availableBalance", default=None)
 
-    institution_name: Optional[str] = FieldInfo(alias="institutionName", default=None)
-
     last_updated: Optional[datetime] = FieldInfo(alias="lastUpdated", default=None)
 
     name: Optional[str] = None
-
-    projected_cash_flow: Optional[ProjectedCashFlow] = FieldInfo(alias="projectedCashFlow", default=None)

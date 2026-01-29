@@ -40,6 +40,22 @@ from .audit_logs import (
     AuditLogsResourceWithStreamingResponse,
     AsyncAuditLogsResourceWithStreamingResponse,
 )
+from .verification import (
+    VerificationResource,
+    AsyncVerificationResource,
+    VerificationResourceWithRawResponse,
+    AsyncVerificationResourceWithRawResponse,
+    VerificationResourceWithStreamingResponse,
+    AsyncVerificationResourceWithStreamingResponse,
+)
+from .notifications import (
+    NotificationsResource,
+    AsyncNotificationsResource,
+    NotificationsResourceWithRawResponse,
+    AsyncNotificationsResourceWithRawResponse,
+    NotificationsResourceWithStreamingResponse,
+    AsyncNotificationsResourceWithStreamingResponse,
+)
 
 __all__ = [
     "StatusResource",
@@ -66,6 +82,18 @@ __all__ = [
     "AsyncSandboxResourceWithRawResponse",
     "SandboxResourceWithStreamingResponse",
     "AsyncSandboxResourceWithStreamingResponse",
+    "VerificationResource",
+    "AsyncVerificationResource",
+    "VerificationResourceWithRawResponse",
+    "AsyncVerificationResourceWithRawResponse",
+    "VerificationResourceWithStreamingResponse",
+    "AsyncVerificationResourceWithStreamingResponse",
+    "NotificationsResource",
+    "AsyncNotificationsResource",
+    "NotificationsResourceWithRawResponse",
+    "AsyncNotificationsResourceWithRawResponse",
+    "NotificationsResourceWithStreamingResponse",
+    "AsyncNotificationsResourceWithStreamingResponse",
     "SystemResource",
     "AsyncSystemResource",
     "SystemResourceWithRawResponse",

@@ -1,0 +1,29 @@
+# File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+from typing import Dict, List, Optional
+
+from pydantic import Field as FieldInfo
+
+from ..._models import BaseModel
+
+__all__ = ["CardListResponse", "Data"]
+
+
+class Data(BaseModel):
+    id: str
+
+    card_number_mask: str = FieldInfo(alias="cardNumberMask")
+
+    holder_name: str = FieldInfo(alias="holderName")
+
+    status: str
+
+    controls: Optional[Dict[str, object]] = None
+
+    frozen: Optional[bool] = None
+
+
+class CardListResponse(BaseModel):
+    data: Optional[List[Data]] = None
+
+    total: Optional[int] = None

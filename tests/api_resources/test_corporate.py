@@ -44,15 +44,11 @@ class TestCorporate:
                     "address": {
                         "city": "city",
                         "country": "country",
-                        "state": "state",
                         "street": "street",
+                        "state": "state",
                         "zip": "zip",
                     },
-                    "phone": "phone",
-                    "preferences": {
-                        "notification_channels": {},
-                        "theme": "theme",
-                    },
+                    "preferences": {"foo": "bar"},
                     "security_status": {
                         "last_login": parse_datetime("2019-12-27T18:11:19.117Z"),
                         "two_factor_enabled": True,
@@ -124,15 +120,11 @@ class TestAsyncCorporate:
                     "address": {
                         "city": "city",
                         "country": "country",
-                        "state": "state",
                         "street": "street",
+                        "state": "state",
                         "zip": "zip",
                     },
-                    "phone": "phone",
-                    "preferences": {
-                        "notification_channels": {},
-                        "theme": "theme",
-                    },
+                    "preferences": {"foo": "bar"},
                     "security_status": {
                         "last_login": parse_datetime("2019-12-27T18:11:19.117Z"),
                         "two_factor_enabled": True,

@@ -94,8 +94,8 @@ class TestUsers:
             address={
                 "city": "city",
                 "country": "country",
-                "state": "state",
                 "street": "street",
+                "state": "state",
                 "zip": "zip",
             },
             phone="phone",
@@ -213,8 +213,8 @@ class TestAsyncUsers:
             address={
                 "city": "city",
                 "country": "country",
-                "state": "state",
                 "street": "street",
+                "state": "state",
                 "zip": "zip",
             },
             phone="phone",

@@ -25,12 +25,7 @@ class TestSimulate:
     def test_method_run_advanced(self, client: Jocall3) -> None:
         simulate = client.ai.oracle.simulate.run_advanced(
             prompt="prompt",
-            scenarios=[
-                {
-                    "duration_years": 0,
-                    "name": "name",
-                }
-            ],
+            scenarios=[{"name": "name"}],
         )
         assert_matches_type(SimulateRunAdvancedResponse, simulate, path=["response"])
 
@@ -40,14 +35,9 @@ class TestSimulate:
             prompt="prompt",
             scenarios=[
                 {
-                    "duration_years": 0,
                     "name": "name",
-                    "events": [
-                        {
-                            "details": {},
-                            "type": "type",
-                        }
-                    ],
+                    "description": "description",
+                    "variables": {"foo": "bar"},
                 }
             ],
             global_economic_factors={},
@@ -59,12 +49,7 @@ class TestSimulate:
     def test_raw_response_run_advanced(self, client: Jocall3) -> None:
         response = client.ai.oracle.simulate.with_raw_response.run_advanced(
             prompt="prompt",
-            scenarios=[
-                {
-                    "duration_years": 0,
-                    "name": "name",
-                }
-            ],
+            scenarios=[{"name": "name"}],
         )
 
         assert response.is_closed is True
@@ -76,12 +61,7 @@ class TestSimulate:
     def test_streaming_response_run_advanced(self, client: Jocall3) -> None:
         with client.ai.oracle.simulate.with_streaming_response.run_advanced(
             prompt="prompt",
-            scenarios=[
-                {
-                    "duration_years": 0,
-                    "name": "name",
-                }
-            ],
+            scenarios=[{"name": "name"}],
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -183,12 +163,7 @@ class TestAsyncSimulate:
     async def test_method_run_advanced(self, async_client: AsyncJocall3) -> None:
         simulate = await async_client.ai.oracle.simulate.run_advanced(
             prompt="prompt",
-            scenarios=[
-                {
-                    "duration_years": 0,
-                    "name": "name",
-                }
-            ],
+            scenarios=[{"name": "name"}],
         )
         assert_matches_type(SimulateRunAdvancedResponse, simulate, path=["response"])
 
@@ -198,14 +173,9 @@ class TestAsyncSimulate:
             prompt="prompt",
             scenarios=[
                 {
-                    "duration_years": 0,
                     "name": "name",
-                    "events": [
-                        {
-                            "details": {},
-                            "type": "type",
-                        }
-                    ],
+                    "description": "description",
+                    "variables": {"foo": "bar"},
                 }
             ],
             global_economic_factors={},
@@ -217,12 +187,7 @@ class TestAsyncSimulate:
     async def test_raw_response_run_advanced(self, async_client: AsyncJocall3) -> None:
         response = await async_client.ai.oracle.simulate.with_raw_response.run_advanced(
             prompt="prompt",
-            scenarios=[
-                {
-                    "duration_years": 0,
-                    "name": "name",
-                }
-            ],
+            scenarios=[{"name": "name"}],
         )
 
         assert response.is_closed is True
@@ -234,12 +199,7 @@ class TestAsyncSimulate:
     async def test_streaming_response_run_advanced(self, async_client: AsyncJocall3) -> None:
         async with async_client.ai.oracle.simulate.with_streaming_response.run_advanced(
             prompt="prompt",
-            scenarios=[
-                {
-                    "duration_years": 0,
-                    "name": "name",
-                }
-            ],
+            scenarios=[{"name": "name"}],
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"

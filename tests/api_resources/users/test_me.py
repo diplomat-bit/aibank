@@ -53,8 +53,8 @@ class TestMe:
             address={
                 "city": "city",
                 "country": "country",
-                "state": "state",
                 "street": "street",
+                "state": "state",
                 "zip": "zip",
             },
             name="name",
@@ -149,8 +149,8 @@ class TestAsyncMe:
             address={
                 "city": "city",
                 "country": "country",
-                "state": "state",
                 "street": "street",
+                "state": "state",
                 "zip": "zip",
             },
             name="name",

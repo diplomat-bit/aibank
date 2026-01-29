@@ -60,6 +60,43 @@ class TestTransactions:
         assert cast(Any, response.is_closed) is True
 
     @parametrize
+    def test_method_initiate(self, client: Jocall3) -> None:
+        transaction = client.web3.transactions.initiate(
+            amount=0,
+            asset="asset",
+            wallet_id="wallet_id",
+        )
+        assert transaction is None
+
+    @parametrize
+    def test_raw_response_initiate(self, client: Jocall3) -> None:
+        response = client.web3.transactions.with_raw_response.initiate(
+            amount=0,
+            asset="asset",
+            wallet_id="wallet_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        transaction = response.parse()
+        assert transaction is None
+
+    @parametrize
+    def test_streaming_response_initiate(self, client: Jocall3) -> None:
+        with client.web3.transactions.with_streaming_response.initiate(
+            amount=0,
+            asset="asset",
+            wallet_id="wallet_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            transaction = response.parse()
+            assert transaction is None
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
     def test_method_send_crypto(self, client: Jocall3) -> None:
         transaction = client.web3.transactions.send_crypto(
             token="token",
@@ -170,6 +207,43 @@ class TestAsyncTransactions:
             amount="amount",
             dest_chain="destChain",
             source_chain="sourceChain",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            transaction = await response.parse()
+            assert transaction is None
+
+        assert cast(Any, response.is_closed) is True
+
+    @parametrize
+    async def test_method_initiate(self, async_client: AsyncJocall3) -> None:
+        transaction = await async_client.web3.transactions.initiate(
+            amount=0,
+            asset="asset",
+            wallet_id="wallet_id",
+        )
+        assert transaction is None
+
+    @parametrize
+    async def test_raw_response_initiate(self, async_client: AsyncJocall3) -> None:
+        response = await async_client.web3.transactions.with_raw_response.initiate(
+            amount=0,
+            asset="asset",
+            wallet_id="wallet_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        transaction = await response.parse()
+        assert transaction is None
+
+    @parametrize
+    async def test_streaming_response_initiate(self, async_client: AsyncJocall3) -> None:
+        async with async_client.web3.transactions.with_streaming_response.initiate(
+            amount=0,
+            asset="asset",
+            wallet_id="wallet_id",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"

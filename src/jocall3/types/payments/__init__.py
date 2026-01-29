@@ -11,3 +11,4 @@ from .domestic_wire_params import DomesticWireParams as DomesticWireParams
 from .fx_get_rates_response import FxGetRatesResponse as FxGetRatesResponse
 from .international_sepa_params import InternationalSepaParams as InternationalSepaParams
 from .international_swift_params import InternationalSwiftParams as InternationalSwiftParams
+from .international_get_status_response import InternationalGetStatusResponse as InternationalGetStatusResponse

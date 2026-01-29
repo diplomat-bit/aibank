@@ -18,6 +18,14 @@ from .agent import (
     AgentResourceWithStreamingResponse,
     AsyncAgentResourceWithStreamingResponse,
 )
+from .models import (
+    ModelsResource,
+    AsyncModelsResource,
+    ModelsResourceWithRawResponse,
+    AsyncModelsResourceWithRawResponse,
+    ModelsResourceWithStreamingResponse,
+    AsyncModelsResourceWithStreamingResponse,
+)
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from .oracle.oracle import (
@@ -70,6 +78,10 @@ class AIResource(SyncAPIResource):
         return AgentResource(self._client)
 
     @cached_property
+    def models(self) -> ModelsResource:
+        return ModelsResource(self._client)
+
+    @cached_property
     def with_raw_response(self) -> AIResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
@@ -109,6 +121,10 @@ class AsyncAIResource(AsyncAPIResource):
     @cached_property
     def agent(self) -> AsyncAgentResource:
         return AsyncAgentResource(self._client)
+
+    @cached_property
+    def models(self) -> AsyncModelsResource:
+        return AsyncModelsResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AsyncAIResourceWithRawResponse:
@@ -154,6 +170,10 @@ class AIResourceWithRawResponse:
     def agent(self) -> AgentResourceWithRawResponse:
         return AgentResourceWithRawResponse(self._ai.agent)
 
+    @cached_property
+    def models(self) -> ModelsResourceWithRawResponse:
+        return ModelsResourceWithRawResponse(self._ai.models)
+
 
 class AsyncAIResourceWithRawResponse:
     def __init__(self, ai: AsyncAIResource) -> None:
@@ -178,6 +198,10 @@ class AsyncAIResourceWithRawResponse:
     @cached_property
     def agent(self) -> AsyncAgentResourceWithRawResponse:
         return AsyncAgentResourceWithRawResponse(self._ai.agent)
+
+    @cached_property
+    def models(self) -> AsyncModelsResourceWithRawResponse:
+        return AsyncModelsResourceWithRawResponse(self._ai.models)
 
 
 class AIResourceWithStreamingResponse:
@@ -204,6 +228,10 @@ class AIResourceWithStreamingResponse:
     def agent(self) -> AgentResourceWithStreamingResponse:
         return AgentResourceWithStreamingResponse(self._ai.agent)
 
+    @cached_property
+    def models(self) -> ModelsResourceWithStreamingResponse:
+        return ModelsResourceWithStreamingResponse(self._ai.models)
+
 
 class AsyncAIResourceWithStreamingResponse:
     def __init__(self, ai: AsyncAIResource) -> None:
@@ -228,3 +256,7 @@ class AsyncAIResourceWithStreamingResponse:
     @cached_property
     def agent(self) -> AsyncAgentResourceWithStreamingResponse:
         return AsyncAgentResourceWithStreamingResponse(self._ai.agent)
+
+    @cached_property
+    def models(self) -> AsyncModelsResourceWithStreamingResponse:
+        return AsyncModelsResourceWithStreamingResponse(self._ai.models)

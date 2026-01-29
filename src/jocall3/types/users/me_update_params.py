@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing_extensions import TypedDict
+from typing_extensions import Required, TypedDict
 
 __all__ = ["MeUpdateParams", "Address"]
 
@@ -16,12 +16,12 @@ class MeUpdateParams(TypedDict, total=False):
 
 
 class Address(TypedDict, total=False):
-    city: str
+    city: Required[str]
 
-    country: str
+    country: Required[str]
+
+    street: Required[str]
 
     state: str
-
-    street: str
 
     zip: str

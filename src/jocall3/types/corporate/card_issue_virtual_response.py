@@ -1,19 +1,12 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import List, Optional
-from datetime import date
+from typing import Dict, Optional
 
 from pydantic import Field as FieldInfo
 
 from ..._models import BaseModel
 
-__all__ = ["CardIssueVirtualResponse", "Controls"]
-
-
-class Controls(BaseModel):
-    categories: Optional[List[str]] = None
-
-    monthly_limit: Optional[float] = FieldInfo(alias="monthlyLimit", default=None)
+__all__ = ["CardIssueVirtualResponse"]
 
 
 class CardIssueVirtualResponse(BaseModel):
@@ -25,8 +18,6 @@ class CardIssueVirtualResponse(BaseModel):
 
     status: str
 
-    controls: Optional[Controls] = None
-
-    expiration_date: Optional[date] = FieldInfo(alias="expirationDate", default=None)
+    controls: Optional[Dict[str, object]] = None
 
     frozen: Optional[bool] = None

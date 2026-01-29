@@ -2,19 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Union, Iterable
+from typing import Dict, Union, Iterable
 from datetime import datetime
 from typing_extensions import Literal, Required, Annotated, TypedDict
 
 from .._utils import PropertyInfo
 
-__all__ = [
-    "CorporateOnboardEntityParams",
-    "BeneficialOwner",
-    "BeneficialOwnerAddress",
-    "BeneficialOwnerPreferences",
-    "BeneficialOwnerSecurityStatus",
-]
+__all__ = ["CorporateOnboardEntityParams", "BeneficialOwner", "BeneficialOwnerAddress", "BeneficialOwnerSecurityStatus"]
 
 
 class CorporateOnboardEntityParams(TypedDict, total=False):
@@ -32,21 +26,15 @@ class CorporateOnboardEntityParams(TypedDict, total=False):
 
 
 class BeneficialOwnerAddress(TypedDict, total=False):
-    city: str
+    city: Required[str]
 
-    country: str
+    country: Required[str]
+
+    street: Required[str]
 
     state: str
 
-    street: str
-
     zip: str
-
-
-class BeneficialOwnerPreferences(TypedDict, total=False):
-    notification_channels: Annotated[object, PropertyInfo(alias="notificationChannels")]
-
-    theme: str
 
 
 class BeneficialOwnerSecurityStatus(TypedDict, total=False):
@@ -66,8 +54,6 @@ class BeneficialOwner(TypedDict, total=False):
 
     address: BeneficialOwnerAddress
 
-    phone: str
-
-    preferences: BeneficialOwnerPreferences
+    preferences: Dict[str, object]
 
     security_status: Annotated[BeneficialOwnerSecurityStatus, PropertyInfo(alias="securityStatus")]

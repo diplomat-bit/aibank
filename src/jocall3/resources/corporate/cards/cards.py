@@ -23,9 +23,16 @@ from ...._response import (
     async_to_streamed_response_wrapper,
 )
 from ...._base_client import make_request_options
-from ....types.corporate import card_freeze_params, card_issue_virtual_params, card_issue_physical_params
+from ....types.corporate import (
+    card_list_params,
+    card_freeze_params,
+    card_issue_virtual_params,
+    card_issue_physical_params,
+)
+from ....types.corporate.card_list_response import CardListResponse
 from ....types.corporate.card_issue_virtual_response import CardIssueVirtualResponse
 from ....types.corporate.card_issue_physical_response import CardIssuePhysicalResponse
+from ....types.corporate.card_list_transactions_response import CardListTransactionsResponse
 
 __all__ = ["CardsResource", "AsyncCardsResource"]
 
@@ -53,6 +60,48 @@ class CardsResource(SyncAPIResource):
         For more information, see https://www.github.com/diplomat-bit/aibank#with_streaming_response
         """
         return CardsResourceWithStreamingResponse(self)
+
+    def list(
+        self,
+        *,
+        limit: int | Omit = omit,
+        offset: int | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> CardListResponse:
+        """
+        List all corporate cards
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._get(
+            "/corporate/cards",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "limit": limit,
+                        "offset": offset,
+                    },
+                    card_list_params.CardListParams,
+                ),
+            ),
+            cast_to=CardListResponse,
+        )
 
     def freeze(
         self,
@@ -172,6 +221,39 @@ class CardsResource(SyncAPIResource):
             cast_to=CardIssueVirtualResponse,
         )
 
+    def list_transactions(
+        self,
+        card_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> CardListTransactionsResponse:
+        """
+        Get card transactions
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not card_id:
+            raise ValueError(f"Expected a non-empty value for `card_id` but received {card_id!r}")
+        return self._get(
+            f"/corporate/cards/{card_id}/transactions",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=CardListTransactionsResponse,
+        )
+
 
 class AsyncCardsResource(AsyncAPIResource):
     @cached_property
@@ -196,6 +278,48 @@ class AsyncCardsResource(AsyncAPIResource):
         For more information, see https://www.github.com/diplomat-bit/aibank#with_streaming_response
         """
         return AsyncCardsResourceWithStreamingResponse(self)
+
+    async def list(
+        self,
+        *,
+        limit: int | Omit = omit,
+        offset: int | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> CardListResponse:
+        """
+        List all corporate cards
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return await self._get(
+            "/corporate/cards",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=await async_maybe_transform(
+                    {
+                        "limit": limit,
+                        "offset": offset,
+                    },
+                    card_list_params.CardListParams,
+                ),
+            ),
+            cast_to=CardListResponse,
+        )
 
     async def freeze(
         self,
@@ -315,11 +439,47 @@ class AsyncCardsResource(AsyncAPIResource):
             cast_to=CardIssueVirtualResponse,
         )
 
+    async def list_transactions(
+        self,
+        card_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> CardListTransactionsResponse:
+        """
+        Get card transactions
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not card_id:
+            raise ValueError(f"Expected a non-empty value for `card_id` but received {card_id!r}")
+        return await self._get(
+            f"/corporate/cards/{card_id}/transactions",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=CardListTransactionsResponse,
+        )
+
 
 class CardsResourceWithRawResponse:
     def __init__(self, cards: CardsResource) -> None:
         self._cards = cards
 
+        self.list = to_raw_response_wrapper(
+            cards.list,
+        )
         self.freeze = to_raw_response_wrapper(
             cards.freeze,
         )
@@ -328,6 +488,9 @@ class CardsResourceWithRawResponse:
         )
         self.issue_virtual = to_raw_response_wrapper(
             cards.issue_virtual,
+        )
+        self.list_transactions = to_raw_response_wrapper(
+            cards.list_transactions,
         )
 
     @cached_property
@@ -339,6 +502,9 @@ class AsyncCardsResourceWithRawResponse:
     def __init__(self, cards: AsyncCardsResource) -> None:
         self._cards = cards
 
+        self.list = async_to_raw_response_wrapper(
+            cards.list,
+        )
         self.freeze = async_to_raw_response_wrapper(
             cards.freeze,
         )
@@ -347,6 +513,9 @@ class AsyncCardsResourceWithRawResponse:
         )
         self.issue_virtual = async_to_raw_response_wrapper(
             cards.issue_virtual,
+        )
+        self.list_transactions = async_to_raw_response_wrapper(
+            cards.list_transactions,
         )
 
     @cached_property
@@ -358,6 +527,9 @@ class CardsResourceWithStreamingResponse:
     def __init__(self, cards: CardsResource) -> None:
         self._cards = cards
 
+        self.list = to_streamed_response_wrapper(
+            cards.list,
+        )
         self.freeze = to_streamed_response_wrapper(
             cards.freeze,
         )
@@ -366,6 +538,9 @@ class CardsResourceWithStreamingResponse:
         )
         self.issue_virtual = to_streamed_response_wrapper(
             cards.issue_virtual,
+        )
+        self.list_transactions = to_streamed_response_wrapper(
+            cards.list_transactions,
         )
 
     @cached_property
@@ -377,6 +552,9 @@ class AsyncCardsResourceWithStreamingResponse:
     def __init__(self, cards: AsyncCardsResource) -> None:
         self._cards = cards
 
+        self.list = async_to_streamed_response_wrapper(
+            cards.list,
+        )
         self.freeze = async_to_streamed_response_wrapper(
             cards.freeze,
         )
@@ -385,6 +563,9 @@ class AsyncCardsResourceWithStreamingResponse:
         )
         self.issue_virtual = async_to_streamed_response_wrapper(
             cards.issue_virtual,
+        )
+        self.list_transactions = async_to_streamed_response_wrapper(
+            cards.list_transactions,
         )
 
     @cached_property

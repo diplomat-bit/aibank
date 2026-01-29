@@ -36,6 +36,22 @@ from .audit_logs import (
     AsyncAuditLogsResourceWithStreamingResponse,
 )
 from ..._resource import SyncAPIResource, AsyncAPIResource
+from .verification import (
+    VerificationResource,
+    AsyncVerificationResource,
+    VerificationResourceWithRawResponse,
+    AsyncVerificationResourceWithRawResponse,
+    VerificationResourceWithStreamingResponse,
+    AsyncVerificationResourceWithStreamingResponse,
+)
+from .notifications import (
+    NotificationsResource,
+    AsyncNotificationsResource,
+    NotificationsResourceWithRawResponse,
+    AsyncNotificationsResourceWithRawResponse,
+    NotificationsResourceWithStreamingResponse,
+    AsyncNotificationsResourceWithStreamingResponse,
+)
 
 __all__ = ["SystemResource", "AsyncSystemResource"]
 
@@ -56,6 +72,14 @@ class SystemResource(SyncAPIResource):
     @cached_property
     def sandbox(self) -> SandboxResource:
         return SandboxResource(self._client)
+
+    @cached_property
+    def verification(self) -> VerificationResource:
+        return VerificationResource(self._client)
+
+    @cached_property
+    def notifications(self) -> NotificationsResource:
+        return NotificationsResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> SystemResourceWithRawResponse:
@@ -93,6 +117,14 @@ class AsyncSystemResource(AsyncAPIResource):
     @cached_property
     def sandbox(self) -> AsyncSandboxResource:
         return AsyncSandboxResource(self._client)
+
+    @cached_property
+    def verification(self) -> AsyncVerificationResource:
+        return AsyncVerificationResource(self._client)
+
+    @cached_property
+    def notifications(self) -> AsyncNotificationsResource:
+        return AsyncNotificationsResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AsyncSystemResourceWithRawResponse:
@@ -134,6 +166,14 @@ class SystemResourceWithRawResponse:
     def sandbox(self) -> SandboxResourceWithRawResponse:
         return SandboxResourceWithRawResponse(self._system.sandbox)
 
+    @cached_property
+    def verification(self) -> VerificationResourceWithRawResponse:
+        return VerificationResourceWithRawResponse(self._system.verification)
+
+    @cached_property
+    def notifications(self) -> NotificationsResourceWithRawResponse:
+        return NotificationsResourceWithRawResponse(self._system.notifications)
+
 
 class AsyncSystemResourceWithRawResponse:
     def __init__(self, system: AsyncSystemResource) -> None:
@@ -154,6 +194,14 @@ class AsyncSystemResourceWithRawResponse:
     @cached_property
     def sandbox(self) -> AsyncSandboxResourceWithRawResponse:
         return AsyncSandboxResourceWithRawResponse(self._system.sandbox)
+
+    @cached_property
+    def verification(self) -> AsyncVerificationResourceWithRawResponse:
+        return AsyncVerificationResourceWithRawResponse(self._system.verification)
+
+    @cached_property
+    def notifications(self) -> AsyncNotificationsResourceWithRawResponse:
+        return AsyncNotificationsResourceWithRawResponse(self._system.notifications)
 
 
 class SystemResourceWithStreamingResponse:
@@ -176,6 +224,14 @@ class SystemResourceWithStreamingResponse:
     def sandbox(self) -> SandboxResourceWithStreamingResponse:
         return SandboxResourceWithStreamingResponse(self._system.sandbox)
 
+    @cached_property
+    def verification(self) -> VerificationResourceWithStreamingResponse:
+        return VerificationResourceWithStreamingResponse(self._system.verification)
+
+    @cached_property
+    def notifications(self) -> NotificationsResourceWithStreamingResponse:
+        return NotificationsResourceWithStreamingResponse(self._system.notifications)
+
 
 class AsyncSystemResourceWithStreamingResponse:
     def __init__(self, system: AsyncSystemResource) -> None:
@@ -196,3 +252,11 @@ class AsyncSystemResourceWithStreamingResponse:
     @cached_property
     def sandbox(self) -> AsyncSandboxResourceWithStreamingResponse:
         return AsyncSandboxResourceWithStreamingResponse(self._system.sandbox)
+
+    @cached_property
+    def verification(self) -> AsyncVerificationResourceWithStreamingResponse:
+        return AsyncVerificationResourceWithStreamingResponse(self._system.verification)
+
+    @cached_property
+    def notifications(self) -> AsyncNotificationsResourceWithStreamingResponse:
+        return AsyncNotificationsResourceWithStreamingResponse(self._system.notifications)

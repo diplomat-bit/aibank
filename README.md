@@ -36,32 +36,14 @@ client = Jocall3(
 
 response = client.ai.oracle.simulate.run_advanced(
     prompt="Analyze the systemic risk of a 20% drop in BTC prices on my cross-chain collateralized debt positions, factoring in a simultaneous 50bps hike by the Fed and a liquidity squeeze on Aave.",
-    scenarios=[
-        {
-            "name": "Crypto Black Swan + Macro Contagion",
-            "duration_years": 1,
-            "events": [
-                {
-                    "type": "liquidation_cascade",
-                    "details": {
-                        "magnitude": "extreme",
-                        "threshold": "0.85",
-                    },
-                },
-                {
-                    "type": "interest_rate_shock",
-                    "details": {"basis_points": 50},
-                },
-            ],
-        }
-    ],
+    scenarios=[{"name": "Crypto Black Swan + Macro Contagion"}],
     global_economic_factors={
         "volatility_index": "VIX_HIGHER_30",
         "geopolitical_tension": "high",
     },
     personal_assumptions={"stop_loss_triggered": True},
 )
-print(response.overall_summary)
+print(response.confidence_score)
 ```
 
 While you can provide an `api_key` keyword argument,
@@ -88,32 +70,14 @@ client = AsyncJocall3(
 async def main() -> None:
     response = await client.ai.oracle.simulate.run_advanced(
         prompt="Analyze the systemic risk of a 20% drop in BTC prices on my cross-chain collateralized debt positions, factoring in a simultaneous 50bps hike by the Fed and a liquidity squeeze on Aave.",
-        scenarios=[
-            {
-                "name": "Crypto Black Swan + Macro Contagion",
-                "duration_years": 1,
-                "events": [
-                    {
-                        "type": "liquidation_cascade",
-                        "details": {
-                            "magnitude": "extreme",
-                            "threshold": "0.85",
-                        },
-                    },
-                    {
-                        "type": "interest_rate_shock",
-                        "details": {"basis_points": 50},
-                    },
-                ],
-            }
-        ],
+        scenarios=[{"name": "Crypto Black Swan + Macro Contagion"}],
         global_economic_factors={
             "volatility_index": "VIX_HIGHER_30",
             "geopolitical_tension": "high",
         },
         personal_assumptions={"stop_loss_triggered": True},
     )
-    print(response.overall_summary)
+    print(response.confidence_score)
 
 
 asyncio.run(main())
@@ -148,32 +112,14 @@ async def main() -> None:
     ) as client:
         response = await client.ai.oracle.simulate.run_advanced(
             prompt="Analyze the systemic risk of a 20% drop in BTC prices on my cross-chain collateralized debt positions, factoring in a simultaneous 50bps hike by the Fed and a liquidity squeeze on Aave.",
-            scenarios=[
-                {
-                    "name": "Crypto Black Swan + Macro Contagion",
-                    "duration_years": 1,
-                    "events": [
-                        {
-                            "type": "liquidation_cascade",
-                            "details": {
-                                "magnitude": "extreme",
-                                "threshold": "0.85",
-                            },
-                        },
-                        {
-                            "type": "interest_rate_shock",
-                            "details": {"basis_points": 50},
-                        },
-                    ],
-                }
-            ],
+            scenarios=[{"name": "Crypto Black Swan + Macro Contagion"}],
             global_economic_factors={
                 "volatility_index": "VIX_HIGHER_30",
                 "geopolitical_tension": "high",
             },
             personal_assumptions={"stop_loss_triggered": True},
         )
-        print(response.overall_summary)
+        print(response.confidence_score)
 
 
 asyncio.run(main())
@@ -201,10 +147,31 @@ response = client.users.register(
     email="dev@stainless.com",
     name="name",
     password="password",
-    address={},
+    address={
+        "city": "city",
+        "country": "country",
+        "street": "street",
+    },
 )
 print(response.address)
 ```
+
+## File uploads
+
+Request parameters that correspond to file uploads can be passed as `bytes`, or a [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike) instance or a tuple of `(filename, contents, media type)`.
+
+```python
+from pathlib import Path
+from jocall3 import Jocall3
+
+client = Jocall3()
+
+client.system.verification.document(
+    file=Path("/path/to/file"),
+)
+```
+
+The async client uses the exact same interface. If you pass a [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike) instance, the file contents will be read asynchronously automatically.
 
 ## Handling errors
 

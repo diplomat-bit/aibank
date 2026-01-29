@@ -24,6 +24,14 @@ from .treasury import (
     TreasuryResourceWithStreamingResponse,
     AsyncTreasuryResourceWithStreamingResponse,
 )
+from .anomalies import (
+    AnomaliesResource,
+    AsyncAnomaliesResource,
+    AnomaliesResourceWithRawResponse,
+    AsyncAnomaliesResourceWithRawResponse,
+    AnomaliesResourceWithStreamingResponse,
+    AsyncAnomaliesResourceWithStreamingResponse,
+)
 from .corporate import (
     CorporateResource,
     AsyncCorporateResource,
@@ -80,6 +88,12 @@ __all__ = [
     "AsyncGovernanceResourceWithRawResponse",
     "GovernanceResourceWithStreamingResponse",
     "AsyncGovernanceResourceWithStreamingResponse",
+    "AnomaliesResource",
+    "AsyncAnomaliesResource",
+    "AnomaliesResourceWithRawResponse",
+    "AsyncAnomaliesResourceWithRawResponse",
+    "AnomaliesResourceWithStreamingResponse",
+    "AsyncAnomaliesResourceWithStreamingResponse",
     "CorporateResource",
     "AsyncCorporateResource",
     "CorporateResourceWithRawResponse",

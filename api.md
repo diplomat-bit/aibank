@@ -363,6 +363,19 @@ Methods:
 - <code title="get /ai/agent/prompts">client.ai.agent.<a href="./src/jocall3/resources/ai/agent.py">get_prompts</a>() -> <a href="./src/jocall3/types/ai/agent_get_prompts_response.py">AgentGetPromptsResponse</a></code>
 - <code title="put /ai/agent/prompts">client.ai.agent.<a href="./src/jocall3/resources/ai/agent.py">update_prompts</a>(\*\*<a href="src/jocall3/types/ai/agent_update_prompts_params.py">params</a>) -> None</code>
 
+## Models
+
+Types:
+
+```python
+from jocall3.types.ai import ModelListResponse, ModelFineTuneResponse
+```
+
+Methods:
+
+- <code title="get /ai/models/versions">client.ai.models.<a href="./src/jocall3/resources/ai/models.py">list</a>() -> <a href="./src/jocall3/types/ai/model_list_response.py">ModelListResponse</a></code>
+- <code title="post /ai/models/fine-tune">client.ai.models.<a href="./src/jocall3/resources/ai/models.py">fine_tune</a>(\*\*<a href="src/jocall3/types/ai/model_fine_tune_params.py">params</a>) -> <a href="./src/jocall3/types/ai/model_fine_tune_response.py">ModelFineTuneResponse</a></code>
+
 # Corporate
 
 Types:
@@ -413,13 +426,16 @@ Types:
 ```python
 from jocall3.types.corporate import (
     TreasuryForecastCashFlowResponse,
+    TreasuryGetLiquidityPositionsResponse,
     TreasuryManageLiquidityResponse,
 )
 ```
 
 Methods:
 
+- <code title="post /corporate/treasury/bulk-payouts">client.corporate.treasury.<a href="./src/jocall3/resources/corporate/treasury/treasury.py">bulk_payout</a>(\*\*<a href="src/jocall3/types/corporate/treasury_bulk_payout_params.py">params</a>) -> None</code>
 - <code title="get /corporate/treasury/cash-flow/forecast">client.corporate.treasury.<a href="./src/jocall3/resources/corporate/treasury/treasury.py">forecast_cash_flow</a>(\*\*<a href="src/jocall3/types/corporate/treasury_forecast_cash_flow_params.py">params</a>) -> <a href="./src/jocall3/types/corporate/treasury_forecast_cash_flow_response.py">TreasuryForecastCashFlowResponse</a></code>
+- <code title="get /corporate/treasury/liquidity-positions">client.corporate.treasury.<a href="./src/jocall3/resources/corporate/treasury/treasury.py">get_liquidity_positions</a>() -> <a href="./src/jocall3/types/corporate/treasury_get_liquidity_positions_response.py">TreasuryGetLiquidityPositionsResponse</a></code>
 - <code title="post /corporate/treasury/liquidity/optimize">client.corporate.treasury.<a href="./src/jocall3/resources/corporate/treasury/treasury.py">manage_liquidity</a>(\*\*<a href="src/jocall3/types/corporate/treasury_manage_liquidity_params.py">params</a>) -> <a href="./src/jocall3/types/corporate/treasury_manage_liquidity_response.py">TreasuryManageLiquidityResponse</a></code>
 
 ### Sweeping
@@ -429,19 +445,32 @@ Methods:
 - <code title="post /corporate/treasury/sweeping/rules">client.corporate.treasury.sweeping.<a href="./src/jocall3/resources/corporate/treasury/sweeping.py">configure</a>(\*\*<a href="src/jocall3/types/corporate/treasury/sweeping_configure_params.py">params</a>) -> None</code>
 - <code title="post /corporate/treasury/sweeping/execute">client.corporate.treasury.sweeping.<a href="./src/jocall3/resources/corporate/treasury/sweeping.py">execute</a>(\*\*<a href="src/jocall3/types/corporate/treasury/sweeping_execute_params.py">params</a>) -> None</code>
 
+### Pooling
+
+Methods:
+
+- <code title="post /corporate/treasury/liquidity/pooling">client.corporate.treasury.pooling.<a href="./src/jocall3/resources/corporate/treasury/pooling.py">configure</a>(\*\*<a href="src/jocall3/types/corporate/treasury/pooling_configure_params.py">params</a>) -> None</code>
+
 ## Cards
 
 Types:
 
 ```python
-from jocall3.types.corporate import CardIssuePhysicalResponse, CardIssueVirtualResponse
+from jocall3.types.corporate import (
+    CardListResponse,
+    CardIssuePhysicalResponse,
+    CardIssueVirtualResponse,
+    CardListTransactionsResponse,
+)
 ```
 
 Methods:
 
+- <code title="get /corporate/cards">client.corporate.cards.<a href="./src/jocall3/resources/corporate/cards/cards.py">list</a>(\*\*<a href="src/jocall3/types/corporate/card_list_params.py">params</a>) -> <a href="./src/jocall3/types/corporate/card_list_response.py">CardListResponse</a></code>
 - <code title="post /corporate/cards/{cardId}/freeze">client.corporate.cards.<a href="./src/jocall3/resources/corporate/cards/cards.py">freeze</a>(card_id, \*\*<a href="src/jocall3/types/corporate/card_freeze_params.py">params</a>) -> None</code>
 - <code title="post /corporate/cards/physical">client.corporate.cards.<a href="./src/jocall3/resources/corporate/cards/cards.py">issue_physical</a>(\*\*<a href="src/jocall3/types/corporate/card_issue_physical_params.py">params</a>) -> <a href="./src/jocall3/types/corporate/card_issue_physical_response.py">CardIssuePhysicalResponse</a></code>
 - <code title="post /corporate/cards/virtual">client.corporate.cards.<a href="./src/jocall3/resources/corporate/cards/cards.py">issue_virtual</a>(\*\*<a href="src/jocall3/types/corporate/card_issue_virtual_params.py">params</a>) -> <a href="./src/jocall3/types/corporate/card_issue_virtual_response.py">CardIssueVirtualResponse</a></code>
+- <code title="get /corporate/cards/{cardId}/transactions">client.corporate.cards.<a href="./src/jocall3/resources/corporate/cards/cards.py">list_transactions</a>(card_id) -> <a href="./src/jocall3/types/corporate/card_list_transactions_response.py">CardListTransactionsResponse</a></code>
 
 ### Controls
 
@@ -485,6 +514,7 @@ from jocall3.types.corporate.risk.fraud import RuleListResponse
 Methods:
 
 - <code title="post /corporate/risk/fraud/rules">client.corporate.risk.fraud.rules.<a href="./src/jocall3/resources/corporate/risk/fraud/rules.py">create</a>(\*\*<a href="src/jocall3/types/corporate/risk/fraud/rule_create_params.py">params</a>) -> None</code>
+- <code title="put /corporate/risk/fraud/rules/{ruleId}">client.corporate.risk.fraud.rules.<a href="./src/jocall3/resources/corporate/risk/fraud/rules.py">update</a>(rule_id, \*\*<a href="src/jocall3/types/corporate/risk/fraud/rule_update_params.py">params</a>) -> None</code>
 - <code title="get /corporate/risk/fraud/rules">client.corporate.risk.fraud.rules.<a href="./src/jocall3/resources/corporate/risk/fraud/rules.py">list</a>() -> <a href="./src/jocall3/types/corporate/risk/fraud/rule_list_response.py">RuleListResponse</a></code>
 
 ## Governance
@@ -502,6 +532,19 @@ Methods:
 - <code title="post /corporate/governance/proposals">client.corporate.governance.proposals.<a href="./src/jocall3/resources/corporate/governance/proposals.py">create</a>(\*\*<a href="src/jocall3/types/corporate/governance/proposal_create_params.py">params</a>) -> None</code>
 - <code title="get /corporate/governance/proposals">client.corporate.governance.proposals.<a href="./src/jocall3/resources/corporate/governance/proposals.py">list</a>() -> <a href="./src/jocall3/types/corporate/governance/proposal_list_response.py">ProposalListResponse</a></code>
 - <code title="post /corporate/governance/proposals/{proposalId}/vote">client.corporate.governance.proposals.<a href="./src/jocall3/resources/corporate/governance/proposals.py">vote</a>(proposal_id, \*\*<a href="src/jocall3/types/corporate/governance/proposal_vote_params.py">params</a>) -> None</code>
+
+## Anomalies
+
+Types:
+
+```python
+from jocall3.types.corporate import AnomalyListResponse
+```
+
+Methods:
+
+- <code title="get /corporate/anomalies">client.corporate.anomalies.<a href="./src/jocall3/resources/corporate/anomalies.py">list</a>() -> <a href="./src/jocall3/types/corporate/anomaly_list_response.py">AnomalyListResponse</a></code>
+- <code title="put /corporate/anomalies/{anomalyId}/status">client.corporate.anomalies.<a href="./src/jocall3/resources/corporate/anomalies.py">update_status</a>(anomaly_id, \*\*<a href="src/jocall3/types/corporate/anomaly_update_status_params.py">params</a>) -> None</code>
 
 # Web3
 
@@ -541,6 +584,7 @@ from jocall3.types.web3 import TransactionSendCryptoResponse
 Methods:
 
 - <code title="post /web3/transactions/bridge">client.web3.transactions.<a href="./src/jocall3/resources/web3/transactions.py">bridge_chain</a>(\*\*<a href="src/jocall3/types/web3/transaction_bridge_chain_params.py">params</a>) -> None</code>
+- <code title="post /web3/transactions/initiate">client.web3.transactions.<a href="./src/jocall3/resources/web3/transactions.py">initiate</a>(\*\*<a href="src/jocall3/types/web3/transaction_initiate_params.py">params</a>) -> None</code>
 - <code title="post /web3/transactions/send">client.web3.transactions.<a href="./src/jocall3/resources/web3/transactions.py">send_crypto</a>(\*\*<a href="src/jocall3/types/web3/transaction_send_crypto_params.py">params</a>) -> <a href="./src/jocall3/types/web3/transaction_send_crypto_response.py">TransactionSendCryptoResponse</a></code>
 - <code title="post /web3/transactions/swap">client.web3.transactions.<a href="./src/jocall3/resources/web3/transactions.py">swap_tokens</a>(\*\*<a href="src/jocall3/types/web3/transaction_swap_tokens_params.py">params</a>) -> None</code>
 
@@ -586,8 +630,15 @@ Methods:
 
 ## International
 
+Types:
+
+```python
+from jocall3.types.payments import InternationalGetStatusResponse
+```
+
 Methods:
 
+- <code title="get /payments/international/{paymentId}/status">client.payments.international.<a href="./src/jocall3/resources/payments/international.py">get_status</a>(payment_id) -> <a href="./src/jocall3/types/payments/international_get_status_response.py">InternationalGetStatusResponse</a></code>
 - <code title="post /payments/international/sepa">client.payments.international.<a href="./src/jocall3/resources/payments/international.py">sepa</a>(\*\*<a href="src/jocall3/types/payments/international_sepa_params.py">params</a>) -> None</code>
 - <code title="post /payments/international/swift">client.payments.international.<a href="./src/jocall3/resources/payments/international.py">swift</a>(\*\*<a href="src/jocall3/types/payments/international_swift_params.py">params</a>) -> None</code>
 
@@ -784,3 +835,23 @@ Methods:
 
 - <code title="post /system/sandbox/reset">client.system.sandbox.<a href="./src/jocall3/resources/system/sandbox.py">reset</a>() -> None</code>
 - <code title="post /system/sandbox/simulate-error">client.system.sandbox.<a href="./src/jocall3/resources/system/sandbox.py">simulate_error</a>(\*\*<a href="src/jocall3/types/system/sandbox_simulate_error_params.py">params</a>) -> <a href="./src/jocall3/types/system/sandbox_simulate_error_response.py">SandboxSimulateErrorResponse</a></code>
+
+## Verification
+
+Methods:
+
+- <code title="post /system/verification/biometric-comparison">client.system.verification.<a href="./src/jocall3/resources/system/verification.py">biometric_match</a>(\*\*<a href="src/jocall3/types/system/verification_biometric_match_params.py">params</a>) -> None</code>
+- <code title="post /system/verification/document">client.system.verification.<a href="./src/jocall3/resources/system/verification.py">document</a>(\*\*<a href="src/jocall3/types/system/verification_document_params.py">params</a>) -> None</code>
+
+## Notifications
+
+Types:
+
+```python
+from jocall3.types.system import NotificationListTemplatesResponse
+```
+
+Methods:
+
+- <code title="get /system/notifications/templates">client.system.notifications.<a href="./src/jocall3/resources/system/notifications.py">list_templates</a>() -> <a href="./src/jocall3/types/system/notification_list_templates_response.py">NotificationListTemplatesResponse</a></code>
+- <code title="post /system/notifications/push">client.system.notifications.<a href="./src/jocall3/resources/system/notifications.py">send</a>(\*\*<a href="src/jocall3/types/system/notification_send_params.py">params</a>) -> None</code>

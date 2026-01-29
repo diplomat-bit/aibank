@@ -16,12 +16,12 @@ class CardIssuePhysicalParams(TypedDict, total=False):
 
 
 class ShippingAddress(TypedDict, total=False):
-    city: str
+    city: Required[str]
 
-    country: str
+    country: Required[str]
+
+    street: Required[str]
 
     state: str
-
-    street: str
 
     zip: str
