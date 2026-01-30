@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.14.0 (2026-01-30)
+
+Full Changelog: [v0.13.0...v0.14.0](https://github.com/diplomat-bit/aibank/compare/v0.13.0...v0.14.0)
+
+### Features
+
+* **api:** api update ([985ac2f](https://github.com/diplomat-bit/aibank/commit/985ac2fed55963d00d5416e77d0c596cc804690b))
+* **client:** add custom JSON encoder for extended type support ([814b1c5](https://github.com/diplomat-bit/aibank/commit/814b1c526a3d71f12c80a9c59c131818ed1ed738))
+
 ## 0.13.0 (2026-01-30)
 
 Full Changelog: [v0.12.0...v0.13.0](https://github.com/diplomat-bit/aibank/compare/v0.12.0...v0.13.0)

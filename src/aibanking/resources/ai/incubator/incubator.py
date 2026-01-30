@@ -12,18 +12,10 @@ from .pitch import (
     PitchResourceWithStreamingResponse,
     AsyncPitchResourceWithStreamingResponse,
 )
-from .analysis import (
-    AnalysisResource,
-    AsyncAnalysisResource,
-    AnalysisResourceWithRawResponse,
-    AsyncAnalysisResourceWithRawResponse,
-    AnalysisResourceWithStreamingResponse,
-    AsyncAnalysisResourceWithStreamingResponse,
-)
-from ...._types import Body, Query, Headers, NotGiven, not_given
+from ...._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ...._utils import maybe_transform, async_maybe_transform
 from ...._compat import cached_property
-from ....types.ai import incubator_validate_params
+from ....types.ai import incubator_retrieve_pitches_params
 from ...._resource import SyncAPIResource, AsyncAPIResource
 from ...._response import (
     to_raw_response_wrapper,
@@ -32,8 +24,6 @@ from ...._response import (
     async_to_streamed_response_wrapper,
 )
 from ...._base_client import make_request_options
-from ....types.ai.incubator_validate_response import IncubatorValidateResponse
-from ....types.ai.incubator_retrieve_pitches_response import IncubatorRetrievePitchesResponse
 
 __all__ = ["IncubatorResource", "AsyncIncubatorResource"]
 
@@ -42,10 +32,6 @@ class IncubatorResource(SyncAPIResource):
     @cached_property
     def pitch(self) -> PitchResource:
         return PitchResource(self._client)
-
-    @cached_property
-    def analysis(self) -> AnalysisResource:
-        return AnalysisResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> IncubatorResourceWithRawResponse:
@@ -69,37 +55,27 @@ class IncubatorResource(SyncAPIResource):
     def retrieve_pitches(
         self,
         *,
+        limit: int | Omit = omit,
+        offset: int | Omit = omit,
+        status: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> IncubatorRetrievePitchesResponse:
-        """List All User Business Pitches"""
-        return self._get(
-            "/ai/incubator/pitches",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=IncubatorRetrievePitchesResponse,
-        )
-
-    def validate(
-        self,
-        *,
-        concept: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> IncubatorValidateResponse:
+    ) -> object:
         """
-        Rapid Idea Validation Engine
+        Retrieves a summary list of all business pitches submitted by the authenticated
+        user to Quantum Weaver.
 
         Args:
+          limit: Maximum number of items to return in a single page.
+
+          offset: Number of items to skip before starting to collect the result set.
+
+          status: Filter pitches by their current stage.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -108,13 +84,23 @@ class IncubatorResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return self._post(
-            "/ai/incubator/validate",
-            body=maybe_transform({"concept": concept}, incubator_validate_params.IncubatorValidateParams),
+        return self._get(
+            "/ai/incubator/pitches",
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "limit": limit,
+                        "offset": offset,
+                        "status": status,
+                    },
+                    incubator_retrieve_pitches_params.IncubatorRetrievePitchesParams,
+                ),
             ),
-            cast_to=IncubatorValidateResponse,
+            cast_to=object,
         )
 
 
@@ -122,10 +108,6 @@ class AsyncIncubatorResource(AsyncAPIResource):
     @cached_property
     def pitch(self) -> AsyncPitchResource:
         return AsyncPitchResource(self._client)
-
-    @cached_property
-    def analysis(self) -> AsyncAnalysisResource:
-        return AsyncAnalysisResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AsyncIncubatorResourceWithRawResponse:
@@ -149,37 +131,27 @@ class AsyncIncubatorResource(AsyncAPIResource):
     async def retrieve_pitches(
         self,
         *,
+        limit: int | Omit = omit,
+        offset: int | Omit = omit,
+        status: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> IncubatorRetrievePitchesResponse:
-        """List All User Business Pitches"""
-        return await self._get(
-            "/ai/incubator/pitches",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=IncubatorRetrievePitchesResponse,
-        )
-
-    async def validate(
-        self,
-        *,
-        concept: str,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> IncubatorValidateResponse:
+    ) -> object:
         """
-        Rapid Idea Validation Engine
+        Retrieves a summary list of all business pitches submitted by the authenticated
+        user to Quantum Weaver.
 
         Args:
+          limit: Maximum number of items to return in a single page.
+
+          offset: Number of items to skip before starting to collect the result set.
+
+          status: Filter pitches by their current stage.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -188,13 +160,23 @@ class AsyncIncubatorResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return await self._post(
-            "/ai/incubator/validate",
-            body=await async_maybe_transform({"concept": concept}, incubator_validate_params.IncubatorValidateParams),
+        return await self._get(
+            "/ai/incubator/pitches",
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=await async_maybe_transform(
+                    {
+                        "limit": limit,
+                        "offset": offset,
+                        "status": status,
+                    },
+                    incubator_retrieve_pitches_params.IncubatorRetrievePitchesParams,
+                ),
             ),
-            cast_to=IncubatorValidateResponse,
+            cast_to=object,
         )
 
 
@@ -205,17 +187,10 @@ class IncubatorResourceWithRawResponse:
         self.retrieve_pitches = to_raw_response_wrapper(
             incubator.retrieve_pitches,
         )
-        self.validate = to_raw_response_wrapper(
-            incubator.validate,
-        )
 
     @cached_property
     def pitch(self) -> PitchResourceWithRawResponse:
         return PitchResourceWithRawResponse(self._incubator.pitch)
-
-    @cached_property
-    def analysis(self) -> AnalysisResourceWithRawResponse:
-        return AnalysisResourceWithRawResponse(self._incubator.analysis)
 
 
 class AsyncIncubatorResourceWithRawResponse:
@@ -225,17 +200,10 @@ class AsyncIncubatorResourceWithRawResponse:
         self.retrieve_pitches = async_to_raw_response_wrapper(
             incubator.retrieve_pitches,
         )
-        self.validate = async_to_raw_response_wrapper(
-            incubator.validate,
-        )
 
     @cached_property
     def pitch(self) -> AsyncPitchResourceWithRawResponse:
         return AsyncPitchResourceWithRawResponse(self._incubator.pitch)
-
-    @cached_property
-    def analysis(self) -> AsyncAnalysisResourceWithRawResponse:
-        return AsyncAnalysisResourceWithRawResponse(self._incubator.analysis)
 
 
 class IncubatorResourceWithStreamingResponse:
@@ -245,17 +213,10 @@ class IncubatorResourceWithStreamingResponse:
         self.retrieve_pitches = to_streamed_response_wrapper(
             incubator.retrieve_pitches,
         )
-        self.validate = to_streamed_response_wrapper(
-            incubator.validate,
-        )
 
     @cached_property
     def pitch(self) -> PitchResourceWithStreamingResponse:
         return PitchResourceWithStreamingResponse(self._incubator.pitch)
-
-    @cached_property
-    def analysis(self) -> AnalysisResourceWithStreamingResponse:
-        return AnalysisResourceWithStreamingResponse(self._incubator.analysis)
 
 
 class AsyncIncubatorResourceWithStreamingResponse:
@@ -265,14 +226,7 @@ class AsyncIncubatorResourceWithStreamingResponse:
         self.retrieve_pitches = async_to_streamed_response_wrapper(
             incubator.retrieve_pitches,
         )
-        self.validate = async_to_streamed_response_wrapper(
-            incubator.validate,
-        )
 
     @cached_property
     def pitch(self) -> AsyncPitchResourceWithStreamingResponse:
         return AsyncPitchResourceWithStreamingResponse(self._incubator.pitch)
-
-    @cached_property
-    def analysis(self) -> AsyncAnalysisResourceWithStreamingResponse:
-        return AsyncAnalysisResourceWithStreamingResponse(self._incubator.analysis)

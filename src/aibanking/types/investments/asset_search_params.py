@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing_extensions import Literal, Required, Annotated, TypedDict
+from typing_extensions import Annotated, TypedDict
 
 from ..._utils import PropertyInfo
 
@@ -10,6 +10,14 @@ __all__ = ["AssetSearchParams"]
 
 
 class AssetSearchParams(TypedDict, total=False):
-    query: Required[str]
+    limit: int
+    """Maximum number of items to return in a single page."""
 
-    asset_type: Annotated[Literal["EQUITY", "CRYPTO", "ETF", "BOND"], PropertyInfo(alias="assetType")]
+    min_esg_score: Annotated[int, PropertyInfo(alias="minESGScore")]
+    """Minimum desired ESG score (0-10)."""
+
+    offset: int
+    """Number of items to skip before starting to collect the result set."""
+
+    query: str
+    """Search query for asset name or symbol."""

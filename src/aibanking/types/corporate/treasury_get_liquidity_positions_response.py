@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import List, Optional
+from pydantic import Field as FieldInfo
 
 from ..._models import BaseModel
 
@@ -8,6 +8,8 @@ __all__ = ["TreasuryGetLiquidityPositionsResponse"]
 
 
 class TreasuryGetLiquidityPositionsResponse(BaseModel):
-    positions: Optional[List[object]] = None
+    ai_liquidity_assessment: object = FieldInfo(alias="aiLiquidityAssessment")
+    """AI's overall assessment of liquidity."""
 
-    total_liquidity: Optional[float] = None
+    short_term_investments: object = FieldInfo(alias="shortTermInvestments")
+    """Details on short-term investments contributing to liquidity."""
