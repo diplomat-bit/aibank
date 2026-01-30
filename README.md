@@ -27,9 +27,7 @@ The full API of this library can be found in [api.md](api.md).
 ```python
 from aibanking import Jocall3
 
-client = Jocall3(
-    api_key="My API Key",
-)
+client = Jocall3()
 
 response = client.accounts.open(
     currency="USD",
@@ -47,9 +45,7 @@ Simply import `AsyncJocall3` instead of `Jocall3` and use `await` with each API 
 import asyncio
 from aibanking import AsyncJocall3
 
-client = AsyncJocall3(
-    api_key="My API Key",
-)
+client = AsyncJocall3()
 
 
 async def main() -> None:
@@ -87,7 +83,6 @@ from aibanking import AsyncJocall3
 
 async def main() -> None:
     async with AsyncJocall3(
-        api_key="My API Key",
         http_client=DefaultAioHttpClient(),
     ) as client:
         response = await client.accounts.open(
@@ -117,9 +112,7 @@ Nested parameters are dictionaries, typed using `TypedDict`, for example:
 ```python
 from aibanking import Jocall3
 
-client = Jocall3(
-    api_key="My API Key",
-)
+client = Jocall3()
 
 response = client.corporate.cards.request_physical_card(
     holder_name="string",
@@ -147,9 +140,7 @@ All errors inherit from `aibanking.APIError`.
 import aibanking
 from aibanking import Jocall3
 
-client = Jocall3(
-    api_key="My API Key",
-)
+client = Jocall3()
 
 try:
     client.accounts.open(
@@ -194,7 +185,6 @@ from aibanking import Jocall3
 
 # Configure the default for all requests:
 client = Jocall3(
-    api_key="My API Key",
     # default is 2
     max_retries=0,
 )
@@ -217,14 +207,12 @@ from aibanking import Jocall3
 
 # Configure the default for all requests:
 client = Jocall3(
-    api_key="My API Key",
     # 20 seconds (default is 1 minute)
     timeout=20.0,
 )
 
 # More granular control:
 client = Jocall3(
-    api_key="My API Key",
     timeout=httpx.Timeout(60.0, read=5.0, write=10.0, connect=2.0),
 )
 
@@ -273,9 +261,7 @@ The "raw" Response object can be accessed by prefixing `.with_raw_response.` to 
 ```py
 from aibanking import Jocall3
 
-client = Jocall3(
-    api_key="My API Key",
-)
+client = Jocall3()
 response = client.accounts.with_raw_response.open(
     currency="USD",
     initial_deposit=8885.832056335083,
@@ -358,7 +344,6 @@ import httpx
 from aibanking import Jocall3, DefaultHttpxClient
 
 client = Jocall3(
-    api_key="My API Key",
     # Or use the `JOCALL3_BASE_URL` env var
     base_url="http://my.test.server.example.com:8083",
     http_client=DefaultHttpxClient(
@@ -381,9 +366,7 @@ By default the library closes underlying HTTP connections whenever the client is
 ```py
 from aibanking import Jocall3
 
-with Jocall3(
-    api_key="My API Key",
-) as client:
+with Jocall3() as client:
   # make requests here
   ...
 
