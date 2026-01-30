@@ -29,12 +29,7 @@ from aibanking import Jocall3
 
 client = Jocall3()
 
-response = client.accounts.open(
-    currency="USD",
-    initial_deposit=8885.832056335083,
-    product_type="high_yield_vault",
-)
-print(response.id)
+response = client.users.login()
 ```
 
 ## Async usage
@@ -49,12 +44,7 @@ client = AsyncJocall3()
 
 
 async def main() -> None:
-    response = await client.accounts.open(
-        currency="USD",
-        initial_deposit=8885.832056335083,
-        product_type="high_yield_vault",
-    )
-    print(response.id)
+    response = await client.users.login()
 
 
 asyncio.run(main())
@@ -85,12 +75,7 @@ async def main() -> None:
     async with AsyncJocall3(
         http_client=DefaultAioHttpClient(),
     ) as client:
-        response = await client.accounts.open(
-            currency="USD",
-            initial_deposit=8885.832056335083,
-            product_type="high_yield_vault",
-        )
-        print(response.id)
+        response = await client.users.login()
 
 
 asyncio.run(main())
@@ -114,17 +99,10 @@ from aibanking import Jocall3
 
 client = Jocall3()
 
-response = client.corporate.cards.request_physical_card(
-    holder_name="string",
-    shipping_address={
-        "city": "string",
-        "country": "string",
-        "street": "string",
-        "state": "string",
-        "zip": "string",
-    },
+me = client.users.me.update(
+    preferences={},
 )
-print(response.shipping_address)
+print(me.preferences)
 ```
 
 ## Handling errors
@@ -143,11 +121,7 @@ from aibanking import Jocall3
 client = Jocall3()
 
 try:
-    client.accounts.open(
-        currency="USD",
-        initial_deposit=8885.832056335083,
-        product_type="high_yield_vault",
-    )
+    client.users.login()
 except aibanking.APIConnectionError as e:
     print("The server could not be reached")
     print(e.__cause__)  # an underlying Exception, likely raised within httpx.
@@ -190,11 +164,7 @@ client = Jocall3(
 )
 
 # Or, configure per-request:
-client.with_options(max_retries=5).accounts.open(
-    currency="USD",
-    initial_deposit=8885.832056335083,
-    product_type="high_yield_vault",
-)
+client.with_options(max_retries=5).users.login()
 ```
 
 ### Timeouts
@@ -217,11 +187,7 @@ client = Jocall3(
 )
 
 # Override per-request:
-client.with_options(timeout=5.0).accounts.open(
-    currency="USD",
-    initial_deposit=8885.832056335083,
-    product_type="high_yield_vault",
-)
+client.with_options(timeout=5.0).users.login()
 ```
 
 On timeout, an `APITimeoutError` is thrown.
@@ -262,15 +228,11 @@ The "raw" Response object can be accessed by prefixing `.with_raw_response.` to 
 from aibanking import Jocall3
 
 client = Jocall3()
-response = client.accounts.with_raw_response.open(
-    currency="USD",
-    initial_deposit=8885.832056335083,
-    product_type="high_yield_vault",
-)
+response = client.users.with_raw_response.login()
 print(response.headers.get('X-My-Header'))
 
-account = response.parse()  # get the object that `accounts.open()` would have returned
-print(account.id)
+user = response.parse()  # get the object that `users.login()` would have returned
+print(user)
 ```
 
 These methods return an [`APIResponse`](https://github.com/diplomat-bit/aibank/tree/main/src/aibanking/_response.py) object.
@@ -284,11 +246,7 @@ The above interface eagerly reads the full response body when you make the reque
 To stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.
 
 ```python
-with client.accounts.with_streaming_response.open(
-    currency="USD",
-    initial_deposit=8885.832056335083,
-    product_type="high_yield_vault",
-) as response:
+with client.users.with_streaming_response.login() as response:
     print(response.headers.get("X-My-Header"))
 
     for line in response.iter_lines():
