@@ -25,12 +25,9 @@ pip install aibanking
 The full API of this library can be found in [api.md](api.md).
 
 ```python
-import os
 from aibanking import Jocall3
 
-client = Jocall3(
-    api_key=os.environ.get("X_API_KEY"),  # This is the default and can be omitted
-)
+client = Jocall3()
 
 response = client.accounts.open(
     currency="USD",
@@ -40,23 +37,15 @@ response = client.accounts.open(
 print(response.id)
 ```
 
-While you can provide an `api_key` keyword argument,
-we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)
-to add `X_API_KEY="My API Key"` to your `.env` file
-so that your API Key is not stored in source control.
-
 ## Async usage
 
 Simply import `AsyncJocall3` instead of `Jocall3` and use `await` with each API call:
 
 ```python
-import os
 import asyncio
 from aibanking import AsyncJocall3
 
-client = AsyncJocall3(
-    api_key=os.environ.get("X_API_KEY"),  # This is the default and can be omitted
-)
+client = AsyncJocall3()
 
 
 async def main() -> None:
@@ -87,7 +76,6 @@ pip install aibanking[aiohttp]
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
 
 ```python
-import os
 import asyncio
 from aibanking import DefaultAioHttpClient
 from aibanking import AsyncJocall3
@@ -95,7 +83,6 @@ from aibanking import AsyncJocall3
 
 async def main() -> None:
     async with AsyncJocall3(
-        api_key=os.environ.get("X_API_KEY"),  # This is the default and can be omitted
         http_client=DefaultAioHttpClient(),
     ) as client:
         response = await client.accounts.open(
