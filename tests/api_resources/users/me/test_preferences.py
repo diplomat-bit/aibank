@@ -55,8 +55,7 @@ class TestPreferences:
     @parametrize
     def test_method_update_with_all_params(self, client: Jocall3) -> None:
         preference = client.users.me.preferences.update(
-            ai_interaction_mode="string",
-            theme="string",
+            notification_channels={},
         )
         assert_matches_type(PreferenceUpdateResponse, preference, path=["response"])
 
@@ -126,8 +125,7 @@ class TestAsyncPreferences:
     @parametrize
     async def test_method_update_with_all_params(self, async_client: AsyncJocall3) -> None:
         preference = await async_client.users.me.preferences.update(
-            ai_interaction_mode="string",
-            theme="string",
+            notification_channels={},
         )
         assert_matches_type(PreferenceUpdateResponse, preference, path=["response"])
 

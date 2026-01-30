@@ -10,7 +10,7 @@ import pytest
 from aibanking import Jocall3, AsyncJocall3
 from tests.utils import assert_matches_type
 from aibanking.types import (
-    TransactionListResponse,
+    TransactionAddNotesResponse,
     TransactionRetrieveResponse,
     TransactionCategorizeResponse,
 )
@@ -25,7 +25,7 @@ class TestTransactions:
     @parametrize
     def test_method_retrieve(self, client: Jocall3) -> None:
         transaction = client.transactions.retrieve(
-            "string",
+            "txn_quantum-2024-07-21-A7B8C9",
         )
         assert_matches_type(TransactionRetrieveResponse, transaction, path=["response"])
 
@@ -33,7 +33,7 @@ class TestTransactions:
     @parametrize
     def test_raw_response_retrieve(self, client: Jocall3) -> None:
         response = client.transactions.with_raw_response.retrieve(
-            "string",
+            "txn_quantum-2024-07-21-A7B8C9",
         )
 
         assert response.is_closed is True
@@ -45,7 +45,7 @@ class TestTransactions:
     @parametrize
     def test_streaming_response_retrieve(self, client: Jocall3) -> None:
         with client.transactions.with_streaming_response.retrieve(
-            "string",
+            "txn_quantum-2024-07-21-A7B8C9",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -67,19 +67,23 @@ class TestTransactions:
     @parametrize
     def test_method_list(self, client: Jocall3) -> None:
         transaction = client.transactions.list()
-        assert_matches_type(TransactionListResponse, transaction, path=["response"])
+        assert_matches_type(object, transaction, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_list_with_all_params(self, client: Jocall3) -> None:
         transaction = client.transactions.list(
+            category="category",
+            end_date="endDate",
             limit=0,
             max_amount=0,
             min_amount=0,
             offset=0,
+            search_query="searchQuery",
+            start_date="startDate",
             type="type",
         )
-        assert_matches_type(TransactionListResponse, transaction, path=["response"])
+        assert_matches_type(object, transaction, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -89,7 +93,7 @@ class TestTransactions:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         transaction = response.parse()
-        assert_matches_type(TransactionListResponse, transaction, path=["response"])
+        assert_matches_type(object, transaction, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -99,7 +103,7 @@ class TestTransactions:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             transaction = response.parse()
-            assert_matches_type(TransactionListResponse, transaction, path=["response"])
+            assert_matches_type(object, transaction, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -107,36 +111,33 @@ class TestTransactions:
     @parametrize
     def test_method_add_notes(self, client: Jocall3) -> None:
         transaction = client.transactions.add_notes(
-            transaction_id="string",
-            notes="string",
+            "txn_quantum-2024-07-21-A7B8C9",
         )
-        assert transaction is None
+        assert_matches_type(TransactionAddNotesResponse, transaction, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_add_notes(self, client: Jocall3) -> None:
         response = client.transactions.with_raw_response.add_notes(
-            transaction_id="string",
-            notes="string",
+            "txn_quantum-2024-07-21-A7B8C9",
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         transaction = response.parse()
-        assert transaction is None
+        assert_matches_type(TransactionAddNotesResponse, transaction, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_add_notes(self, client: Jocall3) -> None:
         with client.transactions.with_streaming_response.add_notes(
-            transaction_id="string",
-            notes="string",
+            "txn_quantum-2024-07-21-A7B8C9",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             transaction = response.parse()
-            assert transaction is None
+            assert_matches_type(TransactionAddNotesResponse, transaction, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -145,26 +146,14 @@ class TestTransactions:
     def test_path_params_add_notes(self, client: Jocall3) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `transaction_id` but received ''"):
             client.transactions.with_raw_response.add_notes(
-                transaction_id="",
-                notes="string",
+                "",
             )
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_categorize(self, client: Jocall3) -> None:
         transaction = client.transactions.categorize(
-            transaction_id="string",
-            category="string",
-        )
-        assert_matches_type(TransactionCategorizeResponse, transaction, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    def test_method_categorize_with_all_params(self, client: Jocall3) -> None:
-        transaction = client.transactions.categorize(
-            transaction_id="string",
-            category="string",
-            apply_to_future=False,
+            "txn_quantum-2024-07-21-A7B8C9",
         )
         assert_matches_type(TransactionCategorizeResponse, transaction, path=["response"])
 
@@ -172,8 +161,7 @@ class TestTransactions:
     @parametrize
     def test_raw_response_categorize(self, client: Jocall3) -> None:
         response = client.transactions.with_raw_response.categorize(
-            transaction_id="string",
-            category="string",
+            "txn_quantum-2024-07-21-A7B8C9",
         )
 
         assert response.is_closed is True
@@ -185,8 +173,7 @@ class TestTransactions:
     @parametrize
     def test_streaming_response_categorize(self, client: Jocall3) -> None:
         with client.transactions.with_streaming_response.categorize(
-            transaction_id="string",
-            category="string",
+            "txn_quantum-2024-07-21-A7B8C9",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -201,110 +188,7 @@ class TestTransactions:
     def test_path_params_categorize(self, client: Jocall3) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `transaction_id` but received ''"):
             client.transactions.with_raw_response.categorize(
-                transaction_id="",
-                category="string",
-            )
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    def test_method_initiate_dispute(self, client: Jocall3) -> None:
-        transaction = client.transactions.initiate_dispute(
-            transaction_id="string",
-            reason="service_not_rendered",
-        )
-        assert transaction is None
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    def test_method_initiate_dispute_with_all_params(self, client: Jocall3) -> None:
-        transaction = client.transactions.initiate_dispute(
-            transaction_id="string",
-            reason="service_not_rendered",
-            evidence_files=["string", "string"],
-        )
-        assert transaction is None
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    def test_raw_response_initiate_dispute(self, client: Jocall3) -> None:
-        response = client.transactions.with_raw_response.initiate_dispute(
-            transaction_id="string",
-            reason="service_not_rendered",
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        transaction = response.parse()
-        assert transaction is None
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    def test_streaming_response_initiate_dispute(self, client: Jocall3) -> None:
-        with client.transactions.with_streaming_response.initiate_dispute(
-            transaction_id="string",
-            reason="service_not_rendered",
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            transaction = response.parse()
-            assert transaction is None
-
-        assert cast(Any, response.is_closed) is True
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    def test_path_params_initiate_dispute(self, client: Jocall3) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `transaction_id` but received ''"):
-            client.transactions.with_raw_response.initiate_dispute(
-                transaction_id="",
-                reason="service_not_rendered",
-            )
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    def test_method_split(self, client: Jocall3) -> None:
-        transaction = client.transactions.split(
-            transaction_id="string",
-            splits=[{}, {}],
-        )
-        assert transaction is None
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    def test_raw_response_split(self, client: Jocall3) -> None:
-        response = client.transactions.with_raw_response.split(
-            transaction_id="string",
-            splits=[{}, {}],
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        transaction = response.parse()
-        assert transaction is None
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    def test_streaming_response_split(self, client: Jocall3) -> None:
-        with client.transactions.with_streaming_response.split(
-            transaction_id="string",
-            splits=[{}, {}],
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            transaction = response.parse()
-            assert transaction is None
-
-        assert cast(Any, response.is_closed) is True
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    def test_path_params_split(self, client: Jocall3) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `transaction_id` but received ''"):
-            client.transactions.with_raw_response.split(
-                transaction_id="",
-                splits=[{}, {}],
+                "",
             )
 
 
@@ -317,7 +201,7 @@ class TestAsyncTransactions:
     @parametrize
     async def test_method_retrieve(self, async_client: AsyncJocall3) -> None:
         transaction = await async_client.transactions.retrieve(
-            "string",
+            "txn_quantum-2024-07-21-A7B8C9",
         )
         assert_matches_type(TransactionRetrieveResponse, transaction, path=["response"])
 
@@ -325,7 +209,7 @@ class TestAsyncTransactions:
     @parametrize
     async def test_raw_response_retrieve(self, async_client: AsyncJocall3) -> None:
         response = await async_client.transactions.with_raw_response.retrieve(
-            "string",
+            "txn_quantum-2024-07-21-A7B8C9",
         )
 
         assert response.is_closed is True
@@ -337,7 +221,7 @@ class TestAsyncTransactions:
     @parametrize
     async def test_streaming_response_retrieve(self, async_client: AsyncJocall3) -> None:
         async with async_client.transactions.with_streaming_response.retrieve(
-            "string",
+            "txn_quantum-2024-07-21-A7B8C9",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -359,19 +243,23 @@ class TestAsyncTransactions:
     @parametrize
     async def test_method_list(self, async_client: AsyncJocall3) -> None:
         transaction = await async_client.transactions.list()
-        assert_matches_type(TransactionListResponse, transaction, path=["response"])
+        assert_matches_type(object, transaction, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncJocall3) -> None:
         transaction = await async_client.transactions.list(
+            category="category",
+            end_date="endDate",
             limit=0,
             max_amount=0,
             min_amount=0,
             offset=0,
+            search_query="searchQuery",
+            start_date="startDate",
             type="type",
         )
-        assert_matches_type(TransactionListResponse, transaction, path=["response"])
+        assert_matches_type(object, transaction, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -381,7 +269,7 @@ class TestAsyncTransactions:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         transaction = await response.parse()
-        assert_matches_type(TransactionListResponse, transaction, path=["response"])
+        assert_matches_type(object, transaction, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
@@ -391,7 +279,7 @@ class TestAsyncTransactions:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             transaction = await response.parse()
-            assert_matches_type(TransactionListResponse, transaction, path=["response"])
+            assert_matches_type(object, transaction, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -399,36 +287,33 @@ class TestAsyncTransactions:
     @parametrize
     async def test_method_add_notes(self, async_client: AsyncJocall3) -> None:
         transaction = await async_client.transactions.add_notes(
-            transaction_id="string",
-            notes="string",
+            "txn_quantum-2024-07-21-A7B8C9",
         )
-        assert transaction is None
+        assert_matches_type(TransactionAddNotesResponse, transaction, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_add_notes(self, async_client: AsyncJocall3) -> None:
         response = await async_client.transactions.with_raw_response.add_notes(
-            transaction_id="string",
-            notes="string",
+            "txn_quantum-2024-07-21-A7B8C9",
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         transaction = await response.parse()
-        assert transaction is None
+        assert_matches_type(TransactionAddNotesResponse, transaction, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_add_notes(self, async_client: AsyncJocall3) -> None:
         async with async_client.transactions.with_streaming_response.add_notes(
-            transaction_id="string",
-            notes="string",
+            "txn_quantum-2024-07-21-A7B8C9",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             transaction = await response.parse()
-            assert transaction is None
+            assert_matches_type(TransactionAddNotesResponse, transaction, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -437,26 +322,14 @@ class TestAsyncTransactions:
     async def test_path_params_add_notes(self, async_client: AsyncJocall3) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `transaction_id` but received ''"):
             await async_client.transactions.with_raw_response.add_notes(
-                transaction_id="",
-                notes="string",
+                "",
             )
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_categorize(self, async_client: AsyncJocall3) -> None:
         transaction = await async_client.transactions.categorize(
-            transaction_id="string",
-            category="string",
-        )
-        assert_matches_type(TransactionCategorizeResponse, transaction, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    async def test_method_categorize_with_all_params(self, async_client: AsyncJocall3) -> None:
-        transaction = await async_client.transactions.categorize(
-            transaction_id="string",
-            category="string",
-            apply_to_future=False,
+            "txn_quantum-2024-07-21-A7B8C9",
         )
         assert_matches_type(TransactionCategorizeResponse, transaction, path=["response"])
 
@@ -464,8 +337,7 @@ class TestAsyncTransactions:
     @parametrize
     async def test_raw_response_categorize(self, async_client: AsyncJocall3) -> None:
         response = await async_client.transactions.with_raw_response.categorize(
-            transaction_id="string",
-            category="string",
+            "txn_quantum-2024-07-21-A7B8C9",
         )
 
         assert response.is_closed is True
@@ -477,8 +349,7 @@ class TestAsyncTransactions:
     @parametrize
     async def test_streaming_response_categorize(self, async_client: AsyncJocall3) -> None:
         async with async_client.transactions.with_streaming_response.categorize(
-            transaction_id="string",
-            category="string",
+            "txn_quantum-2024-07-21-A7B8C9",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -493,108 +364,5 @@ class TestAsyncTransactions:
     async def test_path_params_categorize(self, async_client: AsyncJocall3) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `transaction_id` but received ''"):
             await async_client.transactions.with_raw_response.categorize(
-                transaction_id="",
-                category="string",
-            )
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    async def test_method_initiate_dispute(self, async_client: AsyncJocall3) -> None:
-        transaction = await async_client.transactions.initiate_dispute(
-            transaction_id="string",
-            reason="service_not_rendered",
-        )
-        assert transaction is None
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    async def test_method_initiate_dispute_with_all_params(self, async_client: AsyncJocall3) -> None:
-        transaction = await async_client.transactions.initiate_dispute(
-            transaction_id="string",
-            reason="service_not_rendered",
-            evidence_files=["string", "string"],
-        )
-        assert transaction is None
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    async def test_raw_response_initiate_dispute(self, async_client: AsyncJocall3) -> None:
-        response = await async_client.transactions.with_raw_response.initiate_dispute(
-            transaction_id="string",
-            reason="service_not_rendered",
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        transaction = await response.parse()
-        assert transaction is None
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    async def test_streaming_response_initiate_dispute(self, async_client: AsyncJocall3) -> None:
-        async with async_client.transactions.with_streaming_response.initiate_dispute(
-            transaction_id="string",
-            reason="service_not_rendered",
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            transaction = await response.parse()
-            assert transaction is None
-
-        assert cast(Any, response.is_closed) is True
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    async def test_path_params_initiate_dispute(self, async_client: AsyncJocall3) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `transaction_id` but received ''"):
-            await async_client.transactions.with_raw_response.initiate_dispute(
-                transaction_id="",
-                reason="service_not_rendered",
-            )
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    async def test_method_split(self, async_client: AsyncJocall3) -> None:
-        transaction = await async_client.transactions.split(
-            transaction_id="string",
-            splits=[{}, {}],
-        )
-        assert transaction is None
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    async def test_raw_response_split(self, async_client: AsyncJocall3) -> None:
-        response = await async_client.transactions.with_raw_response.split(
-            transaction_id="string",
-            splits=[{}, {}],
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        transaction = await response.parse()
-        assert transaction is None
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    async def test_streaming_response_split(self, async_client: AsyncJocall3) -> None:
-        async with async_client.transactions.with_streaming_response.split(
-            transaction_id="string",
-            splits=[{}, {}],
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            transaction = await response.parse()
-            assert transaction is None
-
-        assert cast(Any, response.is_closed) is True
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    async def test_path_params_split(self, async_client: AsyncJocall3) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `transaction_id` but received ''"):
-            await async_client.transactions.with_raw_response.split(
-                transaction_id="",
-                splits=[{}, {}],
+                "",
             )
