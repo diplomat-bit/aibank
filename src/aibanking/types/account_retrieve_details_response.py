@@ -10,4 +10,14 @@ __all__ = ["AccountRetrieveDetailsResponse"]
 
 
 class AccountRetrieveDetailsResponse(BaseModel):
-    projected_cash_flow: Optional[object] = FieldInfo(alias="projectedCashFlow", default=None)
+    id: str
+
+    currency: str
+
+    current_balance: float = FieldInfo(alias="currentBalance")
+
+    institution_name: str = FieldInfo(alias="institutionName")
+
+    type: str
+
+    name: Optional[str] = None

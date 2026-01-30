@@ -24,6 +24,14 @@ from .investments import (
     InvestmentsResourceWithStreamingResponse,
     AsyncInvestmentsResourceWithStreamingResponse,
 )
+from .performance import (
+    PerformanceResource,
+    AsyncPerformanceResource,
+    PerformanceResourceWithRawResponse,
+    AsyncPerformanceResourceWithRawResponse,
+    PerformanceResourceWithStreamingResponse,
+    AsyncPerformanceResourceWithStreamingResponse,
+)
 
 __all__ = [
     "PortfoliosResource",
@@ -38,6 +46,12 @@ __all__ = [
     "AsyncAssetsResourceWithRawResponse",
     "AssetsResourceWithStreamingResponse",
     "AsyncAssetsResourceWithStreamingResponse",
+    "PerformanceResource",
+    "AsyncPerformanceResource",
+    "PerformanceResourceWithRawResponse",
+    "AsyncPerformanceResourceWithRawResponse",
+    "PerformanceResourceWithStreamingResponse",
+    "AsyncPerformanceResourceWithStreamingResponse",
     "InvestmentsResource",
     "AsyncInvestmentsResource",
     "InvestmentsResourceWithRawResponse",

@@ -16,6 +16,14 @@ from .web3 import (
     Web3ResourceWithStreamingResponse,
     AsyncWeb3ResourceWithStreamingResponse,
 )
+from .network import (
+    NetworkResource,
+    AsyncNetworkResource,
+    NetworkResourceWithRawResponse,
+    AsyncNetworkResourceWithRawResponse,
+    NetworkResourceWithStreamingResponse,
+    AsyncNetworkResourceWithStreamingResponse,
+)
 from .wallets import (
     WalletsResource,
     AsyncWalletsResource,
@@ -23,6 +31,14 @@ from .wallets import (
     AsyncWalletsResourceWithRawResponse,
     WalletsResourceWithStreamingResponse,
     AsyncWalletsResourceWithStreamingResponse,
+)
+from .contracts import (
+    ContractsResource,
+    AsyncContractsResource,
+    ContractsResourceWithRawResponse,
+    AsyncContractsResourceWithRawResponse,
+    ContractsResourceWithStreamingResponse,
+    AsyncContractsResourceWithStreamingResponse,
 )
 from .transactions import (
     TransactionsResource,
@@ -34,6 +50,12 @@ from .transactions import (
 )
 
 __all__ = [
+    "NetworkResource",
+    "AsyncNetworkResource",
+    "NetworkResourceWithRawResponse",
+    "AsyncNetworkResourceWithRawResponse",
+    "NetworkResourceWithStreamingResponse",
+    "AsyncNetworkResourceWithStreamingResponse",
     "WalletsResource",
     "AsyncWalletsResource",
     "WalletsResourceWithRawResponse",
@@ -52,6 +74,12 @@ __all__ = [
     "AsyncNFTsResourceWithRawResponse",
     "NFTsResourceWithStreamingResponse",
     "AsyncNFTsResourceWithStreamingResponse",
+    "ContractsResource",
+    "AsyncContractsResource",
+    "ContractsResourceWithRawResponse",
+    "AsyncContractsResourceWithRawResponse",
+    "ContractsResourceWithStreamingResponse",
+    "AsyncContractsResourceWithStreamingResponse",
     "Web3Resource",
     "AsyncWeb3Resource",
     "Web3ResourceWithRawResponse",

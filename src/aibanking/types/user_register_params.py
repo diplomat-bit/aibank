@@ -2,10 +2,14 @@
 
 from __future__ import annotations
 
-from typing_extensions import TypedDict
+from typing_extensions import Required, TypedDict
 
 __all__ = ["UserRegisterParams"]
 
 
 class UserRegisterParams(TypedDict, total=False):
-    address: object
+    email: Required[str]
+
+    name: Required[str]
+
+    password: Required[str]
