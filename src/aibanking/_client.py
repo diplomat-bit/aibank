@@ -23,7 +23,7 @@ from ._utils import is_given, get_async_library
 from ._compat import cached_property
 from ._version import __version__
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
-from ._exceptions import Jocall3Error, APIStatusError
+from ._exceptions import APIStatusError
 from ._base_client import (
     DEFAULT_MAX_RETRIES,
     SyncAPIClient,
@@ -63,12 +63,10 @@ __all__ = ["Timeout", "Transport", "ProxiesTypes", "RequestOptions", "Jocall3", 
 
 class Jocall3(SyncAPIClient):
     # client options
-    api_key: str
 
     def __init__(
         self,
         *,
-        api_key: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         max_retries: int = DEFAULT_MAX_RETRIES,
@@ -88,18 +86,7 @@ class Jocall3(SyncAPIClient):
         # part of our public interface in the future.
         _strict_response_validation: bool = False,
     ) -> None:
-        """Construct a new synchronous Jocall3 client instance.
-
-        This automatically infers the `api_key` argument from the `X_API_KEY` environment variable if it is not provided.
-        """
-        if api_key is None:
-            api_key = os.environ.get("X_API_KEY")
-        if api_key is None:
-            raise Jocall3Error(
-                "The api_key client option must be set either by passing api_key to the client or by setting the X_API_KEY environment variable"
-            )
-        self.api_key = api_key
-
+        """Construct a new synchronous Jocall3 client instance."""
         if base_url is None:
             base_url = os.environ.get("JOCALL3_BASE_URL")
         if base_url is None:
@@ -213,7 +200,6 @@ class Jocall3(SyncAPIClient):
     def copy(
         self,
         *,
-        api_key: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         http_client: httpx.Client | None = None,
@@ -247,7 +233,6 @@ class Jocall3(SyncAPIClient):
 
         http_client = http_client or self._client
         return self.__class__(
-            api_key=api_key or self.api_key,
             base_url=base_url or self.base_url,
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
@@ -297,12 +282,10 @@ class Jocall3(SyncAPIClient):
 
 class AsyncJocall3(AsyncAPIClient):
     # client options
-    api_key: str
 
     def __init__(
         self,
         *,
-        api_key: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         max_retries: int = DEFAULT_MAX_RETRIES,
@@ -322,18 +305,7 @@ class AsyncJocall3(AsyncAPIClient):
         # part of our public interface in the future.
         _strict_response_validation: bool = False,
     ) -> None:
-        """Construct a new async AsyncJocall3 client instance.
-
-        This automatically infers the `api_key` argument from the `X_API_KEY` environment variable if it is not provided.
-        """
-        if api_key is None:
-            api_key = os.environ.get("X_API_KEY")
-        if api_key is None:
-            raise Jocall3Error(
-                "The api_key client option must be set either by passing api_key to the client or by setting the X_API_KEY environment variable"
-            )
-        self.api_key = api_key
-
+        """Construct a new async AsyncJocall3 client instance."""
         if base_url is None:
             base_url = os.environ.get("JOCALL3_BASE_URL")
         if base_url is None:
@@ -447,7 +419,6 @@ class AsyncJocall3(AsyncAPIClient):
     def copy(
         self,
         *,
-        api_key: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         http_client: httpx.AsyncClient | None = None,
@@ -481,7 +452,6 @@ class AsyncJocall3(AsyncAPIClient):
 
         http_client = http_client or self._client
         return self.__class__(
-            api_key=api_key or self.api_key,
             base_url=base_url or self.base_url,
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
