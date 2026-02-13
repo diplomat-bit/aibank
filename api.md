@@ -181,8 +181,8 @@ Methods:
 
 Methods:
 
-- <code title="get /ai/ads/operations/{operationId}">client.ai.ads.<a href="./src/aibanking/resources/ai/ads/ads.py">retrieve</a>(operation_id) -> object</code>
-- <code title="get /ai/ads">client.ai.ads.<a href="./src/aibanking/resources/ai/ads/ads.py">list</a>(\*\*<a href="src/aibanking/types/ai/ad_list_params.py">params</a>) -> object</code>
+- <code title="get /ai/ads/operations/{operationId}">client.ai.ads.<a href="./src/aibanking/resources/ai/ads.py">retrieve</a>(operation_id) -> object</code>
+- <code title="get /ai/ads">client.ai.ads.<a href="./src/aibanking/resources/ai/ads.py">list</a>(\*\*<a href="src/aibanking/types/ai/ad_list_params.py">params</a>) -> object</code>
 
 ## Advisor
 
@@ -331,7 +331,7 @@ Methods:
 
 Methods:
 
-- <code title="get /sustainability/carbon-footprint">client.sustainability.<a href="./src/aibanking/resources/sustainability/sustainability.py">retrieve_carbon_footprint</a>() -> object</code>
+- <code title="get /sustainability/carbon-footprint">client.sustainability.<a href="./src/aibanking/resources/sustainability.py">retrieve_carbon_footprint</a>() -> object</code>
 
 # Marketplace
 
