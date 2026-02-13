@@ -46,13 +46,13 @@ if TYPE_CHECKING:
     from .resources.ai.ai import AIResource, AsyncAIResource
     from .resources.web3.web3 import Web3Resource, AsyncWeb3Resource
     from .resources.users.users import UsersResource, AsyncUsersResource
+    from .resources.sustainability import SustainabilityResource, AsyncSustainabilityResource
     from .resources.accounts.accounts import AccountsResource, AsyncAccountsResource
     from .resources.payments.payments import PaymentsResource, AsyncPaymentsResource
     from .resources.corporate.corporate import CorporateResource, AsyncCorporateResource
     from .resources.investments.investments import InvestmentsResource, AsyncInvestmentsResource
     from .resources.marketplace.marketplace import MarketplaceResource, AsyncMarketplaceResource
     from .resources.transactions.transactions import TransactionsResource, AsyncTransactionsResource
-    from .resources.sustainability.sustainability import SustainabilityResource, AsyncSustainabilityResource
 
 __all__ = ["Timeout", "Transport", "ProxiesTypes", "RequestOptions", "Jocall3", "AsyncJocall3", "Client", "AsyncClient"]
 
