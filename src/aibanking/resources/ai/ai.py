@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from .ads.ads import (
+from .ads import (
     AdsResource,
     AsyncAdsResource,
     AdsResourceWithRawResponse,
