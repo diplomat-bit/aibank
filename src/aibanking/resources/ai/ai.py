@@ -2,15 +2,7 @@
 
 from __future__ import annotations
 
-from .models import (
-    ModelsResource,
-    AsyncModelsResource,
-    ModelsResourceWithRawResponse,
-    AsyncModelsResourceWithRawResponse,
-    ModelsResourceWithStreamingResponse,
-    AsyncModelsResourceWithStreamingResponse,
-)
-from .ads.ads import (
+from .ads import (
     AdsResource,
     AsyncAdsResource,
     AdsResourceWithRawResponse,
@@ -20,14 +12,6 @@ from .ads.ads import (
 )
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
-from .agent.agent import (
-    AgentResource,
-    AsyncAgentResource,
-    AgentResourceWithRawResponse,
-    AsyncAgentResourceWithRawResponse,
-    AgentResourceWithStreamingResponse,
-    AsyncAgentResourceWithStreamingResponse,
-)
 from .oracle.oracle import (
     OracleResource,
     AsyncOracleResource,
@@ -74,14 +58,6 @@ class AIResource(SyncAPIResource):
         return AdvisorResource(self._client)
 
     @cached_property
-    def agent(self) -> AgentResource:
-        return AgentResource(self._client)
-
-    @cached_property
-    def models(self) -> ModelsResource:
-        return ModelsResource(self._client)
-
-    @cached_property
     def with_raw_response(self) -> AIResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
@@ -117,14 +93,6 @@ class AsyncAIResource(AsyncAPIResource):
     @cached_property
     def advisor(self) -> AsyncAdvisorResource:
         return AsyncAdvisorResource(self._client)
-
-    @cached_property
-    def agent(self) -> AsyncAgentResource:
-        return AsyncAgentResource(self._client)
-
-    @cached_property
-    def models(self) -> AsyncModelsResource:
-        return AsyncModelsResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AsyncAIResourceWithRawResponse:
@@ -166,14 +134,6 @@ class AIResourceWithRawResponse:
     def advisor(self) -> AdvisorResourceWithRawResponse:
         return AdvisorResourceWithRawResponse(self._ai.advisor)
 
-    @cached_property
-    def agent(self) -> AgentResourceWithRawResponse:
-        return AgentResourceWithRawResponse(self._ai.agent)
-
-    @cached_property
-    def models(self) -> ModelsResourceWithRawResponse:
-        return ModelsResourceWithRawResponse(self._ai.models)
-
 
 class AsyncAIResourceWithRawResponse:
     def __init__(self, ai: AsyncAIResource) -> None:
@@ -194,14 +154,6 @@ class AsyncAIResourceWithRawResponse:
     @cached_property
     def advisor(self) -> AsyncAdvisorResourceWithRawResponse:
         return AsyncAdvisorResourceWithRawResponse(self._ai.advisor)
-
-    @cached_property
-    def agent(self) -> AsyncAgentResourceWithRawResponse:
-        return AsyncAgentResourceWithRawResponse(self._ai.agent)
-
-    @cached_property
-    def models(self) -> AsyncModelsResourceWithRawResponse:
-        return AsyncModelsResourceWithRawResponse(self._ai.models)
 
 
 class AIResourceWithStreamingResponse:
@@ -224,14 +176,6 @@ class AIResourceWithStreamingResponse:
     def advisor(self) -> AdvisorResourceWithStreamingResponse:
         return AdvisorResourceWithStreamingResponse(self._ai.advisor)
 
-    @cached_property
-    def agent(self) -> AgentResourceWithStreamingResponse:
-        return AgentResourceWithStreamingResponse(self._ai.agent)
-
-    @cached_property
-    def models(self) -> ModelsResourceWithStreamingResponse:
-        return ModelsResourceWithStreamingResponse(self._ai.models)
-
 
 class AsyncAIResourceWithStreamingResponse:
     def __init__(self, ai: AsyncAIResource) -> None:
@@ -252,11 +196,3 @@ class AsyncAIResourceWithStreamingResponse:
     @cached_property
     def advisor(self) -> AsyncAdvisorResourceWithStreamingResponse:
         return AsyncAdvisorResourceWithStreamingResponse(self._ai.advisor)
-
-    @cached_property
-    def agent(self) -> AsyncAgentResourceWithStreamingResponse:
-        return AsyncAgentResourceWithStreamingResponse(self._ai.agent)
-
-    @cached_property
-    def models(self) -> AsyncModelsResourceWithStreamingResponse:
-        return AsyncModelsResourceWithStreamingResponse(self._ai.models)

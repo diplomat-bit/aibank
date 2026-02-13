@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+from typing import Any, cast
+
 import httpx
 
-from ...._types import Body, Query, Headers, NotGiven, not_given
+from ...._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from ...._utils import maybe_transform, async_maybe_transform
 from ...._compat import cached_property
 from ...._resource import SyncAPIResource, AsyncAPIResource
 from ...._response import (
@@ -14,7 +17,7 @@ from ...._response import (
     async_to_streamed_response_wrapper,
 )
 from ...._base_client import make_request_options
-from ....types.ai.oracle.simulation_list_response import SimulationListResponse
+from ....types.ai.oracle import simulation_list_params
 from ....types.ai.oracle.simulation_retrieve_response import SimulationRetrieveResponse
 
 __all__ = ["SimulationsResource", "AsyncSimulationsResource"]
@@ -52,7 +55,8 @@ class SimulationsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SimulationRetrieveResponse:
         """
-        Get Specific Simulation Result
+        Retrieves the full, detailed results of a specific financial simulation by its
+        ID.
 
         Args:
           extra_headers: Send extra headers
@@ -65,31 +69,64 @@ class SimulationsResource(SyncAPIResource):
         """
         if not simulation_id:
             raise ValueError(f"Expected a non-empty value for `simulation_id` but received {simulation_id!r}")
-        return self._get(
-            f"/ai/oracle/simulations/{simulation_id}",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+        return cast(
+            SimulationRetrieveResponse,
+            self._get(
+                f"/ai/oracle/simulations/{simulation_id}",
+                options=make_request_options(
+                    extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                ),
+                cast_to=cast(
+                    Any, SimulationRetrieveResponse
+                ),  # Union types cannot be passed in as arguments in the type system
             ),
-            cast_to=SimulationRetrieveResponse,
         )
 
     def list(
         self,
         *,
+        limit: int | Omit = omit,
+        offset: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> SimulationListResponse:
-        """List All Past Simulations"""
+    ) -> object:
+        """
+        Retrieves a list of all financial simulations previously run by the user,
+        including their status and summaries.
+
+        Args:
+          limit: Maximum number of items to return in a single page.
+
+          offset: Number of items to skip before starting to collect the result set.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
         return self._get(
             "/ai/oracle/simulations",
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "limit": limit,
+                        "offset": offset,
+                    },
+                    simulation_list_params.SimulationListParams,
+                ),
             ),
-            cast_to=SimulationListResponse,
+            cast_to=object,
         )
 
 
@@ -125,7 +162,8 @@ class AsyncSimulationsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> SimulationRetrieveResponse:
         """
-        Get Specific Simulation Result
+        Retrieves the full, detailed results of a specific financial simulation by its
+        ID.
 
         Args:
           extra_headers: Send extra headers
@@ -138,31 +176,64 @@ class AsyncSimulationsResource(AsyncAPIResource):
         """
         if not simulation_id:
             raise ValueError(f"Expected a non-empty value for `simulation_id` but received {simulation_id!r}")
-        return await self._get(
-            f"/ai/oracle/simulations/{simulation_id}",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+        return cast(
+            SimulationRetrieveResponse,
+            await self._get(
+                f"/ai/oracle/simulations/{simulation_id}",
+                options=make_request_options(
+                    extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                ),
+                cast_to=cast(
+                    Any, SimulationRetrieveResponse
+                ),  # Union types cannot be passed in as arguments in the type system
             ),
-            cast_to=SimulationRetrieveResponse,
         )
 
     async def list(
         self,
         *,
+        limit: int | Omit = omit,
+        offset: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> SimulationListResponse:
-        """List All Past Simulations"""
+    ) -> object:
+        """
+        Retrieves a list of all financial simulations previously run by the user,
+        including their status and summaries.
+
+        Args:
+          limit: Maximum number of items to return in a single page.
+
+          offset: Number of items to skip before starting to collect the result set.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
         return await self._get(
             "/ai/oracle/simulations",
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=await async_maybe_transform(
+                    {
+                        "limit": limit,
+                        "offset": offset,
+                    },
+                    simulation_list_params.SimulationListParams,
+                ),
             ),
-            cast_to=SimulationListResponse,
+            cast_to=object,
         )
 
 

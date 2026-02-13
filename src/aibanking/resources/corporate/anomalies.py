@@ -2,11 +2,9 @@
 
 from __future__ import annotations
 
-from typing_extensions import Literal
-
 import httpx
 
-from ..._types import Body, Query, Headers, NoneType, NotGiven, not_given
+from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ..._utils import maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
@@ -17,8 +15,7 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ..._base_client import make_request_options
-from ...types.corporate import anomaly_update_status_params
-from ...types.corporate.anomaly_list_detected_response import AnomalyListDetectedResponse
+from ...types.corporate import anomaly_list_detected_params
 
 __all__ = ["AnomaliesResource", "AsyncAnomaliesResource"]
 
@@ -46,36 +43,86 @@ class AnomaliesResource(SyncAPIResource):
     def list_detected(
         self,
         *,
+        end_date: str | Omit = omit,
+        entity_type: str | Omit = omit,
+        limit: int | Omit = omit,
+        offset: int | Omit = omit,
+        severity: str | Omit = omit,
+        start_date: str | Omit = omit,
+        status: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> AnomalyListDetectedResponse:
-        """List detected anomalies"""
+    ) -> object:
+        """
+        Retrieves a comprehensive list of AI-detected financial anomalies across
+        transactions, payments, and corporate cards that require immediate review and
+        potential action to mitigate risk and ensure compliance.
+
+        Args:
+          end_date: End date for filtering results (inclusive, YYYY-MM-DD).
+
+          entity_type: Filter anomalies by the type of financial entity they are related to.
+
+          limit: Maximum number of items to return in a single page.
+
+          offset: Number of items to skip before starting to collect the result set.
+
+          severity: Filter anomalies by their AI-assessed severity level.
+
+          start_date: Start date for filtering results (inclusive, YYYY-MM-DD).
+
+          status: Filter anomalies by their current review status.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
         return self._get(
             "/corporate/anomalies",
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "end_date": end_date,
+                        "entity_type": entity_type,
+                        "limit": limit,
+                        "offset": offset,
+                        "severity": severity,
+                        "start_date": start_date,
+                        "status": status,
+                    },
+                    anomaly_list_detected_params.AnomalyListDetectedParams,
+                ),
             ),
-            cast_to=AnomalyListDetectedResponse,
+            cast_to=object,
         )
 
     def update_status(
         self,
         anomaly_id: str,
         *,
-        status: Literal["dismissed", "investigating", "resolved"],
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
+    ) -> object:
         """
-        Update anomaly status
+        Updates the review status of a specific financial anomaly, allowing compliance
+        officers to mark it as dismissed, resolved, or escalate for further
+        investigation after thorough AI-assisted and human review.
 
         Args:
           extra_headers: Send extra headers
@@ -88,14 +135,12 @@ class AnomaliesResource(SyncAPIResource):
         """
         if not anomaly_id:
             raise ValueError(f"Expected a non-empty value for `anomaly_id` but received {anomaly_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._put(
             f"/corporate/anomalies/{anomaly_id}/status",
-            body=maybe_transform({"status": status}, anomaly_update_status_params.AnomalyUpdateStatusParams),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=object,
         )
 
 
@@ -122,36 +167,86 @@ class AsyncAnomaliesResource(AsyncAPIResource):
     async def list_detected(
         self,
         *,
+        end_date: str | Omit = omit,
+        entity_type: str | Omit = omit,
+        limit: int | Omit = omit,
+        offset: int | Omit = omit,
+        severity: str | Omit = omit,
+        start_date: str | Omit = omit,
+        status: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> AnomalyListDetectedResponse:
-        """List detected anomalies"""
+    ) -> object:
+        """
+        Retrieves a comprehensive list of AI-detected financial anomalies across
+        transactions, payments, and corporate cards that require immediate review and
+        potential action to mitigate risk and ensure compliance.
+
+        Args:
+          end_date: End date for filtering results (inclusive, YYYY-MM-DD).
+
+          entity_type: Filter anomalies by the type of financial entity they are related to.
+
+          limit: Maximum number of items to return in a single page.
+
+          offset: Number of items to skip before starting to collect the result set.
+
+          severity: Filter anomalies by their AI-assessed severity level.
+
+          start_date: Start date for filtering results (inclusive, YYYY-MM-DD).
+
+          status: Filter anomalies by their current review status.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
         return await self._get(
             "/corporate/anomalies",
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=await async_maybe_transform(
+                    {
+                        "end_date": end_date,
+                        "entity_type": entity_type,
+                        "limit": limit,
+                        "offset": offset,
+                        "severity": severity,
+                        "start_date": start_date,
+                        "status": status,
+                    },
+                    anomaly_list_detected_params.AnomalyListDetectedParams,
+                ),
             ),
-            cast_to=AnomalyListDetectedResponse,
+            cast_to=object,
         )
 
     async def update_status(
         self,
         anomaly_id: str,
         *,
-        status: Literal["dismissed", "investigating", "resolved"],
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
+    ) -> object:
         """
-        Update anomaly status
+        Updates the review status of a specific financial anomaly, allowing compliance
+        officers to mark it as dismissed, resolved, or escalate for further
+        investigation after thorough AI-assisted and human review.
 
         Args:
           extra_headers: Send extra headers
@@ -164,16 +259,12 @@ class AsyncAnomaliesResource(AsyncAPIResource):
         """
         if not anomaly_id:
             raise ValueError(f"Expected a non-empty value for `anomaly_id` but received {anomaly_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._put(
             f"/corporate/anomalies/{anomaly_id}/status",
-            body=await async_maybe_transform(
-                {"status": status}, anomaly_update_status_params.AnomalyUpdateStatusParams
-            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=object,
         )
 
 
