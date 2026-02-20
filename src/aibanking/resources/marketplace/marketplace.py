@@ -12,7 +12,9 @@ from .offers import (
     OffersResourceWithStreamingResponse,
     AsyncOffersResourceWithStreamingResponse,
 )
-from ..._types import Body, Query, Headers, NotGiven, not_given
+from ...types import marketplace_list_products_params
+from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from ..._utils import maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -22,7 +24,6 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ..._base_client import make_request_options
-from ...types.marketplace_list_products_response import MarketplaceListProductsResponse
 
 __all__ = ["MarketplaceResource", "AsyncMarketplaceResource"]
 
@@ -54,20 +55,62 @@ class MarketplaceResource(SyncAPIResource):
     def list_products(
         self,
         *,
+        ai_personalization_level: str | Omit = omit,
+        category: str | Omit = omit,
+        limit: int | Omit = omit,
+        min_rating: int | Omit = omit,
+        offset: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> MarketplaceListProductsResponse:
-        """List Financial Products & Add-ons"""
+    ) -> object:
+        """
+        Retrieves a personalized, AI-curated list of products and services from the
+        Plato AI marketplace, tailored to the user's financial profile, goals, and
+        spending patterns. Includes options for filtering and advanced search.
+
+        Args:
+          ai_personalization_level: Filter by AI personalization level (e.g., low, medium, high). 'High' means
+              highly relevant to user's specific needs.
+
+          category: Filter products by category (e.g., loans, insurance, credit_cards, investments).
+
+          limit: Maximum number of items to return in a single page.
+
+          min_rating: Minimum user rating for products (0-5).
+
+          offset: Number of items to skip before starting to collect the result set.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
         return self._get(
             "/marketplace/products",
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "ai_personalization_level": ai_personalization_level,
+                        "category": category,
+                        "limit": limit,
+                        "min_rating": min_rating,
+                        "offset": offset,
+                    },
+                    marketplace_list_products_params.MarketplaceListProductsParams,
+                ),
             ),
-            cast_to=MarketplaceListProductsResponse,
+            cast_to=object,
         )
 
 
@@ -98,20 +141,62 @@ class AsyncMarketplaceResource(AsyncAPIResource):
     async def list_products(
         self,
         *,
+        ai_personalization_level: str | Omit = omit,
+        category: str | Omit = omit,
+        limit: int | Omit = omit,
+        min_rating: int | Omit = omit,
+        offset: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> MarketplaceListProductsResponse:
-        """List Financial Products & Add-ons"""
+    ) -> object:
+        """
+        Retrieves a personalized, AI-curated list of products and services from the
+        Plato AI marketplace, tailored to the user's financial profile, goals, and
+        spending patterns. Includes options for filtering and advanced search.
+
+        Args:
+          ai_personalization_level: Filter by AI personalization level (e.g., low, medium, high). 'High' means
+              highly relevant to user's specific needs.
+
+          category: Filter products by category (e.g., loans, insurance, credit_cards, investments).
+
+          limit: Maximum number of items to return in a single page.
+
+          min_rating: Minimum user rating for products (0-5).
+
+          offset: Number of items to skip before starting to collect the result set.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
         return await self._get(
             "/marketplace/products",
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=await async_maybe_transform(
+                    {
+                        "ai_personalization_level": ai_personalization_level,
+                        "category": category,
+                        "limit": limit,
+                        "min_rating": min_rating,
+                        "offset": offset,
+                    },
+                    marketplace_list_products_params.MarketplaceListProductsParams,
+                ),
             ),
-            cast_to=MarketplaceListProductsResponse,
+            cast_to=object,
         )
 
 

@@ -2,11 +2,9 @@
 
 from __future__ import annotations
 
-from typing_extensions import Literal
-
 import httpx
 
-from ..._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
+from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ..._utils import maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
@@ -17,14 +15,7 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ..._base_client import make_request_options
-from ...types.investments import (
-    portfolio_list_params,
-    portfolio_create_params,
-    portfolio_update_params,
-    portfolio_rebalance_params,
-)
-from ...types.investments.portfolio_list_response import PortfolioListResponse
-from ...types.investments.portfolio_rebalance_response import PortfolioRebalanceResponse
+from ...types.investments import portfolio_list_params
 
 __all__ = ["PortfoliosResource", "AsyncPortfoliosResource"]
 
@@ -49,48 +40,6 @@ class PortfoliosResource(SyncAPIResource):
         """
         return PortfoliosResourceWithStreamingResponse(self)
 
-    def create(
-        self,
-        *,
-        name: str,
-        strategy: Literal["GROWTH", "BALANCED", "INCOME", "ESG_FOCUSED"],
-        initial_allocation: object | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
-        """
-        Create Strategic Portfolio
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return self._post(
-            "/investments/portfolios",
-            body=maybe_transform(
-                {
-                    "name": name,
-                    "strategy": strategy,
-                    "initial_allocation": initial_allocation,
-                },
-                portfolio_create_params.PortfolioCreateParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
-        )
-
     def retrieve(
         self,
         portfolio_id: str,
@@ -101,9 +50,10 @@ class PortfoliosResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
+    ) -> object:
         """
-        Get Full Portfolio Performance
+        Retrieves detailed information for a specific investment portfolio, including
+        holdings, performance, and AI insights.
 
         Args:
           extra_headers: Send extra headers
@@ -116,30 +66,28 @@ class PortfoliosResource(SyncAPIResource):
         """
         if not portfolio_id:
             raise ValueError(f"Expected a non-empty value for `portfolio_id` but received {portfolio_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._get(
             f"/investments/portfolios/{portfolio_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=object,
         )
 
     def update(
         self,
         portfolio_id: str,
         *,
-        risk_tolerance: int | Omit = omit,
-        strategy: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
+    ) -> object:
         """
-        Update Portfolio Strategy
+        Updates high-level details of an investment portfolio, such as name or risk
+        tolerance.
 
         Args:
           extra_headers: Send extra headers
@@ -152,20 +100,12 @@ class PortfoliosResource(SyncAPIResource):
         """
         if not portfolio_id:
             raise ValueError(f"Expected a non-empty value for `portfolio_id` but received {portfolio_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return self._put(
             f"/investments/portfolios/{portfolio_id}",
-            body=maybe_transform(
-                {
-                    "risk_tolerance": risk_tolerance,
-                    "strategy": strategy,
-                },
-                portfolio_update_params.PortfolioUpdateParams,
-            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=object,
         )
 
     def list(
@@ -179,11 +119,15 @@ class PortfoliosResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> PortfolioListResponse:
+    ) -> object:
         """
-        List All Investment Portfolios
+        Retrieves a summary of all investment portfolios linked to the user's account.
 
         Args:
+          limit: Maximum number of items to return in a single page.
+
+          offset: Number of items to skip before starting to collect the result set.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -207,23 +151,23 @@ class PortfoliosResource(SyncAPIResource):
                     portfolio_list_params.PortfolioListParams,
                 ),
             ),
-            cast_to=PortfolioListResponse,
+            cast_to=object,
         )
 
     def rebalance(
         self,
         portfolio_id: str,
         *,
-        execution_mode: Literal["AUTO", "CONFIRM_ONLY"] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> PortfolioRebalanceResponse:
+    ) -> object:
         """
-        Trigger Gemini AI Rebalancing
+        Triggers an AI-driven rebalancing process for a specific investment portfolio
+        based on a target risk tolerance or strategy.
 
         Args:
           extra_headers: Send extra headers
@@ -238,13 +182,10 @@ class PortfoliosResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `portfolio_id` but received {portfolio_id!r}")
         return self._post(
             f"/investments/portfolios/{portfolio_id}/rebalance",
-            body=maybe_transform(
-                {"execution_mode": execution_mode}, portfolio_rebalance_params.PortfolioRebalanceParams
-            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=PortfolioRebalanceResponse,
+            cast_to=object,
         )
 
 
@@ -268,48 +209,6 @@ class AsyncPortfoliosResource(AsyncAPIResource):
         """
         return AsyncPortfoliosResourceWithStreamingResponse(self)
 
-    async def create(
-        self,
-        *,
-        name: str,
-        strategy: Literal["GROWTH", "BALANCED", "INCOME", "ESG_FOCUSED"],
-        initial_allocation: object | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
-        """
-        Create Strategic Portfolio
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return await self._post(
-            "/investments/portfolios",
-            body=await async_maybe_transform(
-                {
-                    "name": name,
-                    "strategy": strategy,
-                    "initial_allocation": initial_allocation,
-                },
-                portfolio_create_params.PortfolioCreateParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
-        )
-
     async def retrieve(
         self,
         portfolio_id: str,
@@ -320,9 +219,10 @@ class AsyncPortfoliosResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
+    ) -> object:
         """
-        Get Full Portfolio Performance
+        Retrieves detailed information for a specific investment portfolio, including
+        holdings, performance, and AI insights.
 
         Args:
           extra_headers: Send extra headers
@@ -335,30 +235,28 @@ class AsyncPortfoliosResource(AsyncAPIResource):
         """
         if not portfolio_id:
             raise ValueError(f"Expected a non-empty value for `portfolio_id` but received {portfolio_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._get(
             f"/investments/portfolios/{portfolio_id}",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=object,
         )
 
     async def update(
         self,
         portfolio_id: str,
         *,
-        risk_tolerance: int | Omit = omit,
-        strategy: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
+    ) -> object:
         """
-        Update Portfolio Strategy
+        Updates high-level details of an investment portfolio, such as name or risk
+        tolerance.
 
         Args:
           extra_headers: Send extra headers
@@ -371,20 +269,12 @@ class AsyncPortfoliosResource(AsyncAPIResource):
         """
         if not portfolio_id:
             raise ValueError(f"Expected a non-empty value for `portfolio_id` but received {portfolio_id!r}")
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
         return await self._put(
             f"/investments/portfolios/{portfolio_id}",
-            body=await async_maybe_transform(
-                {
-                    "risk_tolerance": risk_tolerance,
-                    "strategy": strategy,
-                },
-                portfolio_update_params.PortfolioUpdateParams,
-            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=NoneType,
+            cast_to=object,
         )
 
     async def list(
@@ -398,11 +288,15 @@ class AsyncPortfoliosResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> PortfolioListResponse:
+    ) -> object:
         """
-        List All Investment Portfolios
+        Retrieves a summary of all investment portfolios linked to the user's account.
 
         Args:
+          limit: Maximum number of items to return in a single page.
+
+          offset: Number of items to skip before starting to collect the result set.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -426,23 +320,23 @@ class AsyncPortfoliosResource(AsyncAPIResource):
                     portfolio_list_params.PortfolioListParams,
                 ),
             ),
-            cast_to=PortfolioListResponse,
+            cast_to=object,
         )
 
     async def rebalance(
         self,
         portfolio_id: str,
         *,
-        execution_mode: Literal["AUTO", "CONFIRM_ONLY"] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> PortfolioRebalanceResponse:
+    ) -> object:
         """
-        Trigger Gemini AI Rebalancing
+        Triggers an AI-driven rebalancing process for a specific investment portfolio
+        based on a target risk tolerance or strategy.
 
         Args:
           extra_headers: Send extra headers
@@ -457,13 +351,10 @@ class AsyncPortfoliosResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `portfolio_id` but received {portfolio_id!r}")
         return await self._post(
             f"/investments/portfolios/{portfolio_id}/rebalance",
-            body=await async_maybe_transform(
-                {"execution_mode": execution_mode}, portfolio_rebalance_params.PortfolioRebalanceParams
-            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=PortfolioRebalanceResponse,
+            cast_to=object,
         )
 
 
@@ -471,9 +362,6 @@ class PortfoliosResourceWithRawResponse:
     def __init__(self, portfolios: PortfoliosResource) -> None:
         self._portfolios = portfolios
 
-        self.create = to_raw_response_wrapper(
-            portfolios.create,
-        )
         self.retrieve = to_raw_response_wrapper(
             portfolios.retrieve,
         )
@@ -492,9 +380,6 @@ class AsyncPortfoliosResourceWithRawResponse:
     def __init__(self, portfolios: AsyncPortfoliosResource) -> None:
         self._portfolios = portfolios
 
-        self.create = async_to_raw_response_wrapper(
-            portfolios.create,
-        )
         self.retrieve = async_to_raw_response_wrapper(
             portfolios.retrieve,
         )
@@ -513,9 +398,6 @@ class PortfoliosResourceWithStreamingResponse:
     def __init__(self, portfolios: PortfoliosResource) -> None:
         self._portfolios = portfolios
 
-        self.create = to_streamed_response_wrapper(
-            portfolios.create,
-        )
         self.retrieve = to_streamed_response_wrapper(
             portfolios.retrieve,
         )
@@ -534,9 +416,6 @@ class AsyncPortfoliosResourceWithStreamingResponse:
     def __init__(self, portfolios: AsyncPortfoliosResource) -> None:
         self._portfolios = portfolios
 
-        self.create = async_to_streamed_response_wrapper(
-            portfolios.create,
-        )
         self.retrieve = async_to_streamed_response_wrapper(
             portfolios.retrieve,
         )

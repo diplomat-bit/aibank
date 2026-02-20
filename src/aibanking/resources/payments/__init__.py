@@ -8,14 +8,6 @@ from .fx import (
     FxResourceWithStreamingResponse,
     AsyncFxResourceWithStreamingResponse,
 )
-from .domestic import (
-    DomesticResource,
-    AsyncDomesticResource,
-    DomesticResourceWithRawResponse,
-    AsyncDomesticResourceWithRawResponse,
-    DomesticResourceWithStreamingResponse,
-    AsyncDomesticResourceWithStreamingResponse,
-)
 from .payments import (
     PaymentsResource,
     AsyncPaymentsResource,
@@ -34,12 +26,6 @@ from .international import (
 )
 
 __all__ = [
-    "DomesticResource",
-    "AsyncDomesticResource",
-    "DomesticResourceWithRawResponse",
-    "AsyncDomesticResourceWithRawResponse",
-    "DomesticResourceWithStreamingResponse",
-    "AsyncDomesticResourceWithStreamingResponse",
     "InternationalResource",
     "AsyncInternationalResource",
     "InternationalResourceWithRawResponse",

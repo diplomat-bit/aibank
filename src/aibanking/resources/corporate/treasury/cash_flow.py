@@ -44,7 +44,8 @@ class CashFlowResource(SyncAPIResource):
     def forecast(
         self,
         *,
-        horizon_days: int | Omit = omit,
+        forecast_horizon_days: int | Omit = omit,
+        include_scenario_analysis: bool | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -53,9 +54,17 @@ class CashFlowResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> CashFlowForecastResponse:
         """
-        Corporate Cash Flow Projection
+        Retrieves an advanced AI-driven cash flow forecast for the organization,
+        projecting liquidity, identifying potential surpluses or deficits, and providing
+        recommendations for optimal treasury management.
 
         Args:
+          forecast_horizon_days: The number of days into the future for which to generate the cash flow forecast
+              (e.g., 30, 90, 180).
+
+          include_scenario_analysis: If true, the forecast will include best-case and worst-case scenario analysis
+              alongside the most likely projection.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -71,7 +80,13 @@ class CashFlowResource(SyncAPIResource):
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                query=maybe_transform({"horizon_days": horizon_days}, cash_flow_forecast_params.CashFlowForecastParams),
+                query=maybe_transform(
+                    {
+                        "forecast_horizon_days": forecast_horizon_days,
+                        "include_scenario_analysis": include_scenario_analysis,
+                    },
+                    cash_flow_forecast_params.CashFlowForecastParams,
+                ),
             ),
             cast_to=CashFlowForecastResponse,
         )
@@ -100,7 +115,8 @@ class AsyncCashFlowResource(AsyncAPIResource):
     async def forecast(
         self,
         *,
-        horizon_days: int | Omit = omit,
+        forecast_horizon_days: int | Omit = omit,
+        include_scenario_analysis: bool | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -109,9 +125,17 @@ class AsyncCashFlowResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> CashFlowForecastResponse:
         """
-        Corporate Cash Flow Projection
+        Retrieves an advanced AI-driven cash flow forecast for the organization,
+        projecting liquidity, identifying potential surpluses or deficits, and providing
+        recommendations for optimal treasury management.
 
         Args:
+          forecast_horizon_days: The number of days into the future for which to generate the cash flow forecast
+              (e.g., 30, 90, 180).
+
+          include_scenario_analysis: If true, the forecast will include best-case and worst-case scenario analysis
+              alongside the most likely projection.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -128,7 +152,11 @@ class AsyncCashFlowResource(AsyncAPIResource):
                 extra_body=extra_body,
                 timeout=timeout,
                 query=await async_maybe_transform(
-                    {"horizon_days": horizon_days}, cash_flow_forecast_params.CashFlowForecastParams
+                    {
+                        "forecast_horizon_days": forecast_horizon_days,
+                        "include_scenario_analysis": include_scenario_analysis,
+                    },
+                    cash_flow_forecast_params.CashFlowForecastParams,
                 ),
             ),
             cast_to=CashFlowForecastResponse,
