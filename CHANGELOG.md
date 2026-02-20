@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.14.0 (2026-02-20)
+
+Full Changelog: [v0.13.0...v0.14.0](https://github.com/diplomat-bit/aibank/compare/v0.13.0...v0.14.0)
+
+### Features
+
+* **api:** api update ([985ac2f](https://github.com/diplomat-bit/aibank/commit/985ac2fed55963d00d5416e77d0c596cc804690b))
+* **client:** add custom JSON encoder for extended type support ([814b1c5](https://github.com/diplomat-bit/aibank/commit/814b1c526a3d71f12c80a9c59c131818ed1ed738))
+
+
+### Chores
+
+* format all `api.md` files ([f7544c2](https://github.com/diplomat-bit/aibank/commit/f7544c2fa8ea7865ff072042058981c8ac992897))
+* **internal:** bump dependencies ([9190351](https://github.com/diplomat-bit/aibank/commit/919035138f51b05d46d3173f986e976b36901c4d))
+* **internal:** fix lint error on Python 3.14 ([b940c2f](https://github.com/diplomat-bit/aibank/commit/b940c2f6cf635c92416b340d14adc8c2929d7adb))
+* **internal:** remove mock server code ([fde4ee7](https://github.com/diplomat-bit/aibank/commit/fde4ee700dd55f50dc1cc5f59978dce5de1ccd35))
+* update mock server docs ([011dad5](https://github.com/diplomat-bit/aibank/commit/011dad59155f649701f6ebdce504b699c94a77c9))
+
 ## 0.13.0 (2026-01-30)
 
 Full Changelog: [v0.12.0...v0.13.0](https://github.com/diplomat-bit/aibank/compare/v0.12.0...v0.13.0)
