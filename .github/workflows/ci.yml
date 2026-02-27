@@ -71,7 +71,7 @@ jobs:
           SHA: ${{ github.sha }}
         run: ./scripts/utils/upload-artifact.sh
 
-  test:
+    test:
     timeout-minutes: 10
     name: test
     runs-on: ${{ github.repository == 'stainless-sdks/jocall3-python' && 'depot-ubuntu-24.04' || 'ubuntu-latest' }}
@@ -87,10 +87,11 @@ jobs:
       - name: Bootstrap
         run: ./scripts/bootstrap
 
-      - name: Install Python test tools
+      - name: Install Python test dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest pytest-asyncio
+          pip install httpx pytest pytest-asyncio respx anyio
 
       - name: Run tests
+        run: pytest -n 1 --maxfail=1 --disable-warnings
         run: pytest -n 1 --maxfail=1 --disable-warnings
