@@ -43,7 +43,7 @@ def pytest_collection_modifyitems(items: list[pytest.Function]) -> None:
             item.add_marker(pytest.mark.skip(reason="aiohttp client is not compatible with respx_mock"))
 
 
-base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
+base_url = os.environ.get("TEST_API_BASE_URL", "https://e1dc0578-5b78-41e1-addc-d30def2b4cfe.mock.pstmn.io")
 
 
 @pytest.fixture(scope="session")
