@@ -1,4 +1,5 @@
 name: CI
+
 on:
   push:
     branches-ignore:
@@ -14,8 +15,8 @@ on:
 
 jobs:
   lint:
-    timeout-minutes: 10
     name: lint
+    timeout-minutes: 10
     runs-on: ${{ github.repository == 'stainless-sdks/jocall3-python' && 'depot-ubuntu-24.04' || 'ubuntu-latest' }}
     if: github.event_name == 'push' || github.event.pull_request.head.repo.fork
     steps:
@@ -35,9 +36,9 @@ jobs:
         run: ./scripts/lint
 
   build:
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.fork
-    timeout-minutes: 10
     name: build
+    timeout-minutes: 10
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.fork
     permissions:
       contents: read
       id-token: write
@@ -71,9 +72,9 @@ jobs:
           SHA: ${{ github.sha }}
         run: ./scripts/utils/upload-artifact.sh
 
-    test:
-    timeout-minutes: 10
+  test:
     name: test
+    timeout-minutes: 10
     runs-on: ${{ github.repository == 'stainless-sdks/jocall3-python' && 'depot-ubuntu-24.04' || 'ubuntu-latest' }}
     if: github.event_name == 'push' || github.event.pull_request.head.repo.fork
     steps:
@@ -93,5 +94,4 @@ jobs:
           pip install httpx pytest pytest-asyncio respx anyio
 
       - name: Run tests
-        run: pytest -n 1 --maxfail=1 --disable-warnings
         run: pytest -n 1 --maxfail=1 --disable-warnings
