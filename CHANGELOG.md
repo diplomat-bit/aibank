@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.14.0 (2026-02-27)
+
+Full Changelog: [v0.13.0...v0.14.0](https://github.com/diplomat-bit/aibank/compare/v0.13.0...v0.14.0)
+
+### Features
+
+* **api:** api update ([92098e1](https://github.com/diplomat-bit/aibank/commit/92098e1400db11b17b4ae60ab49165e8fbee6300))
+* **client:** add custom JSON encoder for extended type support ([3558d28](https://github.com/diplomat-bit/aibank/commit/3558d28e065729daa697c8a3a2760918c59c9ac1))
+
+
+### Chores
+
+* **ci:** bump uv version ([8c05db5](https://github.com/diplomat-bit/aibank/commit/8c05db55ef717c97edd18da5774be60415e96cc4))
+* format all `api.md` files ([23feb44](https://github.com/diplomat-bit/aibank/commit/23feb441df584e4e5741a873843bf20d49f4dedf))
+* **internal:** bump dependencies ([90f15b3](https://github.com/diplomat-bit/aibank/commit/90f15b35520cafbac1950bb38935808980b98b65))
+* **internal:** codegen related update ([17ebc3e](https://github.com/diplomat-bit/aibank/commit/17ebc3eb493c8a685bd98fde285f422b0596f49d))
+* **internal:** fix lint error on Python 3.14 ([691754c](https://github.com/diplomat-bit/aibank/commit/691754c3314df45edfa9db8539362981e8385f82))
+* **internal:** make `test_proxy_environment_variables` more resilient ([a4fa405](https://github.com/diplomat-bit/aibank/commit/a4fa405ff52c39ee859ca01ddcdf88f8b2ed4b0d))
+* **internal:** make `test_proxy_environment_variables` more resilient to env ([1fdc236](https://github.com/diplomat-bit/aibank/commit/1fdc23627ec65d71e6534cb9facd24b575514923))
+* **internal:** remove mock server code ([2f08c35](https://github.com/diplomat-bit/aibank/commit/2f08c350afb26ffdc9e6cee32ac81e04e57a0d0f))
+* update mock server docs ([afa049d](https://github.com/diplomat-bit/aibank/commit/afa049d0325d9035e8a1737db2c8d6e2d66b3c28))
+
 ## 0.13.0 (2026-01-30)
 
 Full Changelog: [v0.12.0...v0.13.0](https://github.com/diplomat-bit/aibank/compare/v0.12.0...v0.13.0)
