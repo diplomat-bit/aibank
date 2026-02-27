@@ -26,17 +26,13 @@ jobs:
         with:
           version: '0.9.13'
 
-      - name: Install dependencies
-        run: uv sync --all-extras
-
-      - name: Auto-fix imports & lint
+      - name: Install Python lint tools
         run: |
-          echo "==== Fixing imports with isort ===="
-          isort .
-          echo "==== Fixing lint issues with ruff ===="
-          ruff --fix . || true
-          echo "==== Lint check ===="
-          ruff .
+          python -m pip install --upgrade pip
+          pip install isort ruff
+
+      - name: Run lints
+        run: ./scripts/lint
 
   build:
     if: github.event_name == 'push' || github.event.pull_request.head.repo.fork
@@ -91,7 +87,10 @@ jobs:
       - name: Bootstrap
         run: ./scripts/bootstrap
 
-      - name: Run tests safely
+      - name: Install Python test tools
         run: |
-          # Force xdist to 1 worker to avoid py.path crash in Python 3.9
-          pytest -n 1 --maxfail=1 --disable-warnings
+          python -m pip install --upgrade pip
+          pip install pytest pytest-asyncio
+
+      - name: Run tests
+        run: pytest -n 1 --maxfail=1 --disable-warnings
