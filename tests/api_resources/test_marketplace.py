@@ -9,7 +9,6 @@ import pytest
 
 from aibanking import Jocall3, AsyncJocall3
 from tests.utils import assert_matches_type
-from aibanking.types import MarketplaceListProductsResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -17,13 +16,25 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestMarketplace:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_list_products(self, client: Jocall3) -> None:
         marketplace = client.marketplace.list_products()
-        assert_matches_type(MarketplaceListProductsResponse, marketplace, path=["response"])
+        assert_matches_type(object, marketplace, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_list_products_with_all_params(self, client: Jocall3) -> None:
+        marketplace = client.marketplace.list_products(
+            ai_personalization_level="aiPersonalizationLevel",
+            category="category",
+            limit=0,
+            min_rating=0,
+            offset=0,
+        )
+        assert_matches_type(object, marketplace, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_list_products(self, client: Jocall3) -> None:
         response = client.marketplace.with_raw_response.list_products()
@@ -31,9 +42,9 @@ class TestMarketplace:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         marketplace = response.parse()
-        assert_matches_type(MarketplaceListProductsResponse, marketplace, path=["response"])
+        assert_matches_type(object, marketplace, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_list_products(self, client: Jocall3) -> None:
         with client.marketplace.with_streaming_response.list_products() as response:
@@ -41,7 +52,7 @@ class TestMarketplace:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             marketplace = response.parse()
-            assert_matches_type(MarketplaceListProductsResponse, marketplace, path=["response"])
+            assert_matches_type(object, marketplace, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -51,13 +62,25 @@ class TestAsyncMarketplace:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_list_products(self, async_client: AsyncJocall3) -> None:
         marketplace = await async_client.marketplace.list_products()
-        assert_matches_type(MarketplaceListProductsResponse, marketplace, path=["response"])
+        assert_matches_type(object, marketplace, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_list_products_with_all_params(self, async_client: AsyncJocall3) -> None:
+        marketplace = await async_client.marketplace.list_products(
+            ai_personalization_level="aiPersonalizationLevel",
+            category="category",
+            limit=0,
+            min_rating=0,
+            offset=0,
+        )
+        assert_matches_type(object, marketplace, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_list_products(self, async_client: AsyncJocall3) -> None:
         response = await async_client.marketplace.with_raw_response.list_products()
@@ -65,9 +88,9 @@ class TestAsyncMarketplace:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         marketplace = await response.parse()
-        assert_matches_type(MarketplaceListProductsResponse, marketplace, path=["response"])
+        assert_matches_type(object, marketplace, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_list_products(self, async_client: AsyncJocall3) -> None:
         async with async_client.marketplace.with_streaming_response.list_products() as response:
@@ -75,6 +98,6 @@ class TestAsyncMarketplace:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             marketplace = await response.parse()
-            assert_matches_type(MarketplaceListProductsResponse, marketplace, path=["response"])
+            assert_matches_type(object, marketplace, path=["response"])
 
         assert cast(Any, response.is_closed) is True
