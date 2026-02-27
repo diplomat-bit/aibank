@@ -1,10 +1,11 @@
-
 from flask import Flask
+
 app = Flask(__name__)
 
-@app.route('/')
+
+@app.route("/")
 def homepage():
-    return '''
+    return """
     <h1>Application Homepage</h1>
     <ul>
         <li><a href="/code_review">Automated Code Review</a></li>
@@ -13,27 +14,33 @@ def homepage():
         <li><a href="/code_search">Code Search Engine</a></li>
         <li><a href="/complexity_analysis">Code Complexity Analysis</a></li>
     </ul>
-    '''
+    """
 
-@app.route('/code_review')
+
+@app.route("/code_review")
 def code_review():
-    return '<h1>Automated Code Review</h1>'
+    return "<h1>Automated Code Review</h1>"
 
-@app.route('/documentation_generator')
+
+@app.route("/documentation_generator")
 def documentation_generator():
-    return '<h1>Documentation Generator</h1>'
+    return "<h1>Documentation Generator</h1>"
 
-@app.route('/codebase_monitoring')
+
+@app.route("/codebase_monitoring")
 def codebase_monitoring():
-    return '<h1>Codebase Health Monitoring</h1>'
+    return "<h1>Codebase Health Monitoring</h1>"
 
-@app.route('/code_search')
+
+@app.route("/code_search")
 def code_search():
-    return '<h1>Code Search Engine</h1>'
+    return "<h1>Code Search Engine</h1>"
 
-@app.route('/complexity_analysis')
+
+@app.route("/complexity_analysis")
 def complexity_analysis():
-    return '<h1>Code Complexity Analysis</h1>'
+    return "<h1>Code Complexity Analysis</h1>"
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     app.run(debug=True)
