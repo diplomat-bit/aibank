@@ -7,7 +7,7 @@ from typing import Any, cast
 import httpx
 
 from ...._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from ...._utils import maybe_transform, async_maybe_transform
+from ...._utils import path_template, maybe_transform, async_maybe_transform
 from ...._compat import cached_property
 from ...._resource import SyncAPIResource, AsyncAPIResource
 from ...._response import (
@@ -72,7 +72,7 @@ class SimulationsResource(SyncAPIResource):
         return cast(
             SimulationRetrieveResponse,
             self._get(
-                f"/ai/oracle/simulations/{simulation_id}",
+                path_template("/ai/oracle/simulations/{simulation_id}", simulation_id=simulation_id),
                 options=make_request_options(
                     extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
                 ),
@@ -179,7 +179,7 @@ class AsyncSimulationsResource(AsyncAPIResource):
         return cast(
             SimulationRetrieveResponse,
             await self._get(
-                f"/ai/oracle/simulations/{simulation_id}",
+                path_template("/ai/oracle/simulations/{simulation_id}", simulation_id=simulation_id),
                 options=make_request_options(
                     extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
                 ),

@@ -5,6 +5,7 @@ from __future__ import annotations
 import httpx
 
 from ...._types import Body, Query, Headers, NotGiven, not_given
+from ...._utils import path_template
 from ...._compat import cached_property
 from ...._resource import SyncAPIResource, AsyncAPIResource
 from ...._response import (
@@ -88,7 +89,7 @@ class AuditsResource(SyncAPIResource):
         if not audit_id:
             raise ValueError(f"Expected a non-empty value for `audit_id` but received {audit_id!r}")
         return self._get(
-            f"/corporate/compliance/audits/{audit_id}/report",
+            path_template("/corporate/compliance/audits/{audit_id}/report", audit_id=audit_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -165,7 +166,7 @@ class AsyncAuditsResource(AsyncAPIResource):
         if not audit_id:
             raise ValueError(f"Expected a non-empty value for `audit_id` but received {audit_id!r}")
         return await self._get(
-            f"/corporate/compliance/audits/{audit_id}/report",
+            path_template("/corporate/compliance/audits/{audit_id}/report", audit_id=audit_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
